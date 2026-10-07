@@ -3229,6 +3229,31 @@ html.has-scroll-reveal .slide-item.is-revealed {
     width: 100%;
     height: 100%;
     min-height: 0;
+    position: relative;
+}
+
+.gallery-stage .slide-image::before {
+    content: '作品圖像準備中';
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: rgba(80, 74, 63, 0.62);
+    font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.18em;
+    border: 1px solid rgba(117, 105, 81, 0.14);
+    background: rgba(248, 245, 238, 0.42);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.gallery-stage .slide-item.is-image-unavailable .slide-image::before {
+    opacity: 1;
+}
+
+.gallery-stage .slide-item.is-image-unavailable .slide-image img {
+    visibility: hidden;
 }
 
 .gallery-stage .slide-image img {

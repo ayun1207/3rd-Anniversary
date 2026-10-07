@@ -21,6 +21,7 @@
 | --- | --- |
 | 章節導覽 | 一般模式原生 smooth scroll；reduced-motion 立即定位 |
 | 作品舊圖淡出 | 860ms，原地交疊 |
+| 作品載入銜接 | 目標圖完成載入與解碼後才換作；等待期間維持舊圖 |
 | 舊／新文案 | 240ms 淡出；延遲 180ms、560ms 淡入 |
 | 展廳背景換色 | CSS 0.8s |
 | 進度環葉片 | CSS 980ms 轉到目前作品角度 |
@@ -41,6 +42,7 @@
 - scroll／resize／pageshow 只排入一個 `requestAnimationFrame`，由 `scrollFrame` 防止同一畫格重複計算。
 - 作品區採自然頁流，滾輪不攔截、不觸發換作；scroll 更新只用於目前章節與左側資訊軌狀態。
 - 作品換作由 `isAnimating`、`turnVersion` 與 `turnAnimations` 管理；取消後由 `finishPageTurn()` 重建唯一目前作品。
+- `prepareSlideImage()` 管理按需載入與解碼 promise；換作不在目標圖準備完成前撤除目前作品，載入錯誤則使用預留狀態收束。
 - `cycleRotation` 累積正負 15 度，避免第 24 件回第 1 件時視覺倒轉。
 - 節氣輪轉保留 `solarPreviewVersion`、`solarAutoplayTimer`、`solarTypingTimer`、`solarHoverTimer`，防止重啟或頁籤切換後產生殘字。
 - 音樂保留 `musicRequest`，避免舊播放 promise 或淡入 frame 回寫新狀態。
@@ -63,6 +65,7 @@
 
 - 頁面與作品區可自然上下捲動，滾輪不會改變目前作品。
 - 快速切換或 24→1 時，進度環、節氣名稱與唯一目前作品保持同步。
+- 無快取、慢速網路與缺圖狀態下，換作期間都不出現空白畫面或永久等待。
 - 自動切換或頁籤恢復時不留下殘影、舊文字或重複計時器。
 - 不用 transform 同時負責版面定位與多組動畫。
 - reduced-motion 保留完整功能與內容。

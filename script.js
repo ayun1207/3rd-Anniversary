@@ -294,8 +294,60 @@ let turnVersion = 0;
 let cycleRotation = 0;
 let cycleCompleteTimer;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const slideImageLoads = new WeakMap();
 
 document.documentElement.style.setProperty('--cycle-angle', '0deg');
+
+function prepareSlideImage(index, { highPriority = false } = {}) {
+    const normalizedIndex = (index + totalSlides) % totalSlides;
+    const slide = originalSlides[normalizedIndex];
+    const image = slide?.querySelector('.slide-image img');
+    if (!image) return Promise.resolve(false);
+
+    if (highPriority) image.fetchPriority = 'high';
+    image.loading = 'eager';
+
+    if (!image.getAttribute('src') && image.dataset.src) {
+        image.src = image.dataset.src;
+    }
+
+    if (!image.getAttribute('src')) {
+        slide.classList.add('is-image-unavailable');
+        return Promise.resolve(false);
+    }
+
+    if (slideImageLoads.has(image)) return slideImageLoads.get(image);
+
+    const loadPromise = (async () => {
+        if (!image.complete) {
+            await new Promise(resolve => {
+                image.addEventListener('load', resolve, { once: true });
+                image.addEventListener('error', resolve, { once: true });
+            });
+        }
+
+        const loaded = image.naturalWidth > 0;
+        if (loaded && typeof image.decode === 'function') {
+            try {
+                await image.decode();
+            } catch {
+                // 已完成的圖片仍可顯示；decode 失敗不應阻止換作。
+            }
+        }
+
+        slide.classList.toggle('is-image-unavailable', !loaded);
+        return loaded;
+    })();
+
+    slideImageLoads.set(image, loadPromise);
+    return loadPromise;
+}
+
+function preloadFollowingSlide(index) {
+    window.setTimeout(() => {
+        void prepareSlideImage(index + 1, { highPriority: true });
+    }, 0);
+}
 
 function updateBackgroundColor() {
     document.getElementById('gallery-page')?.style.setProperty('--gallery-tone', backgroundColors[currentIndex]);
@@ -320,9 +372,15 @@ async function moveSlide(direction) {
     if (isAnimating) return;
     if (direction !== 1 && direction !== -1) return;
 
+    isAnimating = true;
+    const version = ++turnVersion;
     const previousIndex = currentIndex;
     const outgoing = originalSlides[currentIndex];
-    currentIndex = (currentIndex + direction + totalSlides) % totalSlides;
+    const nextIndex = (currentIndex + direction + totalSlides) % totalSlides;
+    await prepareSlideImage(nextIndex, { highPriority: true });
+    if (version !== turnVersion) return;
+
+    currentIndex = nextIndex;
     const incoming = originalSlides[currentIndex];
 
     cycleRotation += direction * 15;
@@ -343,11 +401,10 @@ async function moveSlide(direction) {
 
     if (reducedMotion.matches || typeof outgoing.animate !== 'function') {
         finishPageTurn();
+        preloadFollowingSlide(currentIndex);
         return;
     }
 
-    isAnimating = true;
-    const version = ++turnVersion;
     outgoing.classList.remove('is-current');
     outgoing.classList.add('is-turning');
     outgoing.setAttribute('aria-hidden', 'true');
@@ -381,7 +438,10 @@ async function moveSlide(direction) {
     } catch {
         // 換到其他分頁時取消動畫，由 finishPageTurn 完成定位。
     } finally {
-        if (version === turnVersion) finishPageTurn();
+        if (version === turnVersion) {
+            finishPageTurn();
+            preloadFollowingSlide(currentIndex);
+        }
     }
 }
 
@@ -392,6 +452,9 @@ reducedMotion.addEventListener('change', () => {
     }
 });
 finishPageTurn();
+void prepareSlideImage(0, { highPriority: true }).then(() => {
+    preloadFollowingSlide(0);
+});
 
 /* =========================
    垂直章節與作品閱讀進度

@@ -17,6 +17,7 @@
 - 維持現有古風、暖紙、低彩度、柔和光影與緩慢動態；避免強烈 3D、硬切、厚重陰影及過度飽和。
 - Vue 3 與 Vite 已獲使用者同意並是目前既有技術棧。不要任意更換框架、引入 Tailwind、狀態管理或其他大型套件；若確有需要，先說明影響並取得同意。
 - 遷移採漸進方式。除非使用者明確要求，不要一次重寫整站；將既有區塊移入 Vue 時，需保留其版面、文案、互動、無障礙與動畫最終狀態。
+- 涉及既有互動區塊的較大修改時，應依 `docs/vue-upgrade.md` 判斷是否適合同步進行 Vue 漸進式遷移。
 - `src/` 用於 Vue 元件與資料模組；根目錄既有 HTML、CSS、JavaScript 在完成對應遷移前仍是有效來源，不得因已安裝 Vue 就自行刪除。
 - 不要直接修改 `node_modules/` 或 `dist/`。`node_modules/` 是安裝依賴，`dist/` 是建置產物，均應由 npm/Vite 產生。
 - Windows PowerShell 若阻擋 `npm.ps1`，使用 `npm.cmd` 執行 npm 指令。
@@ -30,6 +31,7 @@
 - 依改動風險檢查桌機、手機及 reduced-motion。
 - JavaScript 或 Vue 修改至少執行語法／建置檢查；HTML／CSS 修改至少檢查引用、元素數量與差異範圍。
 - 涉及導覽、輪播、開場或節氣環時，使用 `docs/INDEX.md` 找到對應驗證清單。
+- 完成較大修改後，應依 `docs/vue-upgrade.md` 對本次涉及區域進行局部 cleanup／review，避免 dead code、重複狀態，或 Vue 與原生 JavaScript 重複控制同一功能。
 - 一般本機預覽使用 `npm.cmd run dev`，並在 Chrome 開啟終端顯示的本機網址（通常是 `http://localhost:5173/`）；不要以 `file://` 或直接雙擊 `index.html` 驗證。
 - 完成跨檔案、Vue、資產路徑或部署相關修改後，至少執行 `npm.cmd run build`；再依改動範圍檢查桌機、手機及 `prefers-reduced-motion`。
 
