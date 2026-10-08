@@ -28,7 +28,7 @@ async function writeWebp(input, output, { maxWidth, quality }) {
 await writeWebp(
   join(projectRoot, 'images', 'intro-atmosphere-v2.png'),
   join(projectRoot, 'images', 'intro-atmosphere-v2.webp'),
-  { maxWidth: 1920, quality: 88 }
+  { maxWidth: 1920, quality: 62 }
 )
 
 const artworkSourceDirectory = existsSync(originalsDirectory)

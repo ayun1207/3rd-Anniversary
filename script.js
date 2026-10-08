@@ -1,3 +1,6 @@
+import entranceAtmosphereUrl from './images/intro-atmosphere-v2.webp?url';
+import displayFontUrl from './fonts/lxgw-wenkai-tc-300-subset.woff2?url';
+
 // 24 張圖片對應的低飽和度背景色列表
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
@@ -142,6 +145,54 @@ function preloadAdjacentSlides(index) {
     }, 0);
 }
 
+function runWhenBrowserIsIdle(callback, timeout = 2000) {
+    if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(callback, { timeout });
+    } else {
+        window.setTimeout(callback, 250);
+    }
+}
+
+function prepareDeferredEntranceAssets() {
+    const atmosphereImage = new Image();
+    atmosphereImage.decoding = 'async';
+    atmosphereImage.src = entranceAtmosphereUrl;
+
+    const revealAtmosphere = () => {
+        document.documentElement.classList.add('entrance-art-ready');
+    };
+    if (atmosphereImage.complete && atmosphereImage.naturalWidth > 0) {
+        void atmosphereImage.decode().catch(() => {}).finally(revealAtmosphere);
+    } else {
+        atmosphereImage.addEventListener('load', () => {
+            void atmosphereImage.decode().catch(() => {}).finally(revealAtmosphere);
+        }, { once: true });
+    }
+
+    window.setTimeout(() => {
+        runWhenBrowserIsIdle(() => {
+            const fontStyle = document.createElement('style');
+            fontStyle.dataset.deferredDisplayFont = '';
+            fontStyle.textContent = `@font-face { font-family: "LXGW WenKai TC"; src: url("${displayFontUrl}") format("woff2"); font-style: normal; font-weight: 300 400; font-display: swap; }`;
+            document.head.append(fontStyle);
+        });
+    }, 1000);
+}
+
+function preloadIdleGalleryImages() {
+    if (navigator.connection?.saveData) return;
+
+    const idleSlideIndexes = originalSlides.flatMap((slide, index) =>
+        slide.querySelector('.slide-image img[data-preload="idle"]') ? [index] : []
+    );
+
+    idleSlideIndexes.forEach((index, order) => {
+        window.setTimeout(() => {
+            runWhenBrowserIsIdle(() => void prepareSlideImage(index));
+        }, order * 750);
+    });
+}
+
 function continueGalleryNavigation() {
     preloadAdjacentSlides(currentIndex);
     if (!originalSlides[currentIndex]?.classList.contains('is-image-unavailable') && galleryLoadStatus) {
@@ -274,12 +325,11 @@ reducedMotion.addEventListener('change', () => {
 finishPageTurn();
 void prepareSlideImage(0, { highPriority: true }).then(() => {
     const prepareSecondSlide = () => {
-        const loadWhenIdle = () => void prepareSlideImage(1);
-        if ('requestIdleCallback' in window) {
-            window.requestIdleCallback(loadWhenIdle, { timeout: 1500 });
-        } else {
-            window.setTimeout(loadWhenIdle, 250);
-        }
+        runWhenBrowserIsIdle(() => {
+            prepareDeferredEntranceAssets();
+            void prepareSlideImage(1);
+            preloadIdleGalleryImages();
+        }, 1500);
     };
 
     if (document.readyState === 'complete') prepareSecondSlide();
