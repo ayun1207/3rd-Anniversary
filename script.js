@@ -273,7 +273,17 @@ reducedMotion.addEventListener('change', () => {
 });
 finishPageTurn();
 void prepareSlideImage(0, { highPriority: true }).then(() => {
-    void prepareSlideImage(1, { highPriority: true });
+    const prepareSecondSlide = () => {
+        const loadWhenIdle = () => void prepareSlideImage(1);
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(loadWhenIdle, { timeout: 1500 });
+        } else {
+            window.setTimeout(loadWhenIdle, 250);
+        }
+    };
+
+    if (document.readyState === 'complete') prepareSecondSlide();
+    else window.addEventListener('load', prepareSecondSlide, { once: true });
 });
 
 /* =========================

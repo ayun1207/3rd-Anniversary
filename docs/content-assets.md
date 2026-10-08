@@ -55,7 +55,7 @@
 
 ## 字體
 
-- LXGW WenKai TC：網頁只載入 `lxgw-wenkai-tc-300.woff2` 並涵蓋 300–400 字重，避免同時下載兩個約 2 MB 的完整中文字型；用於開場、節氣名稱、中心文字與作品節氣標籤。
+- LXGW WenKai TC：`lxgw-wenkai-tc-300.woff2` 保留為完整原始字型；網站實際載入由 `npm.cmd run optimize:font` 依 `index.html`、`script.js` 與 `src/` 現有文字產生的 `lxgw-wenkai-tc-300-subset.woff2`，仍涵蓋 300–400 字重並維持同一字體外觀。新增會使用此字體顯示的文字後需重新執行子集指令。
 - Chiron Sung HK 的分片字型不完整，會產生大量 404 請求，因此不再於執行期載入；原授權檔保留供素材紀錄使用。
 - 一般回退包含 Noto Serif TC、Noto Serif CJK TC、Source Han Serif TC、Songti TC、PMingLiU、MingLiU、serif。
 - 授權文件位於 `fonts/OFL-LXGW-WenKai-TC.txt` 與 `fonts/LICENSE-Chiron-Sung-HK.md`。
@@ -79,8 +79,8 @@
 
 ## 作品載入策略
 
-- `artworks/01.webp` 是首張清晰作品，使用 preload 與最高載入優先級；不以模糊版本取代第一眼畫質。
-- 第一張完成後先預備第 2 張；完成一次手動切換後再準備目前作品的前後相鄰目標。第 2–24 張使用 `data-src`，只有在即將使用時才設定 `src`，避免首次開啟就一次下載全部圖片。
+- 開場氛圍圖與 `artworks/01.webp` 都由 HTML preload 提早發現；首屏開場圖優先取得，首張作品仍維持清晰 WebP，不以模糊版本取代第一眼畫質。
+- 第一張完成且整頁 `load` 後，於瀏覽器空閒時預備第 2 張；完成一次手動切換後再準備目前作品的前後相鄰目標。第 2–24 張使用 `data-src`，只有在即將使用時才設定 `src`，避免首次開啟就一次下載全部圖片。
 - 換作前等待目標圖片完成載入與 `decode()`；尚未完成時保留目前作品，因此不會先清空畫面。
 - 缺檔或載入錯誤顯示統一預留狀態。測試階段缺少 19 張圖片不應拖慢首頁或形成長時間轉圈。
 - 三張橫式測試圖原本約 3.6–4.4 MB；目前桌機 WebP 為 218–346 KB，960px 版本為 62–100 KB，頁面不再直接請求原 JPG。
