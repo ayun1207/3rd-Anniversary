@@ -55,7 +55,7 @@
 
 ## 字體
 
-- LXGW WenKai TC：`lxgw-wenkai-tc-300.woff2` 保留為完整原始字型；網站實際使用由 `npm.cmd run optimize:font` 依 `index.html`、`script.js` 與 `src/` 現有文字產生的 `lxgw-wenkai-tc-300-subset.woff2`，仍涵蓋 300–400 字重並維持同一字體外觀。子集字型於首屏 `load` 完成後才註冊，不阻擋瀏覽器初次完成狀態；新增會使用此字體顯示的文字後需重新執行子集指令。
+- LXGW WenKai TC：`lxgw-wenkai-tc-300.woff2` 保留為完整原始字型；網站實際使用由 `npm.cmd run optimize:font` 依 `index.html`、`script.js` 與 `src/` 現有文字產生的 `lxgw-wenkai-tc-300-subset.woff2`，仍涵蓋 300–400 字重。全站以此字體作為唯一主字體，並在首屏以 preload 優先取得；字體判定完成前只顯示暖紙底色，不先繪製回退文字，因此不會發生可見的換字或版面跳動。若 4 秒內載入失敗，會在內容首次顯示前固定選用中文襯線回退，該次瀏覽不再切換。新增會使用此字體顯示的文字後需重新執行子集指令。
 - Chiron Sung HK 的分片字型不完整，會產生大量 404 請求，因此不再於執行期載入；原授權檔保留供素材紀錄使用。
 - 一般回退包含 Noto Serif TC、Noto Serif CJK TC、Source Han Serif TC、Songti TC、PMingLiU、MingLiU、serif。
 - 授權文件位於 `fonts/OFL-LXGW-WenKai-TC.txt` 與 `fonts/LICENSE-Chiron-Sung-HK.md`。

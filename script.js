@@ -1,5 +1,4 @@
 import entranceAtmosphereUrl from './images/intro-atmosphere-v2.webp?url';
-import displayFontUrl from './fonts/lxgw-wenkai-tc-300-subset.woff2?url';
 
 // 24 張圖片對應的低飽和度背景色列表
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -168,15 +167,6 @@ function prepareDeferredEntranceAssets() {
             void atmosphereImage.decode().catch(() => {}).finally(revealAtmosphere);
         }, { once: true });
     }
-
-    window.setTimeout(() => {
-        runWhenBrowserIsIdle(() => {
-            const fontStyle = document.createElement('style');
-            fontStyle.dataset.deferredDisplayFont = '';
-            fontStyle.textContent = `@font-face { font-family: "LXGW WenKai TC"; src: url("${displayFontUrl}") format("woff2"); font-style: normal; font-weight: 300 400; font-display: swap; }`;
-            document.head.append(fontStyle);
-        });
-    }, 1000);
 }
 
 function preloadIdleGalleryImages() {

@@ -1,9 +1,25 @@
+@font-face {
+    font-family: "LXGW WenKai TC";
+    src: url("fonts/lxgw-wenkai-tc-300-subset.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 300 400;
+    font-display: block;
+}
+
+:root {
+    --site-font: "LXGW WenKai TC", serif;
+}
+
+html.font-fallback {
+    --site-font: "Noto Serif TC", "Noto Serif CJK TC", "Source Han Serif TC",
+        "Songti TC", "PMingLiU", "MingLiU", serif;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Noto Serif TC", "Noto Serif CJK TC", "Source Han Serif TC",
-        "Songti TC", "PMingLiU", "MingLiU", serif;
+    font-family: var(--site-font) !important;
 }
 
 .visually-hidden {
@@ -20,6 +36,25 @@
 
 html {
     scrollbar-gutter: stable;
+}
+
+html.font-pending body {
+    visibility: hidden;
+    opacity: 0;
+}
+
+html.font-ready body,
+html.font-fallback body {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 220ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.font-ready body,
+    html.font-fallback body {
+        transition: none;
+    }
 }
 
 /* JavaScript 將封面提升為 modal 前，先阻止理時序被繪製一幀。 */
