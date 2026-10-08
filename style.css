@@ -763,29 +763,6 @@ main {
 }
 
 /* 理時序進入作品時，讓兩個場景短暫重疊，避免整頁像投影片般先退場。 */
-#gallery-page.gallery-entry-stage {
-    position: absolute;
-    inset: 0;
-    z-index: 4;
-    display: flex;
-    opacity: 1;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-#gallery-page.gallery-entry-stage .arrow-btn {
-    opacity: 0;
-}
-
-.solar-cycle-transition {
-    position: fixed;
-    z-index: 50;
-    margin: 0;
-    pointer-events: none;
-    transform-origin: center;
-    will-change: transform, opacity, filter;
-}
-
 
 /* =========================
    理時序
@@ -2940,6 +2917,31 @@ body.gallery-section-active .gallery-scroll-progress {
     color: #7a858b;
 }
 
+.gallery-load-status {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: max-content;
+    max-width: min(18rem, 72vw);
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: rgba(255, 253, 248, 0.84);
+    color: #69736e;
+    font-size: 0.68rem;
+    line-height: 1.5;
+    letter-spacing: 0.06em;
+    box-shadow: 0 5px 18px rgba(65, 57, 45, 0.07);
+    opacity: 0;
+    transform: translateY(-3px);
+    transition: opacity 180ms ease, transform 180ms ease;
+    pointer-events: none;
+}
+
+.gallery-load-status:not(:empty) {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 #gallery-page.is-awaiting-image .gallery-progress-orbit {
     animation: gallery-image-wait 1.4s ease-in-out infinite;
 }
@@ -3494,30 +3496,10 @@ html.has-scroll-reveal .slide-item.is-revealed {
 }
 
 /* =========================
-   常駐資訊軌與黏著式作品敘事
+   常駐資訊軌與作品章節框架
 ========================= */
 
 .site-rail-ornament { display: none; }
-
-#gallery-page {
-    height: 606svh;
-    min-height: 3600px;
-    padding: 0;
-}
-
-.gallery-sticky-shell {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    width: 100%;
-    height: 100svh;
-    min-height: 680px;
-    padding: clamp(34px, 5vh, 62px) 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: clip;
-}
 
 .gallery-section-heading {
     flex: 0 0 auto;
@@ -3588,36 +3570,15 @@ html.has-scroll-reveal .slide-item.is-revealed {
         scroll-margin-top: 0;
     }
 
-    .gallery-sticky-shell { padding-left: 0; }
 }
 
 @media (max-width: 900px) {
     .site-header .music-toggle { margin-left: 0; }
 
-    .gallery-sticky-shell {
-        top: 82px;
-        height: calc(100svh - 82px);
-        min-height: 600px;
-        padding: 24px 0 30px;
-    }
-
-    #gallery-page {
-        height: 590svh;
-        min-height: 3300px;
-    }
-
     .gallery-section-heading { margin-bottom: 28px; }
 }
 
 @media (max-width: 768px) {
-    .gallery-sticky-shell {
-        top: 70px;
-        height: calc(100svh - 70px);
-        min-height: 560px;
-        padding-top: 20px;
-        padding-bottom: 24px;
-    }
-
     .gallery-stage {
         height: min(650px, 64svh);
         min-height: 520px;
@@ -3629,21 +3590,6 @@ html.has-scroll-reveal .slide-item.is-revealed {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    #gallery-page {
-        height: auto;
-        min-height: 0;
-        padding: 68px 0 96px;
-    }
-
-    .gallery-sticky-shell {
-        position: relative;
-        top: auto;
-        height: auto;
-        min-height: 0;
-        padding: 0;
-        overflow: visible;
-    }
-
     .gallery-section-heading::after { display: none; }
 }
 
@@ -4034,9 +3980,14 @@ main::before {
 .gallery-sticky-shell {
     position: relative;
     top: auto;
+    z-index: 2;
+    width: 100%;
     height: auto;
     min-height: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     overflow: visible;
 }
 

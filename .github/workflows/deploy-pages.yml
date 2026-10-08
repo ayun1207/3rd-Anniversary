@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate structure and content
+        run: npm run validate
+
       - name: Build website
         run: npm run build
         env:

@@ -1,6 +1,6 @@
 # 頁面與導覽
 
-最後核對：2026-10-07
+最後核對：2026-10-08
 
 ## 頁面結構
 
@@ -33,6 +33,7 @@
 ## 選單
 
 - `#siteMenu` 是原生 `dialog`，左側 `.menu-panel` 寬度為 `min(340px, 82vw)`。
+- `#menuTitle` 提供 `aria-labelledby` 所需的隱藏標題，視覺上不占版面。
 - `openMenu()` 使用 `showModal()`；`closeMenu()` 播放收合後關閉。
 - 點遮罩或按 Esc 可關閉；`close` 事件清理 class、同步 `aria-expanded=false` 並將焦點還給選單按鈕。
 - 選定章節時 `closeMenuImmediately()` 先完整關閉選單，再開始捲動。

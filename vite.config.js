@@ -6,7 +6,7 @@ import { relative, resolve } from 'node:path'
 function copyStaticDirectories() {
   const directoryMappings = [
     ['audio', 'audio'],
-    ['images', 'images'],
+    ['images/artworks', 'images/artworks'],
   ]
 
   return {

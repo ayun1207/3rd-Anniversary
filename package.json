@@ -7,6 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "optimize:images": "node scripts/optimize-images.mjs",
+    "validate": "node scripts/validate-content.mjs",
+    "validate:release": "node scripts/validate-content.mjs --strict",
+    "check": "npm run validate && npm run build",
     "preview": "vite preview"
   },
   "dependencies": {

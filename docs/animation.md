@@ -6,7 +6,7 @@
 - 快速操作由動畫鎖與版本檢查保護，觸控只在明確的水平滑動時換組。
 - prefers-reduced-motion 下取消位移並直接復原到最終狀態。
 
-最後核對：2026-10-06
+最後核對：2026-10-08
 
 ## 動態原則
 
@@ -42,8 +42,9 @@
 - scroll／resize／pageshow 只排入一個 `requestAnimationFrame`，由 `scrollFrame` 防止同一畫格重複計算。
 - 作品區採自然頁流，滾輪不攔截、不觸發換作；scroll 更新只用於目前章節與左側資訊軌狀態。
 - 作品換作由 `isAnimating`、`turnVersion` 與 `turnAnimations` 管理；取消後由 `finishPageTurn()` 重建唯一目前作品。
-- 換作期間的再次手動操作記入 `queuedSlideDirection`，目前動畫完成後執行最後一次方向，不讓點擊或按鍵無聲消失。
+- 換作期間的再次手動操作只更新可見狀態，不加入佇列；圖片完成後不執行已過期的方向指令。
 - `prepareSlideImage()` 管理按需載入與解碼 promise；換作不在目標圖準備完成前撤除目前作品，載入錯誤則使用預留狀態收束。
+- 單次圖片等待上限為 8 秒；逾時時保持目前作品並解除操作鎖，不在背景載入完成後自動換作。
 - `cycleRotation` 累積正負 15 度，避免第 24 件回第 1 件時視覺倒轉。
 - 節氣輪轉保留 `solarPreviewVersion`、`solarAutoplayTimer`、`solarTypingTimer`、`solarHoverTimer`，防止重啟或頁籤切換後產生殘字。
 - 音樂保留 `musicRequest`，避免舊播放 promise 或淡入 frame 回寫新狀態。

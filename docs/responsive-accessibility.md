@@ -8,10 +8,8 @@
 - 寄語分組疊放在同一個 CSS Grid 軌道，讓最高組別保留版面高度，避免切換時控制項與頁面內容產生垂直位移。
 - 觸控只在明確的水平滑動時換組，避免攔截頁面的垂直捲動。
 - reduced-motion 模式直接完成切換，且只有一組時隱藏無作用的控制。
-- Vue 寄語表單在 700px 以下改為單欄；狀態文字使用 `role="status"` 與 `aria-live="polite"`。
-- 新增寄語的流動效果在 reduced-motion 下停用，訊息改為正常文件流中的靜態可捲動列表。
 
-最後核對：2026-10-07
+最後核對：2026-10-08
 
 ## 主要斷點
 
@@ -55,7 +53,7 @@
 
 - 開場與選單都使用原生 `dialog`／`showModal()`。
 - 開場使用 `aria-labelledby`、`aria-describedby`；Esc 以靜音方式進入。
-- 選單的 `aria-labelledby="menuTitle"` 目前仍缺少對應元素，是待處理語意缺口。
+- 選單以隱藏的 `#menuTitle` 提供 `aria-labelledby` 對應名稱。
 - 選單與開場關閉後，焦點回到 `#menuToggle`。
 - 選單按鈕保留 `aria-controls`、`aria-expanded`；目前章節以 `aria-current="page"` 標示。
 
@@ -63,8 +61,8 @@
 
 - 24 件作品保留正常 DOM 順序；非目前作品設為 `aria-hidden` 與 `inert`，換作完成後只留下唯一可讀作品。
 - 展廳進度環與重複節氣資訊設為 `aria-hidden=true`；正式節氣名稱仍存在目前作品的 `h2`。
-- `.carousel-viewport` 可聚焦，左右方向鍵可切換作品；動畫或載入中的再次操作會排隊而不被忽略。
-- 載入狀態透過 `aria-live="polite"` 回報；作品不自動輪播。
+- `.carousel-viewport` 可聚焦，左右方向鍵可切換作品；動畫或載入中的再次操作不排隊，避免稍後非預期換作。
+- 載入狀態同時以可見文字與 `aria-live="polite"` 回報；作品不自動輪播。
 - 裝飾層大多為 `aria-hidden` 或 `inert`，且不接收 pointer events。
 - 圖片 `alt` 仍是暫時文字，正式上線前必須補寫。
 - 理時序個別節氣是不可聚焦的展示文字；節氣環全自動輪轉，不要求 pointer、觸控或鍵盤操作，並以 `aria-label` 說明為自動循環圖。

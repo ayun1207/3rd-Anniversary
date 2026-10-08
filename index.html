@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>展示網站</title>
-    <link rel="preload" as="image" href="images/photo1.png" fetchpriority="high">
+    <link rel="preload" as="image" href="images/artworks/01.webp" fetchpriority="high">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -96,6 +96,7 @@
     <dialog id="siteMenu" class="site-menu" aria-labelledby="menuTitle">
         <div class="menu-panel">
             <div class="menu-heading">
+                <h2 id="menuTitle" class="visually-hidden">章節導覽</h2>
                 <button class="menu-close" type="button" aria-label="關閉導覽選單" onclick="closeMenu()" autofocus>&times;</button>
             </div>
             
@@ -202,14 +203,14 @@
                         <span id="galleryProgressTerm" class="gallery-progress-term">立春</span>
                         <span id="galleryProgressNumber" class="gallery-progress-number">01</span>
                     </span>
-                    <span id="galleryLoadStatus" class="visually-hidden" role="status" aria-live="polite"></span>
+                    <span id="galleryLoadStatus" class="gallery-load-status" role="status" aria-live="polite"></span>
                 </aside>
 
                 <div class="carousel-viewport" tabindex="0" aria-label="作品展示，可使用左右方向鍵切換">
                 <div class="carousel-slide" id="carouselSlide">
                     <!-- 圖片 1 至 24 -->
                     <figure class="slide-item">
-                        <div class="slide-image"><img src="images/photo1.png" alt="圖片 1" width="261" height="454" loading="eager" decoding="async" fetchpriority="high"></div>
+                        <div class="slide-image"><img src="images/artworks/01.webp" alt="圖片 1" width="261" height="454" loading="eager" decoding="async" fetchpriority="high"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">01</span></span></p>
                             <h2>立春</h2>
@@ -217,7 +218,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo2.png" alt="圖片 2" width="267" height="430" decoding="async" fetchpriority="low"></div>
+                        <div class="slide-image"><img data-src="images/artworks/02.webp" alt="圖片 2" width="267" height="430" decoding="async" fetchpriority="low"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">02</span></span></p>
                             <h2>雨水</h2>
@@ -273,7 +274,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item slide-item-landscape">
-                        <div class="slide-image"><img data-src="images/photo9.jpg" alt="圖片 9" width="2400" height="1350" decoding="async"></div>
+                        <div class="slide-image"><img data-src="images/artworks/09.webp" data-srcset="images/artworks/09-960.webp 960w, images/artworks/09.webp 2000w" data-sizes="(max-width: 768px) 92vw, 72vw" alt="圖片 9" width="2400" height="1350" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">09</span></span></p>
                             <h2>芒種</h2>
@@ -321,7 +322,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item slide-item-landscape slide-item-landscape-featured">
-                        <div class="slide-image"><img data-src="images/photo15.jpg" alt="圖片 15" width="2800" height="1576" decoding="async"></div>
+                        <div class="slide-image"><img data-src="images/artworks/15.webp" data-srcset="images/artworks/15-960.webp 960w, images/artworks/15.webp 2000w" data-sizes="(max-width: 768px) 92vw, 72vw" alt="圖片 15" width="2800" height="1576" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">15</span></span></p>
                             <h2>白露</h2>
@@ -377,7 +378,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item slide-item-landscape">
-                        <div class="slide-image"><img data-src="images/photo22.jpg" alt="圖片 22" width="2400" height="1350" decoding="async"></div>
+                        <div class="slide-image"><img data-src="images/artworks/22.webp" data-srcset="images/artworks/22-960.webp 960w, images/artworks/22.webp 2000w" data-sizes="(max-width: 768px) 92vw, 72vw" alt="圖片 22" width="2400" height="1350" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">22</span></span></p>
                             <h2>冬至</h2>

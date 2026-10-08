@@ -29,11 +29,12 @@
 
 | 檔案 | 專案內尺寸 | 用途／狀態 |
 | --- | ---: | --- |
-| `photo1.png` | 261×454 | 已引用，直式暫存素材 |
-| `photo2.png` | 267×430 | 已引用，直式暫存素材 |
-| `photo9.jpg` | 2400×1350 | 已引用，橫式；使用者表示原圖為 6000×3376 |
-| `photo15.jpg` | 2800×1576 | 已引用，橫式 featured；使用者表示原圖為 7000×3939 |
-| `photo22.jpg` | 2400×1350 | 已引用，橫式；使用者表示原圖為 6000×3376 |
+| `artworks/01.webp` | 261×454／18 KB | 網頁引用的直式暫存素材 |
+| `artworks/02.webp` | 267×430／20 KB | 網頁引用的直式暫存素材 |
+| `artworks/09.webp`／`09-960.webp` | 2000px／346 KB；960px／100 KB | 網頁引用的橫式響應式版本 |
+| `artworks/15.webp`／`15-960.webp` | 2000px／233 KB；960px／67 KB | 網頁引用的橫式 featured 響應式版本 |
+| `artworks/22.webp`／`22-960.webp` | 2000px／218 KB；960px／62 KB | 網頁引用的橫式響應式版本 |
+| `photo1.png`、`photo2.png`、`photo9.jpg`、`photo15.jpg`、`photo22.jpg` | 原測試來源 | 保留供重新輸出，頁面不直接引用 |
 | `photo3.jpg`–`photo8.jpg` | 缺少 | HTML 已引用 |
 | `photo10.jpg`–`photo14.jpg` | 缺少 | HTML 已引用 |
 | `photo16.jpg`–`photo21.jpg` | 缺少 | HTML 已引用 |
@@ -68,19 +69,27 @@
 ## 圖片交付建議
 
 - 保留原始委託圖於專案外的安全位置，或只放入已由 `.gitignore` 排除的 `artwork-originals/`；不可把原圖放進會部署的 `images/`。
-- 執行 `npm.cmd run optimize:images` 會將 `artwork-originals/` 內的圖片輸出為最長邊不超過 2400px、品質 88 的 WebP 至 `images/artworks/`，不覆蓋原圖。
+- 執行 `npm.cmd run optimize:images` 會將 `artwork-originals/` 內以 `01`–`24` 開頭的圖片輸出至 `images/artworks/`：桌機版最長邊 2000px、品質 84，另產生 960px、品質 80 的輕量版，不覆蓋原圖。
+- 測試階段若尚無 `artwork-originals/`，腳本會辨識 `images/photo1.*`–`photo24.*` 作為暫時來源。
 - 上線前依畫質需求考慮 WebP／AVIF、JPEG 品質與 responsive image，而不是直接使用 6000–7000px 原圖。
 - 每次替換後檢查方向、色彩、檔案大小、載入時間、透明背景及 `alt`。
 - 若改副檔名，必須同步修改 HTML；不可只重新命名而不確認實際編碼格式。
 - 網頁傳送到訪客瀏覽器的圖片無法真正禁止擷取；目前以不提供原始尺寸、禁止直接拖曳與只發布最佳化版本降低隨手複製。不要用封鎖右鍵取代素材保護。
+- 正式建置只額外複製 `images/artworks/`；根目錄的來源圖與未使用圖片不再進入 `dist`，固定介面素材則由 Vite 依實際引用打包。
 
 ## 作品載入策略
 
-- `photo1.png` 是首張清晰作品，使用 preload 與最高載入優先級；不以模糊版本取代第一眼畫質。
+- `artworks/01.webp` 是首張清晰作品，使用 preload 與最高載入優先級；不以模糊版本取代第一眼畫質。
 - 第一張完成後先預備第 2 張；完成一次手動切換後再準備目前作品的前後相鄰目標。第 2–24 張使用 `data-src`，只有在即將使用時才設定 `src`，避免首次開啟就一次下載全部圖片。
 - 換作前等待目標圖片完成載入與 `decode()`；尚未完成時保留目前作品，因此不會先清空畫面。
 - 缺檔或載入錯誤顯示統一預留狀態。測試階段缺少 19 張圖片不應拖慢首頁或形成長時間轉圈。
-- 目前三張橫式測試圖約 3.6–4.4 MB，正式上線前仍需輸出適合網頁的版本；延後載入只避免競爭首屏頻寬，不能取代圖片壓縮。
+- 三張橫式測試圖原本約 3.6–4.4 MB；目前桌機 WebP 為 218–346 KB，960px 版本為 62–100 KB，頁面不再直接請求原 JPG。
+
+## 自動檢查
+
+- `npm.cmd run validate` 檢查 24 筆資料、節氣環、作品 DOM、色調數量與順序；缺圖、超過 700 KB 的網站圖片和 placeholder 在開發期間列為警告。
+- `npm.cmd run validate:release` 使用相同檢查，但任何警告都會讓指令失敗，供正式公開前使用。
+- `npm.cmd run check` 依序執行一般內容檢查與 Vite build；GitHub Actions 也會先驗證再建置。
 
 ## 更新此文件的時機
 

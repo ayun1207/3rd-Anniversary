@@ -6,9 +6,9 @@
 
 ## 技術型態
 
-- 專案已進入漸進式 Vue 3／Vite 重構：既有章節目前仍由 `index.html` 提供，新增互動可先以 Vue SFC island 接管，再逐章遷移。
+- 專案已由 Vite 開發與建置，並保留 Vue 3 作為漸進式遷移技術；目前沒有正在掛載的 Vue 畫面，既有章節仍由 `index.html`、`style.css`、`script.js` 提供。
 - `style.css` 仍負責既有版面、斷點及 CSS 動畫；`script.js` 已改為 Vite module，暫時負責選單、捲動狀態、節氣自動輪轉、開場、音樂與滑鼠回應。
-- `src/main.js` 是 Vue 入口；`src/components/MessageComposer.vue` 是第一個 SFC；`src/data/seasons.js` 是後續 24 節氣資料驅動重構的集中資料來源。
+- `src/data/seasons.js` 是後續 24 節氣資料驅動重構的集中資料來源；正式遷移第一個完整區塊時，再建立 Vue 入口與對應 SFC。
 - `package.json` 與 `vite.config.js` 提供開發、建置、預覽與靜態素材複製流程。
 - `images/` 與 `fonts/` 為本機素材，沒有外部 CDN 字體依賴。
 
@@ -28,12 +28,11 @@ body
    │     └─ .gallery-stage（箭頭、進度環、24 × .slide-item）
    ├─ #text-page
    ├─ #planning-page
-   ├─ #messages-page
-   │  └─ #messageComposerApp（Vue SFC 掛載點）
+   ├─ #messages-page（預先收集的寄語卡片）
    └─ #thanks-page
 ```
 
-五個 `.page-content` 都在正常文件流中並同時顯示。`.active` 只標示目前閱讀章節，不再用來切換 `display`。網站沒有路由、網址 hash 或瀏覽器歷史狀態。
+六個 `.page-content` 都在正常文件流中並同時顯示。`.active` 只標示目前閱讀章節，不再用來切換 `display`。網站沒有路由、網址 hash 或瀏覽器歷史狀態。
 
 ## 載入與初始狀態
 
@@ -41,7 +40,7 @@ body
 2. JavaScript 初始化節氣環、作品閱讀進度與理時序裝飾，接著 `entrance.showModal()`。
 3. 使用者按「入新章」後關閉開場，從理時序開始正常垂直瀏覽。
 4. 捲動時 `requestAnimationFrame` 節流的 `updateScrollState()` 同步目前章節；作品索引不由滾輪改變。
-5. Vue 入口掛載寄語輸入元件；掛載失敗不影響既有靜態寄語與其他章節閱讀。
+5. 第 2–24 張作品依使用路徑按需載入；目前作品在目標圖完成載入與解碼前保持可見。
 
 ## 核心狀態
 
@@ -56,16 +55,17 @@ body
 | `enteringExhibition` | 防止重複關閉開場 |
 | `musicRequest` / `wantsMusic` | 管理播放請求與淡入取消 |
 
-舊的整頁切換函式仍暫留在 `script.js` 作相容保護，但目前 HTML 不再呼叫；作品手動切換函式則是現行展廳的核心互動。
+舊的互斥分頁與理時序跳往作品區動畫已移除；`navigateToSection()`、捲動章節判定與作品手動切換是目前的核心互動。
 
 ## 必須同步的 24 筆資料
 
-下列四組資料以相同索引互相對應：
+下列五組資料以相同索引互相對應：
 
 1. HTML 的 24 個 `.solar-term`。
 2. HTML 的 24 個 `.slide-item`。
 3. JavaScript 的 24 筆 `solarTermNotes`。
 4. JavaScript 的 24 筆 `backgroundColors`。
+5. `src/data/seasons.js` 的 24 筆節氣資料。
 
 作品進度名稱直接取自各 `.slide-item h2`。任何增刪、排序或名稱修改仍須一起核對四組資料。
 
@@ -92,7 +92,7 @@ body
 
 - `#messages-page` 是位於 `#text-page` 與 `#thanks-page` 之間的第 05 章，導覽 key 為 `messages`。
 - 既有寄語由 JavaScript 每四張分組成循環輪播，並保留箭頭、觸控、`aria-hidden`、`inert` 與 reduced-motion 狀態整理。
-- `#messageComposerApp` 由 Vue 接管本次瀏覽新增的寄語；不寫入伺服器或 localStorage。
+- 網站不提供訪客輸入；寄語由企劃方事先收集後，以 `.message-card` 放入頁面。
 - 實際預設名單變動時仍只增減完整 `.message-card` 節點；謝花人為第 06 章。
 - 詳細卡片結構與響應式規則見 `messages.md`。
 

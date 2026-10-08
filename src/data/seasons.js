@@ -23,19 +23,28 @@ const tones = [
 
 const seasonKeys = ['spring', 'summer', 'autumn', 'winter']
 const landscapeIds = new Set([9, 15, 22])
+const optimizedImageIds = new Set([1, 2, 9, 15, 22])
+const basePath = import.meta.env?.BASE_URL || '/'
 
 export const seasonsData = names.map((name, index) => {
   const id = index + 1
   const extension = id <= 2 ? 'png' : 'jpg'
+  const number = String(id).padStart(2, '0')
+  const hasOptimizedImage = optimizedImageIds.has(id)
 
   return {
     id,
-    number: String(id).padStart(2, '0'),
+    number,
     name,
     season: seasonKeys[Math.floor(index / 6)],
     note: notes[index],
     story: '在這裡寫下這張作品的故事，或是一句想留給看見它的人的話。',
-    image: `${import.meta.env.BASE_URL}images/photo${id}.${extension}`,
+    image: hasOptimizedImage
+      ? `${basePath}images/artworks/${number}.webp`
+      : `${basePath}images/photo${id}.${extension}`,
+    imageSmall: hasOptimizedImage && landscapeIds.has(id)
+      ? `${basePath}images/artworks/${number}-960.webp`
+      : null,
     alt: `圖片 ${id}`,
     tone: tones[index],
     landscape: landscapeIds.has(id),

@@ -31,10 +31,7 @@ const backgroundColors = [
 const siteMenu = document.getElementById('siteMenu');
 const menuToggle = document.getElementById('menuToggle');
 let menuCloseTimer;
-let isPageSwitching = false;
-
 function openMenu() {
-    if (isPageSwitching) return;
     clearTimeout(menuCloseTimer);
     if (!siteMenu.open) siteMenu.showModal();
     document.body.classList.add('menu-open');
@@ -67,217 +64,6 @@ siteMenu.addEventListener('close', () => {
     menuToggle.focus({ preventScroll: true });
 });
 
-function displayPage(pageName, targetPage, targetButton) {
-    finishPageTurn();
-    if (pageName !== 'intro') restIntroBreeze();
-    document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(button => {
-        button.classList.remove('active');
-        button.removeAttribute('aria-current');
-    });
-    targetPage.classList.add('active');
-    document.body.classList.toggle('intro-page-active', pageName === 'intro');
-    document.body.classList.toggle('text-page-active', pageName === 'text' || pageName === 'messages' || pageName === 'thanks');
-    targetButton.classList.add('active');
-    targetButton.setAttribute('aria-current', 'page');
-    document.getElementById('currentPageLabel').textContent = {
-        intro: '理時序', gallery: '觀芳華', text: '繪春信', planning: '籌花事', messages: '寄語', thanks: '謝花人'
-    }[pageName];
-    if (pageName === 'gallery') {
-        updateBackgroundColor();
-    } else if (pageName === 'intro') {
-        document.body.style.backgroundColor = '#F3EFE5';
-    }
-
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    clearTimeout(menuCloseTimer);
-    if (siteMenu.open) siteMenu.close();
-    siteMenu.classList.remove('is-open');
-    document.body.classList.remove('menu-open');
-    menuToggle.setAttribute('aria-expanded', 'false');
-}
-
-async function switchPage(pageName) {
-    const targetPage = document.getElementById(`${pageName}-page`);
-    const targetButton = Array.from(document.querySelectorAll('.nav-btn')).find(button => button.dataset.page === pageName);
-    const currentPage = document.querySelector('.page-content.active');
-    if (!targetPage || !targetButton || !currentPage || isPageSwitching || currentPage === targetPage) return;
-    if (reducedMotion.matches || typeof targetPage.animate !== 'function') {
-        displayPage(pageName, targetPage, targetButton);
-        return;
-    }
-
-    isPageSwitching = true;
-
-    let leaveAnimation;
-    let enterAnimation;
-
-    try {
-        leaveAnimation = currentPage.animate([
-            { opacity: 1, transform: 'translateY(0)' },
-            { opacity: 0, transform: 'translateY(-6px)' }
-        ], {
-            duration: 180,
-            easing: 'ease-in',
-            fill: 'forwards'
-        });
-
-        await leaveAnimation.finished;
-        displayPage(pageName, targetPage, targetButton);
-
-        enterAnimation = targetPage.animate([
-            { opacity: 0, transform: 'translateY(8px)' },
-            { opacity: 1, transform: 'translateY(0)' }
-        ], {
-            duration: 320,
-            easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-            fill: 'both'
-        });
-
-        await enterAnimation.finished;
-    } catch {
-        displayPage(pageName, targetPage, targetButton);
-    } finally {
-        leaveAnimation?.cancel();
-        enterAnimation?.cancel();
-        isPageSwitching = false;
-        menuToggle.focus({ preventScroll: true });
-    }
-}
-
-/* 理時序的主要入口使用跨頁視覺延續；選單仍沿用一般切頁。 */
-async function enterGalleryFromIntro() {
-    const targetPage = document.getElementById('gallery-page');
-    const targetButton = document.querySelector('.nav-btn[data-page="gallery"]');
-    const currentPage = document.querySelector('.page-content.active');
-
-    if (!targetPage || !targetButton || !currentPage || isPageSwitching || currentPage === targetPage) return;
-    if (currentPage.id !== 'intro-page' || siteMenu.open || reducedMotion.matches || typeof targetPage.animate !== 'function') {
-        await switchPage('gallery');
-        return;
-    }
-
-    const introCopy = currentPage.querySelector('.intro-copy');
-    const sourceCycle = currentPage.querySelector('.solar-cycle');
-    const targetSlide = originalSlides[currentIndex];
-    const targetImage = targetSlide?.querySelector('.slide-image');
-    const targetCaption = targetSlide?.querySelector('.slide-caption');
-    const targetOrbit = targetSlide?.querySelector('.cycle-orbit');
-
-    if (!introCopy || !sourceCycle || !targetImage || !targetCaption || !targetOrbit) {
-        await switchPage('gallery');
-        return;
-    }
-
-    isPageSwitching = true;
-    finishPageTurn();
-    restIntroBreeze();
-    targetPage.classList.add('gallery-entry-stage');
-    targetPage.inert = true;
-    targetPage.setAttribute('aria-hidden', 'true');
-    void targetPage.offsetWidth;
-
-    const sourceRect = sourceCycle.getBoundingClientRect();
-    const targetRect = targetOrbit.getBoundingClientRect();
-    const sourceIsVisible = sourceRect.width > 0 && sourceRect.height > 0
-        && sourceRect.bottom > 0 && sourceRect.top < window.innerHeight;
-    const targetIsVisible = targetRect.width > 0 && targetRect.height > 0;
-
-    targetImage.style.opacity = '0';
-    targetCaption.style.opacity = '0';
-    targetOrbit.style.opacity = '0';
-    targetPage.style.backgroundColor = backgroundColors[currentIndex];
-
-    try {
-        if (sourceIsVisible && targetIsVisible) {
-            galleryEntryProxy = sourceCycle.cloneNode(true);
-            galleryEntryProxy.classList.add('solar-cycle-transition');
-            galleryEntryProxy.querySelectorAll('[id]').forEach(element => element.removeAttribute('id'));
-            galleryEntryProxy.setAttribute('aria-hidden', 'true');
-            galleryEntryProxy.inert = true;
-            Object.assign(galleryEntryProxy.style, {
-                left: `${sourceRect.left}px`,
-                top: `${sourceRect.top}px`,
-                width: `${sourceRect.width}px`,
-                height: `${sourceRect.height}px`
-            });
-            document.body.append(galleryEntryProxy);
-            sourceCycle.style.visibility = 'hidden';
-
-            const sourceCenterX = sourceRect.left + sourceRect.width / 2;
-            const sourceCenterY = sourceRect.top + sourceRect.height / 2;
-            const targetCenterX = targetRect.left + targetRect.width / 2;
-            const targetCenterY = targetRect.top + targetRect.height / 2;
-            const targetScale = targetRect.width / sourceRect.width;
-
-            galleryEntryAnimations.push(galleryEntryProxy.animate([
-                { transform: 'translate3d(0, 0, 0) scale(1)', opacity: 1, filter: 'blur(0)' },
-                {
-                    transform: `translate3d(${targetCenterX - sourceCenterX}px, ${targetCenterY - sourceCenterY}px, 0) scale(${targetScale})`,
-                    opacity: 0.22,
-                    filter: 'blur(1px)'
-                }
-            ], {
-                duration: 900,
-                easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-                fill: 'forwards'
-            }));
-        }
-
-        galleryEntryAnimations.push(
-            introCopy.animate([
-                { opacity: 1, transform: 'translateY(0)' },
-                { opacity: 0, transform: 'translateY(-4px)' }
-            ], { duration: 240, easing: 'ease-out', fill: 'forwards' }),
-            targetPage.animate([
-                { backgroundColor: 'rgba(239, 236, 230, 0)' },
-                { backgroundColor: backgroundColors[currentIndex] }
-            ], { duration: 900, easing: 'ease-in-out', fill: 'both' }),
-            targetImage.animate([
-                { opacity: 0, filter: 'blur(8px)', transform: 'scale(0.985)' },
-                { opacity: 1, filter: 'blur(0)', transform: 'scale(1)' }
-            ], {
-                duration: 760,
-                delay: 170,
-                easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-                fill: 'both'
-            }),
-            targetCaption.animate([
-                { opacity: 0 },
-                { opacity: 1 }
-            ], { duration: 420, delay: 500, easing: 'ease-out', fill: 'both' })
-        );
-
-        await Promise.all(galleryEntryAnimations.map(animation => animation.finished));
-    } catch {
-        // reduced-motion 在途中啟用或動畫被取消時，直接完成到作品頁。
-    } finally {
-        displayPage('gallery', targetPage, targetButton);
-        targetPage.classList.remove('gallery-entry-stage');
-        targetPage.inert = false;
-        targetPage.removeAttribute('aria-hidden');
-        targetPage.style.removeProperty('background-color');
-        targetImage.style.removeProperty('opacity');
-        targetCaption.style.removeProperty('opacity');
-        targetOrbit.style.removeProperty('opacity');
-        sourceCycle.style.removeProperty('visibility');
-        galleryEntryAnimations.forEach(animation => animation.cancel());
-        galleryEntryAnimations = [];
-        galleryEntryProxy?.remove();
-        galleryEntryProxy = null;
-
-        if (!reducedMotion.matches && typeof targetOrbit.animate === 'function') {
-            targetOrbit.animate([
-                { opacity: 0.2, filter: 'blur(1px)' },
-                { opacity: 1, filter: 'blur(0)' }
-            ], { duration: 260, easing: 'ease-out' });
-        }
-
-        isPageSwitching = false;
-        menuToggle.focus({ preventScroll: true });
-    }
-}
-
 /* =========================
    作品手動切換初始化
 ========================= */
@@ -289,15 +75,13 @@ const galleryLoadStatus = document.getElementById('galleryLoadStatus');
 
 let currentIndex = 0;
 let isAnimating = false;
-let queuedSlideDirection = 0;
 let turnAnimations = [];
-let galleryEntryAnimations = [];
-let galleryEntryProxy = null;
 let turnVersion = 0;
 let cycleRotation = 0;
 let cycleCompleteTimer;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const slideImageLoads = new WeakMap();
+const galleryImageWaitLimit = 8000;
 
 document.documentElement.style.setProperty('--cycle-angle', '0deg');
 
@@ -311,6 +95,10 @@ function prepareSlideImage(index, { highPriority = false } = {}) {
     if (highPriority) image.fetchPriority = 'high';
     image.loading = 'eager';
 
+    if (!image.getAttribute('srcset') && image.dataset.srcset) {
+        image.srcset = image.dataset.srcset;
+        image.sizes = image.dataset.sizes || '100vw';
+    }
     if (!image.getAttribute('src') && image.dataset.src) {
         image.src = image.dataset.src;
     }
@@ -356,10 +144,8 @@ function preloadAdjacentSlides(index) {
 
 function continueGalleryNavigation() {
     preloadAdjacentSlides(currentIndex);
-    if (queuedSlideDirection) {
-        const direction = queuedSlideDirection;
-        queuedSlideDirection = 0;
-        window.setTimeout(() => void moveSlide(direction), 0);
+    if (!originalSlides[currentIndex]?.classList.contains('is-image-unavailable') && galleryLoadStatus) {
+        galleryLoadStatus.textContent = '';
     }
 }
 
@@ -385,8 +171,7 @@ function finishPageTurn() {
 async function moveSlide(direction) {
     if (direction !== 1 && direction !== -1) return;
     if (isAnimating) {
-        queuedSlideDirection = direction;
-        if (galleryLoadStatus) galleryLoadStatus.textContent = '已記下切換操作，將在目前轉場後繼續。';
+        if (galleryLoadStatus) galleryLoadStatus.textContent = '作品正在準備，完成前不會追加切換。';
         return;
     }
 
@@ -399,8 +184,20 @@ async function moveSlide(direction) {
     const targetReady = Boolean(targetImage?.complete && targetImage.naturalWidth > 0);
     galleryPage?.classList.toggle('is-awaiting-image', !targetReady);
     if (!targetReady && galleryLoadStatus) galleryLoadStatus.textContent = '正在準備下一幅作品。';
-    const imageReady = await prepareSlideImage(nextIndex, { highPriority: true });
+    let waitTimer;
+    const imageReady = await Promise.race([
+        prepareSlideImage(nextIndex, { highPriority: true }),
+        new Promise(resolve => {
+            waitTimer = window.setTimeout(() => resolve(null), galleryImageWaitLimit);
+        })
+    ]);
+    window.clearTimeout(waitTimer);
     galleryPage?.classList.remove('is-awaiting-image');
+    if (imageReady === null) {
+        if (galleryLoadStatus) galleryLoadStatus.textContent = '圖片仍在載入，請稍後再按一次。';
+        if (version === turnVersion) finishPageTurn();
+        return;
+    }
     if (galleryLoadStatus) galleryLoadStatus.textContent = imageReady ? '' : '這幅作品的圖像尚未提供。';
     if (version !== turnVersion) return;
 
@@ -472,7 +269,6 @@ async function moveSlide(direction) {
 reducedMotion.addEventListener('change', () => {
     if (reducedMotion.matches) {
         finishPageTurn();
-        galleryEntryAnimations.forEach(animation => animation.cancel());
     }
 });
 finishPageTurn();

@@ -69,6 +69,9 @@ cleanup／refactor 原則上只限本次修改涉及的區域。若發現問題�
 npm install
 npm run dev
 npm run optimize:images
+npm run validate
+npm run validate:release
+npm run check
 npm run build
 npm run preview
 ```
