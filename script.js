@@ -77,6 +77,7 @@ const galleryLoadStatus = document.getElementById('galleryLoadStatus');
 
 let currentIndex = 0;
 let isAnimating = false;
+let queuedSlideDirection = 0;
 let turnAnimations = [];
 let turnVersion = 0;
 let cycleRotation = 0;
@@ -209,10 +210,17 @@ function finishPageTurn() {
     isAnimating = false;
 }
 
+function continueQueuedSlideMove() {
+    if (!queuedSlideDirection) return;
+    const direction = queuedSlideDirection;
+    queuedSlideDirection = 0;
+    window.setTimeout(() => void moveSlide(direction), 0);
+}
+
 async function moveSlide(direction) {
     if (direction !== 1 && direction !== -1) return;
     if (isAnimating) {
-        if (galleryLoadStatus) galleryLoadStatus.textContent = '作品正在準備，完成前不會追加切換。';
+        queuedSlideDirection = direction;
         return;
     }
 
@@ -236,7 +244,10 @@ async function moveSlide(direction) {
     galleryPage?.classList.remove('is-awaiting-image');
     if (imageReady === null) {
         if (galleryLoadStatus) galleryLoadStatus.textContent = '圖片仍在載入，請稍後再按一次。';
-        if (version === turnVersion) finishPageTurn();
+        if (version === turnVersion) {
+            finishPageTurn();
+            continueQueuedSlideMove();
+        }
         return;
     }
     if (galleryLoadStatus) galleryLoadStatus.textContent = imageReady ? '' : '這幅作品的圖像尚未提供。';
@@ -264,6 +275,7 @@ async function moveSlide(direction) {
     if (reducedMotion.matches || typeof outgoing.animate !== 'function') {
         finishPageTurn();
         continueGalleryNavigation();
+        continueQueuedSlideMove();
         return;
     }
 
@@ -303,6 +315,7 @@ async function moveSlide(direction) {
         if (version === turnVersion) {
             finishPageTurn();
             continueGalleryNavigation();
+            continueQueuedSlideMove();
         }
     }
 }
@@ -347,6 +360,7 @@ function closeMenuImmediately() {
 
 function updateGalleryProgress(index) {
     const boundedIndex = Math.max(0, Math.min(totalSlides - 1, index));
+    queuedSlideDirection = 0;
     currentIndex = boundedIndex;
     updateGalleryMeta(boundedIndex);
     finishPageTurn();

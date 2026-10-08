@@ -8,38 +8,6 @@
     <link rel="preload" as="font" type="font/woff2" href="fonts/lxgw-wenkai-tc-300-subset.woff2" crossorigin fetchpriority="high">
     <link rel="preload" as="image" href="images/artworks/01.webp" fetchpriority="high">
     <link rel="stylesheet" href="style.css">
-    <script>
-        (() => {
-            const root = document.documentElement;
-            let fontChoiceLocked = false;
-
-            const finishFontChoice = useFallback => {
-                if (fontChoiceLocked) return;
-                fontChoiceLocked = true;
-                root.classList.add(useFallback ? 'font-fallback' : 'font-ready');
-                root.classList.remove('font-pending');
-            };
-
-            const loadPreferredFont = () => {
-                if (!document.fonts?.load) {
-                    finishFontChoice(true);
-                    return;
-                }
-
-                document.fonts.load(
-                    '300 1em "LXGW WenKai TC"',
-                    '霓影流轉 四時成章'
-                ).then(loadedFonts => {
-                    finishFontChoice(loadedFonts.length === 0);
-                }).catch(() => {
-                    finishFontChoice(true);
-                });
-            };
-
-            if (document.readyState === 'complete') loadPreferredFont();
-            else window.addEventListener('load', loadPreferredFont, { once: true });
-        })();
-    </script>
     <noscript>
         <style>
             html.font-pending {
@@ -541,6 +509,33 @@
         </section>
     </main>
 
+    <script>
+        (() => {
+            const root = document.documentElement;
+            let fontChoiceLocked = false;
+
+            const finishFontChoice = useFallback => {
+                if (fontChoiceLocked) return;
+                fontChoiceLocked = true;
+                root.classList.add(useFallback ? 'font-fallback' : 'font-ready');
+                root.classList.remove('font-pending');
+            };
+
+            if (!document.fonts?.load) {
+                finishFontChoice(true);
+                return;
+            }
+
+            document.fonts.load(
+                '300 1em "LXGW WenKai TC"',
+                '霓影流轉 四時成章'
+            ).then(loadedFonts => {
+                finishFontChoice(loadedFonts.length === 0);
+            }).catch(() => {
+                finishFontChoice(true);
+            });
+        })();
+    </script>
     <script type="module" src="/script.js"></script>
 </body>
 </html>

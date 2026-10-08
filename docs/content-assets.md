@@ -55,7 +55,7 @@
 
 ## 字體
 
-- LXGW WenKai TC：`lxgw-wenkai-tc-300.woff2` 保留為完整原始字型；網站實際使用由 `npm.cmd run optimize:font` 依 `index.html`、`script.js` 與 `src/` 現有文字產生的 `lxgw-wenkai-tc-300-subset.woff2`。子集來源是300字重，CSS將同一字形提供給目前使用的300–400字重範圍。全站以此字體作為唯一主字體，並在首屏以高優先度 preload 取得；正式建置會將 CSS 連結重新排序，因此字體判定需等待 `load`，確認 `@font-face` 已註冊後再以入口中文實際驗證。字體確實載入完成前只顯示暖紙底色，不先繪製回退文字，因此不會發生可見的換字或版面跳動，也不會因固定逾時而放棄尚在下載的字體。只有字體請求明確失敗或瀏覽器不支援字體載入判定時，才會在內容首次顯示前固定選用中文襯線回退，該次瀏覽不再切換。新增會使用此字體顯示的文字後需重新執行子集指令。
+- LXGW WenKai TC：`lxgw-wenkai-tc-300.woff2` 保留為完整原始字型；網站實際使用由 `npm.cmd run optimize:font` 依 `index.html`、`script.js` 與 `src/` 現有文字產生的 `lxgw-wenkai-tc-300-subset.woff2`。子集來源是300字重，CSS將同一字形提供給目前使用的300–400字重範圍。全站以此字體作為唯一主字體，並在首屏以高優先度 preload 取得；字體判定程式放在文件底部，確保正式建置重排後的 CSS 已註冊，並不等待整頁 `load` 就以入口中文實際驗證。字體確實載入完成前只顯示暖紙底色，不先繪製回退文字，因此不會發生可見的換字或版面跳動，也不會因固定逾時而放棄尚在下載的字體。只有字體請求明確失敗或瀏覽器不支援字體載入判定時，才會在內容首次顯示前固定選用中文襯線回退，該次瀏覽不再切換。新增會使用此字體顯示的文字後需重新執行子集指令。
 - Chiron Sung HK 的分片字型不完整，會產生大量 404 請求，因此不再於執行期載入；原授權檔保留供素材紀錄使用。
 - 一般回退包含 Noto Serif TC、Noto Serif CJK TC、Source Han Serif TC、Songti TC、PMingLiU、MingLiU、serif。
 - 授權文件位於 `fonts/OFL-LXGW-WenKai-TC.txt` 與 `fonts/LICENSE-Chiron-Sung-HK.md`。

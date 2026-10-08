@@ -48,7 +48,7 @@ body
 | --- | --- |
 | `currentSection` | 目前位於閱讀線上的章節 |
 | `currentIndex` | 橫向展廳目前作品索引，0–23 |
-| `isAnimating` / `turnVersion` | 防止重複換作與過期動畫完成處理 |
+| `isAnimating` / `turnVersion` / `queuedSlideDirection` | 防止重複換作與過期動畫完成處理，並在動畫期間保留最新一次手動切換 |
 | `cycleRotation` | 保存循環累積角度，讓 24→1 延續到 360 度 |
 | `scrollFrame` | 合併連續 scroll／resize 更新 |
 | `solarPreviewVersion` / autoplay timers | 管理節氣自動輪轉並防止舊文字計時器回寫 |
