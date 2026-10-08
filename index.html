@@ -20,16 +20,24 @@
                 root.classList.remove('font-pending');
             };
 
-            if (!document.fonts?.load) {
-                finishFontChoice(true);
-                return;
-            }
+            const loadPreferredFont = () => {
+                if (!document.fonts?.load) {
+                    finishFontChoice(true);
+                    return;
+                }
 
-            document.fonts.load('300 1em "LXGW WenKai TC"').then(loadedFonts => {
-                finishFontChoice(loadedFonts.length === 0);
-            }).catch(() => {
-                finishFontChoice(true);
-            });
+                document.fonts.load(
+                    '300 1em "LXGW WenKai TC"',
+                    '霓影流轉 四時成章'
+                ).then(loadedFonts => {
+                    finishFontChoice(loadedFonts.length === 0);
+                }).catch(() => {
+                    finishFontChoice(true);
+                });
+            };
+
+            if (document.readyState === 'complete') loadPreferredFont();
+            else window.addEventListener('load', loadPreferredFont, { once: true });
         })();
     </script>
     <noscript>
