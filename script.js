@@ -475,7 +475,7 @@ let solarPreviewVersion = 0;
 let solarAutoplayTimer;
 let solarAutoplayIndex = 0;
 const solarAutoplayInterval = 2200;
-const solarAutoplayPreviewDelay = 520;
+const solarAutoplayPreviewDelay = 120;
 const solarTermNotes = [
     '風開始有了方向',
     '細雨輕輕落進春天',

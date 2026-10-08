@@ -22,7 +22,7 @@
 | --- | --- | --- |
 | 紙與墨 | `.entrance`、`::before`、`::after` | 暖米漸層、SVG 雜訊紙紋、內緣墨暈 |
 | 光與霓 | `.entrance-light`、`.entrance-iridescence` | 右上柔光與低彩度弧形霓光 |
-| 局部畫意 | `.entrance-paint-*` | 使用保留原解析度的輕量版 `intro-atmosphere-v2.webp`，首屏完成後背景下載、解碼完成才套用，並以 mask 只保留左上與左下局部 |
+| 局部畫意 | `.entrance-paint-*` | 使用保留原解析度的輕量版 `intro-atmosphere-v2.webp`，首屏完成後背景下載、解碼完成才套用；左上局部自行柔和融入，左下山河則與冬雪同步出現，避免提前暴露冬季象限 |
 | 霧與連接 | `.entrance-mist-*`、`.entrance-cloud-bridge` | 橫向連接四季象限的柔霧 |
 | 水紋 | `.entrance-water` | 只保留右下較不規則的淡波紋 |
 | 春 | `.entrance-season-spring` | 左上枝條與 32 枚花形元素 |
@@ -32,10 +32,13 @@
 
 開場中央內容以 `translateY(clamp(24px, 5vh, 48px))` 稍向下配置。入口按鈕本體維持固定位置，JavaScript 只依指標距離改變文字強度與光暈。
 
+四季象限在字體確定、封面開啟後，依左上春、右上夏、右下秋、左下冬的順序交錯融入。動畫只使用現有圖層的透明度，不增加素材請求或阻擋入口操作。
+
 ## 防止重新整理閃頁
 
 - HTML 初始帶 `html.entrance-pending`。
 - 此狀態隱藏 `.site-header` 與 `main`，並使用與封面接近的底色。
+- 封面初始、開啟與關閉後都保留穩定的瀏覽器滾軸槽位，避免恢復頁面捲動時將置中畫面往左推移。
 - JavaScript 開啟 dialog 後，在下一個 animation frame 移除此 class。
 - 不要提前移除 class，也不要只靠 script 載入後才新增，否則會再次短暫閃出理時序。
 
@@ -66,6 +69,7 @@
 - 中央標題、副標與入口在常見尺寸保持清楚。
 - 手機四季元素會縮小且部分理時序飄葉隱藏；修改後一併檢查。
 - reduced-motion 下霧動畫與距離回應必須停止。
+- reduced-motion 下不顯示延遲載入的局部畫意層，避免純裝飾在解碼後突然跳入。
 
 ## 更新此文件的時機
 
