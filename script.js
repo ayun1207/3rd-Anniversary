@@ -279,14 +279,17 @@ async function enterGalleryFromIntro() {
 }
 
 /* =========================
-   輪播初始化
+   作品手動切換初始化
 ========================= */
 
 const originalSlides = Array.from(document.querySelectorAll('.slide-item'));
 const totalSlides = originalSlides.length;
+const galleryPage = document.getElementById('gallery-page');
+const galleryLoadStatus = document.getElementById('galleryLoadStatus');
 
 let currentIndex = 0;
 let isAnimating = false;
+let queuedSlideDirection = 0;
 let turnAnimations = [];
 let galleryEntryAnimations = [];
 let galleryEntryProxy = null;
@@ -304,6 +307,7 @@ function prepareSlideImage(index, { highPriority = false } = {}) {
     const image = slide?.querySelector('.slide-image img');
     if (!image) return Promise.resolve(false);
 
+    image.draggable = false;
     if (highPriority) image.fetchPriority = 'high';
     image.loading = 'eager';
 
@@ -343,14 +347,24 @@ function prepareSlideImage(index, { highPriority = false } = {}) {
     return loadPromise;
 }
 
-function preloadFollowingSlide(index) {
+function preloadAdjacentSlides(index) {
     window.setTimeout(() => {
         void prepareSlideImage(index + 1, { highPriority: true });
+        void prepareSlideImage(index - 1);
     }, 0);
 }
 
+function continueGalleryNavigation() {
+    preloadAdjacentSlides(currentIndex);
+    if (queuedSlideDirection) {
+        const direction = queuedSlideDirection;
+        queuedSlideDirection = 0;
+        window.setTimeout(() => void moveSlide(direction), 0);
+    }
+}
+
 function updateBackgroundColor() {
-    document.getElementById('gallery-page')?.style.setProperty('--gallery-tone', backgroundColors[currentIndex]);
+    galleryPage?.style.setProperty('--gallery-tone', backgroundColors[currentIndex]);
 }
 
 function finishPageTurn() {
@@ -369,15 +383,25 @@ function finishPageTurn() {
 }
 
 async function moveSlide(direction) {
-    if (isAnimating) return;
     if (direction !== 1 && direction !== -1) return;
+    if (isAnimating) {
+        queuedSlideDirection = direction;
+        if (galleryLoadStatus) galleryLoadStatus.textContent = '已記下切換操作，將在目前轉場後繼續。';
+        return;
+    }
 
     isAnimating = true;
     const version = ++turnVersion;
     const previousIndex = currentIndex;
     const outgoing = originalSlides[currentIndex];
     const nextIndex = (currentIndex + direction + totalSlides) % totalSlides;
-    await prepareSlideImage(nextIndex, { highPriority: true });
+    const targetImage = originalSlides[nextIndex]?.querySelector('.slide-image img');
+    const targetReady = Boolean(targetImage?.complete && targetImage.naturalWidth > 0);
+    galleryPage?.classList.toggle('is-awaiting-image', !targetReady);
+    if (!targetReady && galleryLoadStatus) galleryLoadStatus.textContent = '正在準備下一幅作品。';
+    const imageReady = await prepareSlideImage(nextIndex, { highPriority: true });
+    galleryPage?.classList.remove('is-awaiting-image');
+    if (galleryLoadStatus) galleryLoadStatus.textContent = imageReady ? '' : '這幅作品的圖像尚未提供。';
     if (version !== turnVersion) return;
 
     currentIndex = nextIndex;
@@ -401,7 +425,7 @@ async function moveSlide(direction) {
 
     if (reducedMotion.matches || typeof outgoing.animate !== 'function') {
         finishPageTurn();
-        preloadFollowingSlide(currentIndex);
+        continueGalleryNavigation();
         return;
     }
 
@@ -440,7 +464,7 @@ async function moveSlide(direction) {
     } finally {
         if (version === turnVersion) {
             finishPageTurn();
-            preloadFollowingSlide(currentIndex);
+            continueGalleryNavigation();
         }
     }
 }
@@ -453,7 +477,7 @@ reducedMotion.addEventListener('change', () => {
 });
 finishPageTurn();
 void prepareSlideImage(0, { highPriority: true }).then(() => {
-    preloadFollowingSlide(0);
+    void prepareSlideImage(1, { highPriority: true });
 });
 
 /* =========================
@@ -463,7 +487,6 @@ void prepareSlideImage(0, { highPriority: true }).then(() => {
 const pageSections = Array.from(document.querySelectorAll('.page-content'));
 const galleryProgressTerm = document.getElementById('galleryProgressTerm');
 const galleryProgressNumber = document.getElementById('galleryProgressNumber');
-const galleryPage = document.getElementById('gallery-page');
 let currentSection = 'intro';
 let scrollFrame = 0;
 let scrollSettleTimer;
@@ -906,6 +929,12 @@ const carouselViewport = document.querySelector('.carousel-viewport');
 
 let touchStartX = 0;
 let touchStartY = 0;
+
+carouselViewport.addEventListener('keydown', event => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    event.preventDefault();
+    void moveSlide(event.key === 'ArrowRight' ? 1 : -1);
+});
 
 carouselViewport.addEventListener('touchstart', (event) => {
     touchStartX = event.changedTouches[0].clientX;

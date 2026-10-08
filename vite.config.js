@@ -7,11 +7,11 @@ function copyStaticDirectories() {
   const directoryMappings = [
     ['audio', 'audio'],
     ['images', 'images'],
-    ['fonts/chiron/woff2', 'woff2']
   ]
 
   return {
     name: 'copy-static-directories',
+    apply: 'build',
     buildStart() {
       const emitDirectory = (sourceRoot, outputRoot, currentDirectory = sourceRoot) => {
         readdirSync(currentDirectory).forEach(name => {

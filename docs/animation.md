@@ -42,6 +42,7 @@
 - scroll／resize／pageshow 只排入一個 `requestAnimationFrame`，由 `scrollFrame` 防止同一畫格重複計算。
 - 作品區採自然頁流，滾輪不攔截、不觸發換作；scroll 更新只用於目前章節與左側資訊軌狀態。
 - 作品換作由 `isAnimating`、`turnVersion` 與 `turnAnimations` 管理；取消後由 `finishPageTurn()` 重建唯一目前作品。
+- 換作期間的再次手動操作記入 `queuedSlideDirection`，目前動畫完成後執行最後一次方向，不讓點擊或按鍵無聲消失。
 - `prepareSlideImage()` 管理按需載入與解碼 promise；換作不在目標圖準備完成前撤除目前作品，載入錯誤則使用預留狀態收束。
 - `cycleRotation` 累積正負 15 度，避免第 24 件回第 1 件時視覺倒轉。
 - 節氣輪轉保留 `solarPreviewVersion`、`solarAutoplayTimer`、`solarTypingTimer`、`solarHoverTimer`，防止重啟或頁籤切換後產生殘字。

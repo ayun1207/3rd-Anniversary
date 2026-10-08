@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>展示網站</title>
     <link rel="preload" as="image" href="images/photo1.png" fetchpriority="high">
-    <link rel="stylesheet" href="fonts/chiron/css/vf.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -197,15 +196,16 @@
                     </svg>
                 </button>
 
-                <aside class="gallery-scroll-progress" aria-hidden="true">
-                    <span class="cycle-orbit gallery-progress-orbit"><span class="cycle-marker"></span></span>
-                    <span class="gallery-progress-copy">
+                <aside class="gallery-scroll-progress" aria-label="作品展示狀態">
+                    <span class="cycle-orbit gallery-progress-orbit" aria-hidden="true"><span class="cycle-marker"></span></span>
+                    <span class="gallery-progress-copy" aria-hidden="true">
                         <span id="galleryProgressTerm" class="gallery-progress-term">立春</span>
                         <span id="galleryProgressNumber" class="gallery-progress-number">01</span>
                     </span>
+                    <span id="galleryLoadStatus" class="visually-hidden" role="status" aria-live="polite"></span>
                 </aside>
 
-                <div class="carousel-viewport">
+                <div class="carousel-viewport" tabindex="0" aria-label="作品展示，可使用左右方向鍵切換">
                 <div class="carousel-slide" id="carouselSlide">
                     <!-- 圖片 1 至 24 -->
                     <figure class="slide-item">
@@ -217,7 +217,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img src="images/photo2.png" alt="圖片 2" width="267" height="430" loading="eager" decoding="async" fetchpriority="low"></div>
+                        <div class="slide-image"><img data-src="images/photo2.png" alt="圖片 2" width="267" height="430" decoding="async" fetchpriority="low"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">02</span></span></p>
                             <h2>雨水</h2>
@@ -484,7 +484,6 @@
                     </button>
                     <p id="messagesStatus" class="messages-status" role="status" aria-live="polite"></p>
                 </div>
-                <div id="messageComposerApp"></div>
             </div>
         </section>
 

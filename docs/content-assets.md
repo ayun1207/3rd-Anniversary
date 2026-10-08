@@ -45,7 +45,7 @@
 
 | 檔案 | 尺寸 | 狀態 |
 | --- | ---: | --- |
-| `intro-atmosphere-v2.png` | 1672×941 | 開場局部紙墨畫意，CSS 正在使用 |
+| `intro-atmosphere-v2.webp` | 1672×941 | 開場局部紙墨畫意，CSS 使用的高品質壓縮版 |
 | `intro-atmosphere-v1.png` | 1672×941 | 未引用的舊版本 |
 | `191066.jpg` | 600×600 | 未引用 |
 | `images/README.md` | 空白 | 尚未記錄素材來源或授權 |
@@ -54,8 +54,8 @@
 
 ## 字體
 
-- LXGW WenKai TC：`lxgw-wenkai-tc-300.woff2`、`400.woff2`，用於開場、節氣名稱、中心文字與作品節氣標籤。
-- Chiron Sung HK：由 `fonts/chiron/css/vf.css` 與分片 woff2 載入，中央節氣敘述使用。
+- LXGW WenKai TC：網頁只載入 `lxgw-wenkai-tc-300.woff2` 並涵蓋 300–400 字重，避免同時下載兩個約 2 MB 的完整中文字型；用於開場、節氣名稱、中心文字與作品節氣標籤。
+- Chiron Sung HK 的分片字型不完整，會產生大量 404 請求，因此不再於執行期載入；原授權檔保留供素材紀錄使用。
 - 一般回退包含 Noto Serif TC、Noto Serif CJK TC、Source Han Serif TC、Songti TC、PMingLiU、MingLiU、serif。
 - 授權文件位於 `fonts/OFL-LXGW-WenKai-TC.txt` 與 `fonts/LICENSE-Chiron-Sung-HK.md`。
 
@@ -67,15 +67,17 @@
 
 ## 圖片交付建議
 
-- 保留原始委託圖於專案外的安全位置；網站使用適合顯示尺寸的輸出版本。
+- 保留原始委託圖於專案外的安全位置，或只放入已由 `.gitignore` 排除的 `artwork-originals/`；不可把原圖放進會部署的 `images/`。
+- 執行 `npm.cmd run optimize:images` 會將 `artwork-originals/` 內的圖片輸出為最長邊不超過 2400px、品質 88 的 WebP 至 `images/artworks/`，不覆蓋原圖。
 - 上線前依畫質需求考慮 WebP／AVIF、JPEG 品質與 responsive image，而不是直接使用 6000–7000px 原圖。
 - 每次替換後檢查方向、色彩、檔案大小、載入時間、透明背景及 `alt`。
 - 若改副檔名，必須同步修改 HTML；不可只重新命名而不確認實際編碼格式。
+- 網頁傳送到訪客瀏覽器的圖片無法真正禁止擷取；目前以不提供原始尺寸、禁止直接拖曳與只發布最佳化版本降低隨手複製。不要用封鎖右鍵取代素材保護。
 
 ## 作品載入策略
 
 - `photo1.png` 是首張清晰作品，使用 preload 與最高載入優先級；不以模糊版本取代第一眼畫質。
-- `photo2.png` 作為第一個前進目標先以低優先級請求，等首張完成後再提升優先級；第 3–24 張使用 `data-src`，由輪播在成為下一張時才設定 `src`。
+- 第一張完成後先預備第 2 張；完成一次手動切換後再準備目前作品的前後相鄰目標。第 2–24 張使用 `data-src`，只有在即將使用時才設定 `src`，避免首次開啟就一次下載全部圖片。
 - 換作前等待目標圖片完成載入與 `decode()`；尚未完成時保留目前作品，因此不會先清空畫面。
 - 缺檔或載入錯誤顯示統一預留狀態。測試階段缺少 19 張圖片不應拖慢首頁或形成長時間轉圈。
 - 目前三張橫式測試圖約 3.6–4.4 MB，正式上線前仍需輸出適合網頁的版本；延後載入只避免競爭首屏頻寬，不能取代圖片壓縮。

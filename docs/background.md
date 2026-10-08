@@ -22,7 +22,7 @@
 | --- | --- | --- |
 | 紙與墨 | `.entrance`、`::before`、`::after` | 暖米漸層、SVG 雜訊紙紋、內緣墨暈 |
 | 光與霓 | `.entrance-light`、`.entrance-iridescence` | 右上柔光與低彩度弧形霓光 |
-| 局部畫意 | `.entrance-paint-*` | 使用 `intro-atmosphere-v2.png`，以 mask 只保留左上與左下局部 |
+| 局部畫意 | `.entrance-paint-*` | 使用高品質壓縮版 `intro-atmosphere-v2.webp`，以 mask 只保留左上與左下局部 |
 | 霧與連接 | `.entrance-mist-*`、`.entrance-cloud-bridge` | 橫向連接四季象限的柔霧 |
 | 水紋 | `.entrance-water` | 只保留右下較不規則的淡波紋 |
 | 春 | `.entrance-season-spring` | 左上枝條與 32 枚花形元素 |

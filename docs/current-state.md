@@ -41,13 +41,13 @@
 
 - 目前存在的作品：`photo1.png`、`photo2.png`、`photo9.jpg`、`photo15.jpg`、`photo22.jpg`。
 - HTML 已引用但尚不存在：3–8、10–14、16–21、23–24，共 19 件。
-- `intro-atmosphere-v2.png` 正在使用；`intro-atmosphere-v1.png` 與 `191066.jpg` 未被引用。
+- `intro-atmosphere-v2.webp` 正在使用；PNG 原檔與 `intro-atmosphere-v1.png`、`191066.jpg` 未被頁面引用。
 
 ## 已知風險與技術債
 
 - 正式作品未齊，無法完成 24 件實際載入、比例、背景對比與長頁效能驗證。
 - 目前 9、15、22 是縮放版本，不是完整原始像素；詳見 `content-assets.md`。
-- `script.js` 仍暫留不再被 HTML 呼叫的舊整頁切換函式；日後可在完整回歸後清理。作品輪播函式是目前橫向展廳的必要功能。
+- `script.js` 仍暫留不再被 HTML 呼叫的舊整頁切換函式；日後可在完整回歸後清理。作品手動切換函式是目前橫向展廳的必要功能。
 - 選單 `aria-labelledby="menuTitle"` 尚無對應元素；理時序個別節氣仍不可鍵盤聚焦。
 - 專案沒有自動化測試、格式化工具或建置流程。
 

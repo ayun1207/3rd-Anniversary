@@ -2,15 +2,7 @@
     font-family: "LXGW WenKai TC";
     src: url("fonts/lxgw-wenkai-tc-300.woff2") format("woff2");
     font-style: normal;
-    font-weight: 300;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "LXGW WenKai TC";
-    src: url("fonts/lxgw-wenkai-tc-400.woff2") format("woff2");
-    font-style: normal;
-    font-weight: 400;
+    font-weight: 300 400;
     font-display: swap;
 }
 
@@ -20,6 +12,18 @@
     box-sizing: border-box;
     font-family: "Noto Serif TC", "Noto Serif CJK TC", "Source Han Serif TC",
         "Songti TC", "PMingLiU", "MingLiU", serif;
+}
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
 }
 
 html {
@@ -47,7 +51,7 @@ html.entrance-pending main {
 body {
     isolation: isolate;
     background-color: #F5F2EC; /* 預設第一張圖片背景 */
-    /* 稀疏的小點與柔光，保留輪播原有的背景換色。 */
+    /* 稀疏的小點與柔光，保留作品切換時的背景換色。 */
     background-image:
         radial-gradient(circle at 8% 20%, rgba(143, 121, 89, 0.3) 0 2px, transparent 3px),
         radial-gradient(circle at 92% 76%, rgba(143, 121, 89, 0.3) 0 2px, transparent 3px),
@@ -431,7 +435,7 @@ body.menu-open { overflow: hidden; }
     z-index: 1;
     margin: 0;
     color: rgba(70, 81, 76, 0.82);
-    font-family: "Chiron Sung HK WS", "Noto Serif TC", "Songti TC", serif;
+    font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
     font-size: clamp(0.94rem, 1.2vw, 1.08rem);
     font-weight: 350;
     line-height: 2.05;
@@ -1292,7 +1296,7 @@ body.intro-page-active {
     text-align: center;
     text-wrap: balance;
     color: color-mix(in srgb, var(--season-accent) 46%, #687069);
-    font-family: "Chiron Sung HK WS", "Noto Serif TC", "Songti TC", serif;
+    font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
     font-weight: 350;
     font-variation-settings: "PADG" 4;
     font-size: clamp(0.62rem, 0.79vw, 0.75rem);
@@ -1683,6 +1687,8 @@ body.intro-page-active {
 }
 
 .slide-item img {
+    -webkit-user-drag: none;
+    user-select: none;
     max-width: 100%;
     max-height: none;
     width: auto;
@@ -2153,7 +2159,7 @@ html.entrance-open {
 .entrance-paint {
     position: absolute;
     inset: 0;
-    background: url("images/intro-atmosphere-v2.png") center bottom / cover no-repeat;
+    background: url("images/intro-atmosphere-v2.webp") center bottom / cover no-repeat;
     mix-blend-mode: multiply;
     pointer-events: none;
 }
@@ -2934,6 +2940,15 @@ body.gallery-section-active .gallery-scroll-progress {
     color: #7a858b;
 }
 
+#gallery-page.is-awaiting-image .gallery-progress-orbit {
+    animation: gallery-image-wait 1.4s ease-in-out infinite;
+}
+
+@keyframes gallery-image-wait {
+    0%, 100% { opacity: 0.45; }
+    50% { opacity: 1; }
+}
+
 html.has-scroll-reveal .slide-item {
     opacity: 0.001;
     transition: opacity 900ms ease;
@@ -3475,6 +3490,7 @@ html.has-scroll-reveal .slide-item.is-revealed {
 @media (prefers-reduced-motion: reduce) {
     .gallery-stage { transition: none; }
     .cycle-complete .gallery-stage { animation: none; }
+    #gallery-page.is-awaiting-image .gallery-progress-orbit { animation: none; }
 }
 
 /* =========================

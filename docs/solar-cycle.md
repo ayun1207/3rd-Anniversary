@@ -8,7 +8,7 @@
 - 24 個節氣從立春起依 15 度排列，順序同作品與 `solarTermNotes`。
 - 立春、立夏、立秋、立冬帶 `.solar-cardinal`，字重與字級略高。
 - 四季名稱色分別由 `.solar-spring`、`.solar-summer`、`.solar-autumn`、`.solar-winter` 控制。
-- 環與節氣字主要使用 `LXGW WenKai TC`；中央敘述使用 Chiron Sung HK。
+- 環與節氣字主要使用 `LXGW WenKai TC`；中央敘述使用現有中文襯線回退字體，避免不完整的 Chiron 分片造成載入錯誤。
 
 ## 進入前中央狀態
 

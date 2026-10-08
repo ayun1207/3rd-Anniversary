@@ -56,7 +56,7 @@ body
 | `enteringExhibition` | 防止重複關閉開場 |
 | `musicRequest` / `wantsMusic` | 管理播放請求與淡入取消 |
 
-舊的整頁切換函式仍暫留在 `script.js` 作相容保護，但目前 HTML 不再呼叫；作品輪播函式則是現行展廳的核心互動。
+舊的整頁切換函式仍暫留在 `script.js` 作相容保護，但目前 HTML 不再呼叫；作品手動切換函式則是現行展廳的核心互動。
 
 ## 必須同步的 24 筆資料
 

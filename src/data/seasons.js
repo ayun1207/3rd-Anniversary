@@ -35,7 +35,7 @@ export const seasonsData = names.map((name, index) => {
     season: seasonKeys[Math.floor(index / 6)],
     note: notes[index],
     story: '在這裡寫下這張作品的故事，或是一句想留給看見它的人的話。',
-    image: `/images/photo${id}.${extension}`,
+    image: `${import.meta.env.BASE_URL}images/photo${id}.${extension}`,
     alt: `圖片 ${id}`,
     tone: tones[index],
     landscape: landscapeIds.has(id),
