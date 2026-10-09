@@ -16,7 +16,7 @@ const solarTermNames = Array.from(
   match => match[1].trim()
 )
 const slideNames = Array.from(
-  html.matchAll(/<figure class="slide-item[^>]*>[\s\S]*?<h2>([^<]+)<\/h2>[\s\S]*?<\/figure>/g),
+  html.matchAll(/<figure class="slide-item[^>]*>[\s\S]*?<h2[^>]*>([^<]+)<\/h2>[\s\S]*?<\/figure>/g),
   match => match[1].trim()
 )
 const colorBlock = script.match(/const backgroundColors = \[([\s\S]*?)\];/)

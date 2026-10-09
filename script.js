@@ -74,6 +74,7 @@ const originalSlides = Array.from(document.querySelectorAll('.slide-item'));
 const totalSlides = originalSlides.length;
 const galleryPage = document.getElementById('gallery-page');
 const galleryLoadStatus = document.getElementById('galleryLoadStatus');
+const galleryArrowButtons = Array.from(galleryPage?.querySelectorAll('.arrow-btn') || []);
 
 let currentIndex = 0;
 let isAnimating = false;
@@ -82,9 +83,14 @@ let turnAnimations = [];
 let turnVersion = 0;
 let cycleRotation = 0;
 let cycleCompleteTimer;
+let sceneControlsTimer;
+let sceneControlsVersion = 0;
+let sceneLayoutIndex = null;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const slideImageLoads = new WeakMap();
 const galleryImageWaitLimit = 8000;
+const sceneSlideIndexes = new Set([8, 14, 21]);
+const sceneControlsDelay = 2000;
 
 document.documentElement.style.setProperty('--cycle-angle', '0deg');
 
@@ -195,6 +201,48 @@ function updateBackgroundColor() {
     galleryPage?.style.setProperty('--gallery-tone', backgroundColors[currentIndex]);
 }
 
+function setSceneControlsAvailable(available) {
+    galleryArrowButtons.forEach(button => {
+        button.disabled = !available;
+        if (available) button.removeAttribute('aria-hidden');
+        else button.setAttribute('aria-hidden', 'true');
+    });
+}
+
+function setGallerySceneLayout(index) {
+    if (index === sceneLayoutIndex) return;
+    sceneLayoutIndex = index;
+    const isSceneSlide = sceneSlideIndexes.has(index);
+    clearTimeout(sceneControlsTimer);
+    sceneControlsVersion += 1;
+    galleryPage?.classList.toggle('is-scene-slide', isSceneSlide);
+    galleryPage?.classList.toggle('is-scene-controls-waiting', isSceneSlide && !reducedMotion.matches);
+    galleryPage?.classList.toggle('is-scene-controls-ready', isSceneSlide && reducedMotion.matches);
+    setSceneControlsAvailable(!isSceneSlide || reducedMotion.matches);
+}
+
+function scheduleSceneControlsReveal() {
+    clearTimeout(sceneControlsTimer);
+    const version = ++sceneControlsVersion;
+    const isSceneSlide = sceneSlideIndexes.has(currentIndex);
+    if (!isSceneSlide || reducedMotion.matches) {
+        galleryPage?.classList.remove('is-scene-controls-waiting');
+        galleryPage?.classList.toggle('is-scene-controls-ready', isSceneSlide);
+        setSceneControlsAvailable(true);
+        return;
+    }
+
+    galleryPage?.classList.add('is-scene-controls-waiting');
+    galleryPage?.classList.remove('is-scene-controls-ready');
+    setSceneControlsAvailable(false);
+    sceneControlsTimer = setTimeout(() => {
+        if (version !== sceneControlsVersion || !sceneSlideIndexes.has(currentIndex)) return;
+        galleryPage?.classList.remove('is-scene-controls-waiting');
+        galleryPage?.classList.add('is-scene-controls-ready');
+        setSceneControlsAvailable(true);
+    }, sceneControlsDelay);
+}
+
 function finishPageTurn() {
     turnVersion += 1;
     turnAnimations.forEach(animation => animation.cancel());
@@ -208,6 +256,7 @@ function finishPageTurn() {
         slide.style.removeProperty('z-index');
     });
     isAnimating = false;
+    scheduleSceneControlsReveal();
 }
 
 function continueQueuedSlideMove() {
@@ -370,6 +419,7 @@ function updateGalleryMeta(index) {
     const boundedIndex = Math.max(0, Math.min(totalSlides - 1, index));
     galleryProgressTerm.textContent = originalSlides[boundedIndex]?.querySelector('h2')?.textContent.trim() || '';
     galleryProgressNumber.textContent = String(boundedIndex + 1).padStart(2, '0');
+    setGallerySceneLayout(boundedIndex);
     updateBackgroundColor();
 }
 

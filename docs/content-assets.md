@@ -31,7 +31,7 @@
 | --- | ---: | --- |
 | `artworks/01.webp` | 261×454／18 KB | 網頁引用的直式暫存素材 |
 | `artworks/02.webp` | 267×430／20 KB | 網頁引用的直式暫存素材 |
-| `artworks/09.webp`／`09-960.webp` | 2000px／346 KB；960px／100 KB | 網頁引用的橫式響應式版本 |
+| `artworks/09.webp`／`09-960.webp` | 2000px／346 KB；960px／100 KB | 第 9 張 16:9 滿版場景使用的響應式版本 |
 | `artworks/15.webp`／`15-960.webp` | 2000px／233 KB；960px／67 KB | 網頁引用的橫式 featured 響應式版本 |
 | `artworks/22.webp`／`22-960.webp` | 2000px／218 KB；960px／62 KB | 網頁引用的橫式響應式版本 |
 | `photo1.png`、`photo2.png`、`photo9.jpg`、`photo15.jpg`、`photo22.jpg` | 原測試來源 | 保留供重新輸出，頁面不直接引用 |
