@@ -596,7 +596,7 @@ function clearSolarTermPreview() {
     solarCycle.classList.remove('has-preview');
     delete solarCycle.dataset.season;
     solarCenterTerm.getAnimations().forEach(animation => animation.cancel());
-    solarCenterTerm.textContent = '歲·律';
+    solarCenterTerm.textContent = '';
     solarCenterNote.textContent = '';
 }
 

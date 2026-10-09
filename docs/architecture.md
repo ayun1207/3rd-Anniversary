@@ -29,10 +29,11 @@ body
    ├─ #text-page
    ├─ #planning-page
    ├─ #messages-page（預先收集的寄語卡片）
-   └─ #thanks-page
+   ├─ #thanks-page
+   └─ .site-epilogue（結語保留區，不參與章節導覽）
 ```
 
-六個 `.page-content` 都在正常文件流中並同時顯示。`.active` 只標示目前閱讀章節，不再用來切換 `display`。網站沒有路由、網址 hash 或瀏覽器歷史狀態。
+六個 `.page-content` 都在正常文件流中並同時顯示。`.active` 只標示目前閱讀章節，不再用來切換 `display`。末端 `.site-epilogue` 只是結語留白，不納入 `pageSections`。網站沒有路由、網址 hash 或瀏覽器歷史狀態。
 
 ## 載入與初始狀態
 
