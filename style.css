@@ -803,55 +803,6 @@ main {
     overflow: hidden;
 }
 
-.intro-page::before,
-.intro-page::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-}
-
-.intro-page::before {
-    z-index: -1;
-    inset: -10% -8%;
-    background:
-        radial-gradient(ellipse at 4% 73%, rgba(255, 255, 252, 0.78) 0 8%, transparent 29%),
-        radial-gradient(ellipse at 28% 88%, rgba(235, 237, 229, 0.62) 0 10%, transparent 31%),
-        radial-gradient(ellipse at 58% 76%, rgba(255, 252, 240, 0.58) 0 9%, transparent 28%),
-        radial-gradient(ellipse at 88% 66%, rgba(225, 233, 233, 0.48) 0 8%, transparent 29%),
-        radial-gradient(ellipse at 74% 22%, rgba(255, 255, 255, 0.5) 0 7%, transparent 25%);
-    filter: blur(18px);
-    opacity: 0.52;
-    animation: intro-mist-drift 24s ease-in-out infinite alternate;
-}
-
-.intro-page::after {
-    z-index: -1;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'%3E%3Cg fill='none' stroke='%23766d5d' stroke-opacity='.18' stroke-width='.8'%3E%3Cpath d='M-30 60a30 30 0 0 1 60 0M30 60a30 30 0 0 1 60 0M90 60a30 30 0 0 1 60 0'/%3E%3Cpath d='M0 60a30 30 0 0 1 60 0M60 60a30 30 0 0 1 60 0' transform='translate(0 -15)'/%3E%3Cpath d='M-30 60a30 30 0 0 1 60 0M30 60a30 30 0 0 1 60 0M90 60a30 30 0 0 1 60 0' transform='translate(0 -30)'/%3E%3C/g%3E%3C/svg%3E");
-    background-position: center bottom -4px;
-    background-size: 120px 60px;
-    opacity: 0.12;
-    -webkit-mask-image: linear-gradient(to top, #000 0, rgba(0, 0, 0, 0.72) 18%, transparent 58%);
-    mask-image: linear-gradient(to top, #000 0, rgba(0, 0, 0, 0.72) 18%, transparent 58%);
-}
-
-@keyframes intro-mist-drift {
-    from { transform: translate3d(-1.2%, 0, 0) scale(1); }
-    to { transform: translate3d(1.2%, -1%, 0) scale(1.025); }
-}
-
-body.intro-page-active {
-    background-color: #f7f3e9;
-    background-image:
-        radial-gradient(ellipse at 10% 16%, rgba(216, 165, 156, 0.24), transparent 48%),
-        radial-gradient(ellipse at 89% 24%, rgba(153, 178, 139, 0.23), transparent 46%),
-        radial-gradient(ellipse at 12% 88%, rgba(202, 159, 89, 0.2), transparent 45%),
-        radial-gradient(ellipse at 88% 88%, rgba(155, 176, 182, 0.22), transparent 45%);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-}
-
 .intro-layout {
     position: relative;
     z-index: 1;
@@ -1529,10 +1480,6 @@ body.intro-page-active {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .intro-page::before {
-        animation: none;
-    }
-
     .solar-term,
     .solar-ring,
     .solar-leaf-marker {
@@ -1946,16 +1893,6 @@ body.intro-page-active {
     font-size: 1.05rem;
     color: #576574;
     margin-bottom: 20px;
-}
-
-/* 第二頁：柔和漸層與選單互動試作。 */
-body.text-page-active {
-    background-image:
-        radial-gradient(ellipse at 8% 12%, rgba(255, 250, 232, 0.95), transparent 60%),
-        radial-gradient(ellipse at 92% 22%, rgba(237, 204, 213, 0.8), transparent 62%),
-        radial-gradient(ellipse at 75% 95%, rgba(192, 216, 204, 0.85), transparent 65%),
-        linear-gradient(135deg, #f9f3e8 0%, #efe5e8 50%, #e2ece4 100%);
-    background-attachment: fixed;
 }
 
 #text-page .text-container,
@@ -2808,22 +2745,6 @@ html.font-fallback.entrance-open .entrance-season-winter {
 .music-toggle:hover { background: rgba(255, 253, 248, 0.85); }
 .music-status { position: fixed; bottom: 16px; left: 20px; right: 20px; z-index: 20; text-align: center; font-size: 0.8rem; }
 .music-status:not(:empty) { padding: 12px; border-radius: 12px; background: #fffdf8; }
-.intro-breeze { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
-.breeze-anchor { position: absolute; width: 1px; height: 1px; }
-.breeze-shape {
-    display: block;
-    width: var(--size);
-    height: calc(var(--size) * 1.4);
-    opacity: 0.72;
-    transform: translate(-50%, -50%) rotate(var(--tilt));
-    transition: transform 1600ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 1400ms ease;
-}
-.breeze-shape::before { content: ''; display: block; width: 100%; height: 100%; border-radius: 75% 25% 65% 35%; background: linear-gradient(135deg, #fff5e8, var(--petal-color) 60%); }
-.breeze-anchor[data-season="summer"] .breeze-shape::before { border-radius: 95% 5% 90% 10%; }
-.breeze-anchor[data-season="autumn"] .breeze-shape::before { border-radius: 10% 80% 20% 80%; }
-.breeze-anchor[data-season="winter"] .breeze-shape { height: var(--size); }
-.breeze-anchor[data-season="winter"] .breeze-shape::before { border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fffdf7, var(--petal-color) 65%, transparent); }
-.breeze-shape.is-stirred { transition-duration: 650ms, 650ms; }
 @media (max-width: 600px) {
     .entrance { padding: 36px 20px; }
     .entrance-content { transform: translateY(18px); }
@@ -2852,8 +2773,6 @@ html.font-fallback.entrance-open .entrance-season-winter {
     .entrance-water::after { width: 40%; }
     .entrance h1 { font-size: clamp(2rem, 10vw, 2.55rem); line-height: 1.5; }
     #entranceDescription { max-width: 19em; margin-top: 22px; line-height: 2; }
-    .breeze-anchor:nth-child(even) { display: none; }
-    .breeze-shape { width: calc(var(--size) * 0.75); height: var(--size); }
     .entrance-prompt { opacity: calc(0.75 + var(--proximity) * 0.25); }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -2864,7 +2783,7 @@ html.font-fallback.entrance-open .entrance-season-winter {
         animation: none !important;
         opacity: var(--entrance-season-opacity);
     }
-    .breeze-shape, .breeze-shape.is-stirred, .entrance-prompt, .entrance-enter::before { transition: none; }
+    .entrance-prompt, .entrance-enter::before { transition: none; }
     .entrance-prompt { transform: none; }
 }
 
@@ -3241,57 +3160,13 @@ html.has-scroll-reveal .slide-item.is-revealed {
     min-height: min(620px, calc(86svh - 150px));
 }
 
-.intro-layout::after {
-    content: '';
-    position: absolute;
-    left: 47%;
-    bottom: clamp(-112px, -8vw, -78px);
-    width: min(48vw, 680px);
-    height: 92px;
-    border-bottom: 1px solid rgba(117, 105, 81, 0.2);
-    border-radius: 0 0 58% 42%;
-    background: radial-gradient(ellipse at 72% 100%, rgba(213, 194, 160, 0.12), transparent 62%);
-    opacity: 0.72;
-    pointer-events: none;
-}
-
 #gallery-page {
     --gallery-tone: #EFECE6;
     position: relative;
     padding: clamp(72px, 8vw, 118px) 0 clamp(92px, 10vw, 150px);
     border-top: 1px solid rgba(255, 255, 255, 0.46);
     border-bottom: 1px solid rgba(117, 105, 81, 0.12);
-    background:
-        radial-gradient(ellipse at 12% 12%, rgba(255, 255, 255, 0.7), transparent 43%),
-        radial-gradient(ellipse at 88% 88%, rgba(132, 151, 145, 0.08), transparent 46%),
-        linear-gradient(180deg, rgba(245, 240, 231, 0.58), rgba(237, 232, 222, 0.42));
-}
-
-#gallery-page::before,
-#gallery-page::after {
-    content: '';
-    position: absolute;
-    pointer-events: none;
-}
-
-#gallery-page::before {
-    top: 34px;
-    right: -10vw;
-    width: min(46vw, 720px);
-    aspect-ratio: 1;
-    border: 1px solid rgba(117, 105, 81, 0.07);
-    border-radius: 50%;
-    box-shadow:
-        0 0 0 52px rgba(255, 255, 255, 0.055),
-        0 0 0 104px rgba(117, 105, 81, 0.025);
-}
-
-#gallery-page::after {
-    left: 0;
-    right: 0;
-    bottom: 30px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(117, 105, 81, 0.18), transparent);
+    background: transparent;
 }
 
 .gallery-section-heading {
@@ -3601,7 +3476,10 @@ html.has-scroll-reveal .slide-item.is-revealed {
     font-weight: 300;
     line-height: 2;
     letter-spacing: 0.11em;
-    text-shadow: 0 1px 12px rgba(255, 255, 255, 0.48);
+    text-shadow:
+        0 0 3px rgba(249, 241, 216, 0.96),
+        0 0 8px rgba(241, 230, 194, 0.82),
+        0 1px 14px rgba(250, 244, 225, 0.74);
 }
 
 /* 第 15 張：文字置於左上天空留白，避免覆蓋飛鳥、山景與人物。 */
@@ -3617,7 +3495,10 @@ html.has-scroll-reveal .slide-item.is-revealed {
 
 #gallery-page.is-scene-slide .gallery-stage .slide-item-scene-15 .caption-description {
     white-space: nowrap;
-    text-shadow: 0 1px 12px rgba(255, 255, 255, 0.58);
+    text-shadow:
+        0 0 3px rgba(234, 246, 240, 0.98),
+        0 0 8px rgba(210, 236, 229, 0.86),
+        0 1px 14px rgba(238, 249, 244, 0.78);
 }
 
 /* 第 22 張：文字置於右側窗格留白，避開中央人物與落雪主景。 */
@@ -3680,13 +3561,6 @@ html.has-scroll-reveal .slide-item.is-revealed {
     }
 
     .intro-layout { min-height: auto; }
-
-    .intro-layout::after {
-        left: 30%;
-        bottom: -68px;
-        width: 72%;
-        height: 62px;
-    }
 
     #gallery-page { padding: 68px 0 96px; }
 
@@ -3966,9 +3840,7 @@ html.has-scroll-reveal .slide-item.is-revealed {
    以紙張、欄線與局部色域建立網站感，避免每一章都成為獨立滿版畫面。
 ========================= */
 
-body,
-body.intro-page-active,
-body.text-page-active {
+body {
     background-color: #f3efe6;
     background-image:
         linear-gradient(90deg, rgba(118, 105, 82, 0.018) 1px, transparent 1px),
@@ -4038,11 +3910,6 @@ main::before {
 .solar-cycle {
     justify-self: end;
     transform: translate(3%, 4%) scale(1.04);
-}
-
-.intro-layout::after {
-    left: 39%;
-    width: min(54vw, 760px);
 }
 
 /* 顏色停留在章節邊角，不再用整頁漸層切換場景。 */
@@ -4456,11 +4323,6 @@ main::before {
         transform: none;
     }
 
-    .intro-layout::after {
-        left: 24%;
-        width: 76%;
-    }
-
     .info-page,
     .page-content.info-page,
     .page-content.info-page.active {
@@ -4504,9 +4366,7 @@ main::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    body,
-    body.intro-page-active,
-    body.text-page-active {
+    body {
         background-attachment: scroll;
     }
 }

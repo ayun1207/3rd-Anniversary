@@ -10,8 +10,8 @@
 | --- | --- | --- | --- |
 | `intro` | `#intro-page` | 理時序 | 大標、引文與節氣環 |
 | `gallery` | `#gallery-page` | 觀芳華 | 大標「作品展示」與獨立的 24 件橫向循環展廳 |
-| `planning` | `#planning-page` | 籌花事 | 籌畫細節，內容待補 |
 | `text` | `#text-page` | 繪春信 | 繪師資訊，內容待補 |
+| `planning` | `#planning-page` | 籌花事 | 籌畫細節，內容待補 |
 | `messages` | `#messages-page` | 寄語 | 可變數量的留言與署名卡片 |
 | `thanks` | `#thanks-page` | 謝花人 | 三個等寬紙框的 36 人委託名單；暱稱待替換，章節編號為 06 |
 

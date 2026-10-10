@@ -254,6 +254,7 @@ function finishPageTurn() {
         slide.setAttribute('aria-hidden', String(!active));
         slide.inert = !active;
         slide.style.removeProperty('z-index');
+        slide.style.removeProperty('position');
     });
     isAnimating = false;
     scheduleSceneControlsReveal();
@@ -328,33 +329,26 @@ async function moveSlide(direction) {
         return;
     }
 
-    outgoing.classList.remove('is-current');
-    outgoing.classList.add('is-turning');
+    outgoing.classList.remove('is-current', 'is-turning');
     outgoing.setAttribute('aria-hidden', 'true');
     outgoing.inert = true;
-        incoming.classList.add('is-current');
-        incoming.style.position = 'absolute';
+    incoming.classList.add('is-current');
     incoming.setAttribute('aria-hidden', 'false');
     incoming.inert = false;
-    const outgoingImage = outgoing.querySelector('.slide-image');
-    outgoing.style.zIndex = '2';
-    incoming.style.zIndex = '1';
+    const incomingImage = incoming.querySelector('.slide-image');
+    incoming.style.zIndex = '2';
 
-    // 新圖完整墊在下方，舊圖逐漸透明，避免兩張同時變透明造成閃白。
-    // 文字維持原位，先淡出再淡入。
+    // 目標圖片完成載入與解碼後才切換；舊圖立即退出，避免半透明殘像覆蓋新圖。
+    // 新圖全程保持不透明，只以極輕微縮放復位提示換作。
     turnAnimations = [
-        outgoingImage.animate([
-            { opacity: 1 },
-            { opacity: 0 }
-        ], { duration: 860, easing: 'ease-in-out', fill: 'forwards' }),
-        outgoing.querySelector('.slide-caption').animate([
-            { opacity: 1 },
-            { opacity: 0 }
-        ], { duration: 240, easing: 'ease-out', fill: 'forwards' }),
+        incomingImage.animate([
+            { opacity: 1, transform: 'scale(1.002)' },
+            { opacity: 1, transform: 'scale(1)' }
+        ], { duration: 520, easing: 'ease-out', fill: 'both' }),
         incoming.querySelector('.slide-caption').animate([
             { opacity: 0 },
             { opacity: 1 }
-        ], { duration: 560, delay: 180, easing: 'ease-out', fill: 'both' })
+        ], { duration: 460, delay: 60, easing: 'ease-out', fill: 'both' })
     ];
     try {
         await Promise.all(turnAnimations.map(animation => animation.finished));
@@ -376,16 +370,15 @@ reducedMotion.addEventListener('change', () => {
 });
 finishPageTurn();
 void prepareSlideImage(0, { highPriority: true }).then(() => {
-    const prepareSecondSlide = () => {
+    const prepareDeferredAssets = () => {
         runWhenBrowserIsIdle(() => {
             prepareDeferredEntranceAssets();
-            void prepareSlideImage(1);
             preloadIdleGalleryImages();
         }, 1500);
     };
 
-    if (document.readyState === 'complete') prepareSecondSlide();
-    else window.addEventListener('load', prepareSecondSlide, { once: true });
+    if (document.readyState === 'complete') prepareDeferredAssets();
+    else window.addEventListener('load', prepareDeferredAssets, { once: true });
 });
 
 /* =========================
@@ -436,9 +429,7 @@ function setCurrentSection(pageName) {
         else button.removeAttribute('aria-current');
     });
 
-    document.body.classList.toggle('intro-page-active', pageName === 'intro');
     document.body.classList.toggle('gallery-section-active', pageName === 'gallery');
-    document.body.classList.toggle('text-page-active', pageName === 'text' || pageName === 'messages' || pageName === 'thanks');
     document.getElementById('currentPageLabel').textContent = {
         intro: '理時序',
         gallery: '觀芳華',
@@ -450,16 +441,13 @@ function setCurrentSection(pageName) {
     document.documentElement.style.setProperty('--section-marker-top', {
         intro: '14%',
         gallery: '30%',
-        planning: '46%',
-        text: '62%',
+        text: '46%',
+        planning: '62%',
         messages: '78%',
         thanks: '92%'
     }[pageName]);
 
-    if (pageName !== 'intro' && typeof restIntroBreeze === 'function') restIntroBreeze();
-    if (pageName === 'intro') document.body.style.backgroundColor = '#F3EFE5';
-    else if (pageName === 'gallery') updateGalleryMeta(currentIndex);
-    else document.body.style.backgroundColor = '#F5F2EC';
+    if (pageName === 'gallery') updateGalleryMeta(currentIndex);
 }
 
 function navigateToSection(pageName) {
@@ -874,10 +862,6 @@ carouselViewport.addEventListener('touchend', (event) => {
     }
 }, { passive: true });
 
-/* 初始化：Splash 關閉後先顯示理時序。 */
-document.body.classList.add('intro-page-active');
-document.body.style.backgroundColor = '#F3EFE5';
-
 /* 開場與背景音樂：play 必須在點擊事件內立即呼叫，不等待淡出結束。 */
 const entrance = document.getElementById('entrance');
 const backgroundMusic = document.getElementById('backgroundMusic');
@@ -1075,90 +1059,3 @@ document.addEventListener('visibilitychange', () => {
 reducedMotion.addEventListener('change', () => {
     if (!entrance.open && !document.hidden) startSolarAutoplay();
 });
-
-// 四季裝飾移至「理時序」，置於內容後方且不接收點擊或鍵盤焦點。
-const introPage = document.getElementById('intro-page');
-const breezeLayer = document.createElement('div');
-breezeLayer.className = 'intro-breeze';
-breezeLayer.setAttribute('aria-hidden', 'true');
-breezeLayer.inert = true;
-introPage.prepend(breezeLayer);
-// 四季各六枚裝飾，中央留給企劃文字與節氣環。
-const breezeLayout = [
-    [8, 14, 28, -35], [21, 9, 18, 25], [33, 18, 21, 55], [12, 33, 23, 15], [24, 28, 15, -50], [5, 46, 19, 45],
-    [70, 10, 24, -30], [87, 15, 29, 40], [95, 34, 19, -15], [79, 30, 20, 65], [91, 48, 24, -45], [62, 17, 16, 20],
-    [7, 65, 27, -45], [20, 73, 19, 35], [11, 90, 23, 65], [34, 86, 26, -25], [26, 94, 16, 15], [5, 80, 18, -10],
-    [81, 67, 14, 0], [94, 75, 22, 0], [72, 87, 17, 0], [89, 94, 12, 0], [61, 92, 20, 0], [95, 58, 15, 0]
-];
-const breezeColors = ['#bc8085', '#7a9671', '#bd9255', '#9baeb6'];
-const breezeSeasons = ['spring', 'summer', 'autumn', 'winter'];
-const breezeMotes = breezeLayout.map(([x, y, size, tilt], index) => {
-    const anchor = document.createElement('span');
-    anchor.className = 'breeze-anchor';
-    anchor.style.left = `${x}%`;
-    anchor.style.top = `${y}%`;
-    anchor.style.setProperty('--size', `${size}px`);
-    anchor.style.setProperty('--tilt', `${tilt}deg`);
-    anchor.dataset.season = breezeSeasons[Math.floor(index / 6)];
-    anchor.style.setProperty('--petal-color', breezeColors[Math.floor(index / 6)]);
-    const shape = document.createElement('span');
-    shape.className = 'breeze-shape';
-    anchor.append(shape);
-    breezeLayer.append(anchor);
-    return { anchor, shape, tilt };
-});
-let breezeFrame = 0;
-let breezeRestTimer;
-
-function restIntroBreeze() {
-    cancelAnimationFrame(breezeFrame);
-    clearTimeout(breezeRestTimer);
-    breezeFrame = 0;
-    breezeMotes.forEach(({ shape }) => {
-        shape.classList.remove('is-stirred');
-        shape.style.removeProperty('transform');
-        shape.style.removeProperty('opacity');
-    });
-}
-
-function updateIntroBreeze(x, y) {
-    if (entrance.open || !introPage.classList.contains('active') || reducedMotion.matches || document.hidden) return;
-    breezeMotes.forEach(({ anchor, shape, tilt }) => {
-        if (!anchor.getClientRects().length) return;
-        const rect = anchor.getBoundingClientRect();
-        const dx = rect.left - x;
-        const dy = rect.top - y;
-        const distance = Math.hypot(dx, dy);
-        const progress = Math.max(0, 1 - distance / 240);
-        const strength = progress * progress * (3 - 2 * progress);
-        if (!strength) {
-            shape.classList.remove('is-stirred');
-            shape.style.removeProperty('transform');
-            shape.style.removeProperty('opacity');
-            return;
-        }
-        const offsetX = dx / Math.max(distance, 1) * strength * 26;
-        const offsetY = (dy / Math.max(distance, 1) * 12 - 6) * strength;
-        shape.classList.add('is-stirred');
-        shape.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px)) rotate(${tilt + strength * (dx < 0 ? -24 : 24)}deg) scale(${1 + strength * 0.18})`;
-        shape.style.opacity = String(0.72 + strength * 0.23);
-    });
-}
-
-function queueIntroBreeze(x, y) {
-    if (entrance.open || !introPage.classList.contains('active') || reducedMotion.matches) return;
-    cancelAnimationFrame(breezeFrame);
-    clearTimeout(breezeRestTimer);
-    breezeFrame = requestAnimationFrame(() => {
-        breezeFrame = 0;
-        updateIntroBreeze(x, y);
-    });
-    // 滑鼠停下後餘韻慢慢消散，不持續執行動畫迴圈。
-    breezeRestTimer = setTimeout(restIntroBreeze, 280);
-}
-
-window.addEventListener('pointermove', event => {
-    if (event.pointerType !== 'touch') queueIntroBreeze(event.clientX, event.clientY);
-}, { passive: true });
-document.addEventListener('visibilitychange', () => { if (document.hidden) restIntroBreeze(); });
-reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) restIntroBreeze(); });

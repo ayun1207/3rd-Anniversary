@@ -6,7 +6,6 @@
     <title>展示網站</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='24' fill='none' stroke='%238f7959' stroke-width='3'/%3E%3Cpath d='M32 12c7 8 7 32 0 40M12 32h40' fill='none' stroke='%238f7959' stroke-width='2' opacity='.65'/%3E%3C/svg%3E">
     <link rel="preload" as="font" type="font/woff2" href="fonts/lxgw-wenkai-tc-300-subset.woff2" crossorigin fetchpriority="high">
-    <link rel="preload" as="image" href="images/artworks/01.webp" fetchpriority="high">
     <link rel="stylesheet" href="style.css">
     <noscript>
         <style>
@@ -113,8 +112,8 @@
             <nav class="menu-navigation" aria-label="網站導覽">
                 <button class="nav-btn active" type="button" data-page="intro" aria-current="page" onclick="navigateToSection('intro')">理時序<span class="menu-arrow" aria-hidden="true"></span></button>
                 <button class="nav-btn" type="button" data-page="gallery" onclick="navigateToSection('gallery')">觀芳華<span class="menu-arrow" aria-hidden="true"></span></button>
-                <button class="nav-btn" type="button" data-page="planning" onclick="navigateToSection('planning')">籌花事<span class="menu-arrow" aria-hidden="true"></span></button>
                 <button class="nav-btn" type="button" data-page="text" onclick="navigateToSection('text')">繪春信<span class="menu-arrow" aria-hidden="true"></span></button>
+                <button class="nav-btn" type="button" data-page="planning" onclick="navigateToSection('planning')">籌花事<span class="menu-arrow" aria-hidden="true"></span></button>
                 <button class="nav-btn" type="button" data-page="messages" onclick="navigateToSection('messages')">寄語<span class="menu-arrow" aria-hidden="true"></span></button>
                 <button class="nav-btn" type="button" data-page="thanks" onclick="navigateToSection('thanks')">謝花人<span class="menu-arrow" aria-hidden="true"></span></button>
             </nav>
@@ -219,7 +218,7 @@
                 <div class="carousel-slide" id="carouselSlide">
                     <!-- 圖片 1 至 24 -->
                     <figure class="slide-item">
-                        <div class="slide-image"><img src="images/artworks/01.webp" alt="圖片 1" width="261" height="454" loading="eager" decoding="async" fetchpriority="high"></div>
+                        <div class="slide-image"><img alt="圖片 1" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">01</span></span></p>
                             <h2>立春</h2>
@@ -227,7 +226,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/artworks/02.webp" alt="圖片 2" width="267" height="430" decoding="async" fetchpriority="low"></div>
+                        <div class="slide-image"><img alt="圖片 2" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">02</span></span></p>
                             <h2>雨水</h2>
@@ -420,24 +419,24 @@
 
         </section>
 
-        <!-- 籌花事：可在這裡補上企劃緣起與製作過程。 -->
-        <section id="planning-page" class="page-content info-page" aria-labelledby="planningLabel planningTitle" tabindex="-1">
-            <div class="text-container">
-                <p id="planningLabel" class="section-label">
-                    <span>03</span><span>籌花事</span><span class="section-label-line" aria-hidden="true"></span>
-                </p>
-                <h1 id="planningTitle">籌畫細節</h1>
-                <!-- 可在這裡加入企劃緣起、製作過程與參與名單。 -->
-            </div>
-        </section>
         <!-- 繪春信：可在這裡補上繪師介紹與連結。 -->
         <section id="text-page" class="page-content info-page" aria-labelledby="artistLabel artistTitle">
             <div class="text-container">
                 <p id="artistLabel" class="section-label">
-                    <span>04</span><span>繪春信</span><span class="section-label-line" aria-hidden="true"></span>
+                    <span>03</span><span>繪春信</span><span class="section-label-line" aria-hidden="true"></span>
                 </p>
                 <h1 id="artistTitle">繪師資訊</h1>
                 <!-- 可在這裡補上繪師介紹、社群帳號與作品連結。 -->
+            </div>
+        </section>
+        <!-- 籌花事：可在這裡補上企劃緣起與製作過程。 -->
+        <section id="planning-page" class="page-content info-page" aria-labelledby="planningLabel planningTitle" tabindex="-1">
+            <div class="text-container">
+                <p id="planningLabel" class="section-label">
+                    <span>04</span><span>籌花事</span><span class="section-label-line" aria-hidden="true"></span>
+                </p>
+                <h1 id="planningTitle">籌畫細節</h1>
+                <!-- 可在這裡加入企劃緣起、製作過程與參與名單。 -->
             </div>
         </section>
 

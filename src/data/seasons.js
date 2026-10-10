@@ -23,7 +23,7 @@ const tones = [
 
 const seasonKeys = ['spring', 'summer', 'autumn', 'winter']
 const landscapeIds = new Set([9, 15, 22])
-const optimizedImageIds = new Set([1, 2, 9, 15, 22])
+const optimizedImageIds = new Set([9, 15, 22])
 const basePath = import.meta.env?.BASE_URL || '/'
 
 export const seasonsData = names.map((name, index) => {

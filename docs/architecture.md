@@ -74,7 +74,7 @@ body
 
 - `html.entrance-pending`、`html/body.entrance-open`：開場初始化與捲動鎖定。
 - `body.menu-open`：選單開啟時鎖定背景。
-- `body.intro-page-active`、`body.gallery-section-active`、`body.text-page-active`：目前章節的背景／進度 UI。
+- `body.gallery-section-active`：進入觀芳華時顯示作品進度 UI；各章節背景統一由 `body` 的共同暖紙底層提供。
 - `.page-content.active`：目前閱讀章節。
 - `.slide-item.is-current` / `.is-turning`：目前作品與正離場作品；其他作品為 `aria-hidden` 且 `inert`。
 - `body.cycle-complete`：正向從第 24 件回到第 1 件的短暫完成狀態。
@@ -91,7 +91,7 @@ body
 
 ## 寄語章節擴充
 
-- `#messages-page` 是位於 `#text-page` 與 `#thanks-page` 之間的第 05 章，導覽 key 為 `messages`。
+- `#messages-page` 是位於 `#planning-page` 與 `#thanks-page` 之間的第 05 章，導覽 key 為 `messages`。
 - 既有寄語由 JavaScript 每四張分組成循環輪播，並保留箭頭、觸控、`aria-hidden`、`inert` 與 reduced-motion 狀態整理。
 - 網站不提供訪客輸入；寄語由企劃方事先收集後，以 `.message-card` 放入頁面。
 - 實際預設名單變動時仍只增減完整 `.message-card` 節點；謝花人為第 06 章。
