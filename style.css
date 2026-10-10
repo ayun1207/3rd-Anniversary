@@ -8,6 +8,12 @@
 
 :root {
     --site-font: "LXGW WenKai TC", serif;
+    --paper-base: #f3ebdd;
+    --paper-light: #faf6ed;
+    --paper-depth: #e5d8c5;
+    --ink-primary: #302a24;
+    --ink-secondary: #5d5349;
+    --ink-accent: #6a5948;
 }
 
 html.font-fallback {
@@ -74,22 +80,14 @@ html.entrance-pending main {
     visibility: hidden;
 }
 
-/* 預設背景顏色與平滑過渡動畫 */
+/* 宣紙層載入前的同色 fallback；正式背景由固定的 .site-paper-background 提供。 */
 body {
     isolation: isolate;
-    background-color: #F5F2EC; /* 預設第一張圖片背景 */
-    /* 稀疏的小點與柔光，保留作品切換時的背景換色。 */
-    background-image:
-        radial-gradient(circle at 8% 20%, rgba(143, 121, 89, 0.3) 0 2px, transparent 3px),
-        radial-gradient(circle at 92% 76%, rgba(143, 121, 89, 0.3) 0 2px, transparent 3px),
-        radial-gradient(circle at 87% 24%, rgba(143, 121, 89, 0.22) 0 3px, transparent 4px),
-        radial-gradient(circle at 17% 88%, rgba(143, 121, 89, 0.2) 0 2px, transparent 3px),
-        radial-gradient(ellipse at 10% 8%, rgba(255, 255, 255, 0.4), transparent 55%);
-    color: #2c3e50;
+    background: var(--paper-base);
+    color: var(--ink-primary);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    transition: background-color 0.8s ease; /* 換頁時背景顏色平滑漸變 */
 }
 
 /* 左上角導覽與半透明側欄 */
@@ -157,7 +155,7 @@ body {
 .current-page-label {
     font-size: 0.8rem;
     letter-spacing: 0.15em;
-    color: #576574;
+    color: var(--ink-secondary);
 }
 
 body.menu-open { overflow: hidden; }
@@ -219,7 +217,7 @@ body.menu-open { overflow: hidden; }
 }
 
 .menu-eyebrow {
-    color: #756951;
+    color: var(--ink-accent);
     font-size: 0.62rem;
     letter-spacing: 0.18em;
 }
@@ -250,7 +248,7 @@ body.menu-open { overflow: hidden; }
     background: transparent;
     border: 0;
     text-align: left;
-    color: #5f625b;
+    color: var(--ink-secondary);
     font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
     font-size: clamp(1.08rem, 1.4vw, 1.2rem);
     font-weight: 400;
@@ -339,7 +337,7 @@ body.menu-open { overflow: hidden; }
     font-size: 0.72rem;
     line-height: 1.8;
     letter-spacing: 0.06em;
-    color: #756951;
+    color: var(--ink-accent);
 }
 
 .menu-toggle:focus-visible,
@@ -365,10 +363,8 @@ body.menu-open { overflow: hidden; }
     display: block;
     min-height: 70svh;
     padding: clamp(96px, 11vw, 160px) 0 clamp(120px, 14vw, 190px);
-    border-top: 1px solid rgba(117, 105, 81, 0.1);
-    background:
-        radial-gradient(ellipse at 88% 14%, rgba(179, 197, 177, 0.13), transparent 42%),
-        radial-gradient(ellipse at 8% 82%, rgba(204, 180, 149, 0.11), transparent 40%);
+    border-top: 0;
+    background: transparent;
     overflow: clip;
 }
 
@@ -461,10 +457,10 @@ body.menu-open { overflow: hidden; }
     position: relative;
     z-index: 1;
     margin: 0;
-    color: rgba(70, 81, 76, 0.82);
+    color: var(--ink-secondary);
     font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
     font-size: clamp(1.02rem, 1.35vw, 1.18rem);
-    font-weight: 350;
+    font-weight: 400;
     line-height: 2.05;
     letter-spacing: 0.075em;
     text-wrap: pretty;
@@ -476,8 +472,8 @@ body.menu-open { overflow: hidden; }
     margin-top: auto;
     padding-top: clamp(28px, 4vw, 50px);
     align-self: flex-end;
-    color: rgba(87, 101, 96, 0.66);
-    font-size: 0.76rem;
+    color: var(--ink-secondary);
+    font-size: 0.8rem;
     letter-spacing: 0.16em;
 }
 
@@ -838,8 +834,8 @@ main {
 .intro-lead,
 .intro-description {
     max-width: 620px;
-    color: #5f675f;
-    font-size: clamp(0.92rem, 1.25vw, 1.02rem);
+    color: var(--ink-secondary);
+    font-size: clamp(1rem, 1.25vw, 1.08rem);
     line-height: 2.15;
     letter-spacing: 0.055em;
 }
@@ -847,7 +843,7 @@ main {
 .intro-lead {
     max-width: 35em;
     font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
-    font-size: clamp(0.9rem, 1.15vw, 1rem);
+    font-size: clamp(1rem, 1.15vw, 1.06rem);
     line-height: 2.3;
     letter-spacing: 0.075em;
     text-wrap: pretty;
@@ -855,7 +851,7 @@ main {
 
 .intro-description {
     margin-top: 17px;
-    color: #74786f;
+    color: var(--ink-secondary);
 }
 
 .solar-cycle {
@@ -961,10 +957,10 @@ main {
 
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
     font-size: clamp(0.73rem, 1vw, 0.93rem);
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1;
     letter-spacing: 0.1em;
-    color: #6f776f;
+    color: var(--ink-secondary);
     opacity: 0.82;
 
     transform:
@@ -1310,8 +1306,8 @@ main {
     width: min(100%, 34em);
     min-height: 4.8em;
     margin: 0;
-    color: #576574;
-    font-size: clamp(0.92rem, 1.25vw, 1.05rem);
+    color: var(--ink-secondary);
+    font-size: clamp(1rem, 1.25vw, 1.08rem);
     line-height: 2.35;
     letter-spacing: 0.1em;
     text-align: center;
@@ -1585,7 +1581,7 @@ main {
     backdrop-filter: blur(4px);
     font-size: 0.6rem;
     letter-spacing: 0.26em;
-    color: #576574;
+    color: var(--ink-secondary);
     text-shadow: 0 1px 8px rgba(255, 253, 248, 0.92);
 }
 
@@ -1708,7 +1704,7 @@ main {
     align-items: baseline;
     gap: 6px;
     flex-shrink: 0;
-    color: #6f797e;
+    color: var(--ink-secondary);
 }
 
 .caption-number {
@@ -1725,7 +1721,7 @@ main {
     letter-spacing: -0.07em;
     font-variant-numeric: tabular-nums lining-nums;
     font-feature-settings: "tnum" 1, "lnum" 1;
-    color: #7a858b;
+    color: var(--ink-secondary);
 }
 
 .caption-total {
@@ -1745,8 +1741,8 @@ main {
 }
 
 .caption-description {
-    color: #576574;
-    font-size: 0.88rem;
+    color: var(--ink-secondary);
+    font-size: clamp(1rem, 1.05vw, 1.06rem);
     line-height: 2.2;
     letter-spacing: 0.06em;
 }
@@ -1816,7 +1812,7 @@ main {
     height: 48px;
     background: rgba(255, 253, 248, 0.55);
     border: 1px solid rgba(143, 121, 89, 0.3);
-    color: #756951;
+    color: var(--ink-accent);
     cursor: pointer;
     padding: 0;
     z-index: 10;
@@ -1872,7 +1868,7 @@ main {
 .text-container .info-eyebrow {
     font-size: 0.65rem;
     letter-spacing: 0.18em;
-    color: #756951;
+    color: var(--ink-accent);
 }
 
 .text-container h2 {
@@ -1886,12 +1882,13 @@ main {
     font-weight: 300;
     margin-bottom: 28px;
     letter-spacing: 1px;
-    color: #2c3e50;
+    color: var(--ink-primary);
 }
 
 .text-container p:not(.section-label) {
-    font-size: 1.05rem;
-    color: #576574;
+    font-size: clamp(1rem, 1.15vw, 1.08rem);
+    color: var(--ink-secondary);
+    line-height: 1.9;
     margin-bottom: 20px;
 }
 
@@ -3017,7 +3014,7 @@ body.gallery-section-active .gallery-scroll-progress {
 .gallery-progress-number {
     font-size: 0.62rem;
     letter-spacing: 0.16em;
-    color: #7a858b;
+    color: var(--ink-secondary);
 }
 
 #gallery-page.is-awaiting-image .gallery-progress-orbit {
@@ -3164,8 +3161,8 @@ html.has-scroll-reveal .slide-item.is-revealed {
     --gallery-tone: #EFECE6;
     position: relative;
     padding: clamp(72px, 8vw, 118px) 0 clamp(92px, 10vw, 150px);
-    border-top: 1px solid rgba(255, 255, 255, 0.46);
-    border-bottom: 1px solid rgba(117, 105, 81, 0.12);
+    border-top: 0;
+    border-bottom: 0;
     background: transparent;
 }
 
@@ -3653,8 +3650,9 @@ html.has-scroll-reveal .slide-item.is-revealed {
     }
 
     .gallery-stage .caption-description {
-        font-size: clamp(0.56rem, 2vw, 0.76rem);
-        line-height: 1.6;
+        font-size: clamp(0.78rem, 2.8vw, 0.94rem);
+        font-weight: 400;
+        line-height: 1.65;
     }
 
     .gallery-stage .caption-label { margin-bottom: clamp(3px, 1vw, 8px); }
@@ -3836,23 +3834,65 @@ html.has-scroll-reveal .slide-item.is-revealed {
 }
 
 /* =========================
-   長頁編輯網格與章節留白
-   以紙張、欄線與局部色域建立網站感，避免每一章都成為獨立滿版畫面。
+   全站固定宣紙與長頁內容層
+   背景固定於視窗，章節只以排版、留白及局部元件建立辨識度。
 ========================= */
 
-body {
-    background-color: #f3efe6;
+.site-paper-background {
+    position: fixed;
+    z-index: 0;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    contain: strict;
+    background-color: var(--paper-base);
     background-image:
-        linear-gradient(90deg, rgba(118, 105, 82, 0.018) 1px, transparent 1px),
-        linear-gradient(rgba(118, 105, 82, 0.014) 1px, transparent 1px),
-        radial-gradient(ellipse at 18% 8%, rgba(255, 253, 247, 0.72), transparent 42%),
-        linear-gradient(135deg, #f5f1e8 0%, #f1ede4 56%, #f4f0e7 100%);
-    background-size: 9px 9px, 9px 9px, auto, auto;
-    background-attachment: fixed;
+        radial-gradient(ellipse 88% 72% at 7% 4%, rgba(250, 246, 237, 0.96), transparent 68%),
+        radial-gradient(ellipse 62% 86% at 96% 68%, rgba(218, 201, 177, 0.34), transparent 72%),
+        radial-gradient(ellipse 78% 48% at 42% 108%, rgba(232, 220, 200, 0.38), transparent 74%),
+        radial-gradient(ellipse 46% 58% at 63% 28%, rgba(255, 252, 244, 0.44), transparent 76%),
+        linear-gradient(
+            118deg,
+            var(--paper-light) 0%,
+            var(--paper-base) 47%,
+            color-mix(in srgb, var(--paper-depth) 42%, var(--paper-base)) 100%
+        );
+}
+
+.site-paper-background::before,
+.site-paper-background::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* 靜態 SVG 影像形成細微紙漿顆粒，不使用即時 DOM filter 或捲動動畫。 */
+.site-paper-background::before {
+    opacity: 0.045;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.018 .22' numOctaves='3' seed='17' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23p)' opacity='.72'/%3E%3C/svg%3E");
+    background-size: 320px 320px;
+}
+
+/* 四角淡彩與環線固定在視窗，作為透明內容滑過底紙時的視覺座標。 */
+.site-paper-background::after {
+    opacity: 1;
+    background:
+        radial-gradient(circle at 8% 31%, transparent 0 11vw, rgba(112, 139, 126, 0.16) 11.08vw 11.16vw, transparent 11.24vw),
+        radial-gradient(circle at 94% 74%, transparent 0 16vw, rgba(142, 126, 105, 0.13) 16.08vw 16.16vw, transparent 16.24vw),
+        radial-gradient(ellipse 38vw 34vh at 1% 28%, rgba(142, 166, 146, 0.24), rgba(142, 166, 146, 0.085) 54%, transparent 76%),
+        radial-gradient(ellipse 34vw 40vh at 99% 19%, rgba(193, 157, 145, 0.205), rgba(193, 157, 145, 0.07) 56%, transparent 77%),
+        radial-gradient(ellipse 40vw 37vh at 92% 85%, rgba(139, 161, 171, 0.2), rgba(139, 161, 171, 0.065) 57%, transparent 78%),
+        radial-gradient(ellipse 32vw 31vh at 18% 84%, rgba(177, 188, 145, 0.17), rgba(177, 188, 145, 0.055) 58%, transparent 79%),
+        radial-gradient(ellipse 62% 94% at 51% 47%, rgba(250, 247, 240, 0.28), transparent 72%),
+        linear-gradient(92deg, rgba(112, 91, 66, 0.022), transparent 18% 82%, rgba(112, 91, 66, 0.018));
 }
 
 main {
     --editorial-frame: min(1360px, 86vw);
+    position: relative;
+    z-index: 1;
     isolation: isolate;
 }
 
@@ -3877,6 +3917,7 @@ main::before {
 .page-content {
     position: relative;
     z-index: 1;
+    background-color: transparent;
 }
 
 .intro-layout,
@@ -3921,39 +3962,9 @@ main::before {
     min-height: clamp(440px, 58svh, 680px);
     padding: clamp(82px, 10vw, 150px) 0;
     align-items: stretch;
-    border-top: 1px solid rgba(117, 105, 81, 0.1);
+    border-top: 0;
     background-color: transparent;
     overflow: clip;
-}
-
-.info-page::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    width: min(620px, 48vw);
-    aspect-ratio: 1.45;
-    border-radius: 50%;
-    filter: blur(28px);
-    opacity: 0.38;
-    pointer-events: none;
-}
-
-#text-page::before {
-    right: -10%;
-    top: 8%;
-    background: radial-gradient(ellipse, rgba(179, 197, 177, 0.25), transparent 68%);
-}
-
-#planning-page::before {
-    left: -9%;
-    bottom: 0;
-    background: radial-gradient(ellipse, rgba(204, 180, 149, 0.22), transparent 68%);
-}
-
-#thanks-page::before {
-    right: 4%;
-    bottom: -15%;
-    background: radial-gradient(ellipse, rgba(168, 184, 193, 0.2), transparent 68%);
 }
 
 .info-page .text-container,
@@ -3990,7 +4001,7 @@ main::before {
     width: max-content;
     max-width: 100%;
     margin: 0;
-    color: #47514c;
+    color: var(--ink-primary);
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
     font-size: clamp(2rem, 4vw, 3.6rem);
     font-weight: 300;
@@ -4065,10 +4076,10 @@ main::before {
 }
 
 .commission-roster-card li {
-    color: rgba(70, 81, 76, 0.8);
+    color: var(--ink-secondary);
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
-    font-size: clamp(0.94rem, 1.15vw, 1.06rem);
-    font-weight: 300;
+    font-size: clamp(1rem, 1.15vw, 1.08rem);
+    font-weight: 400;
     line-height: 1.8;
     letter-spacing: 0.1em;
     text-align: center;
@@ -4215,8 +4226,8 @@ main::before {
 .site-epilogue-text {
     min-height: 4.8em;
     margin: 0;
-    color: #576574;
-    font-size: clamp(0.92rem, 1.25vw, 1.05rem);
+    color: var(--ink-secondary);
+    font-size: clamp(1rem, 1.25vw, 1.08rem);
     line-height: 2.35;
     letter-spacing: 0.1em;
     text-wrap: pretty;
@@ -4225,8 +4236,8 @@ main::before {
 .site-epilogue-signature {
     min-height: 1.8em;
     margin: clamp(22px, 3vw, 36px) 0 0 auto;
-    color: rgba(70, 83, 76, 0.68);
-    font-size: 0.78rem;
+    color: var(--ink-secondary);
+    font-size: 0.82rem;
     line-height: 1.8;
     letter-spacing: 0.14em;
     text-align: right;
@@ -4330,11 +4341,6 @@ main::before {
         padding: 72px 0;
     }
 
-    .info-page::before {
-        width: 78vw;
-        opacity: 0.3;
-    }
-
     .info-page .text-container,
     #text-page .text-container,
     #thanks-page .text-container {
@@ -4365,12 +4371,6 @@ main::before {
     #text-page .text-container h1 { justify-self: end; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    body {
-        background-attachment: scroll;
-    }
-}
-
 /* 理時序標題沿用後段資訊章節的編輯式標題格式。 */
 .intro-copy {
     position: relative;
@@ -4388,7 +4388,7 @@ main::before {
     gap: 14px;
     padding: 0;
     background: transparent;
-    color: rgba(87, 101, 116, 0.58);
+    color: var(--ink-secondary);
     font-family: "Noto Serif TC", "Noto Serif CJK TC", "Source Han Serif TC",
         "Songti TC", "PMingLiU", "MingLiU", serif;
     font-size: 0.64rem;
@@ -4432,14 +4432,14 @@ main::before {
 }
 
 .section-label > span:nth-of-type(2) {
-    color: rgba(70, 83, 76, 0.76);
+    color: var(--ink-secondary);
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
     font-size: 0.72rem;
     letter-spacing: 0.18em;
 }
 
 .intro-copy h1 {
-    color: #47514c;
+    color: var(--ink-primary);
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
     font-size: clamp(2rem, 4vw, 3.6rem);
     font-weight: 300;
