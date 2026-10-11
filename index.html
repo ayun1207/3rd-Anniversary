@@ -79,25 +79,142 @@
             <button id="enterQuietly" class="entrance-quiet" type="button" hidden>靜音進入</button>
         </div>
     </dialog>
-    <div class="site-paper-background" aria-hidden="true"></div>
+    <div class="site-paper-background" aria-hidden="true">
+        <svg class="site-paper-floral-library" focusable="false">
+            <defs>
+                <symbol id="paper-flower" viewBox="0 0 28 28">
+                    <g class="paper-flower-petals">
+                        <ellipse cx="14" cy="7.2" rx="4.5" ry="7" />
+                        <ellipse cx="14" cy="7.2" rx="4.5" ry="7" transform="rotate(72 14 14)" />
+                        <ellipse cx="14" cy="7.2" rx="4.5" ry="7" transform="rotate(144 14 14)" />
+                        <ellipse cx="14" cy="7.2" rx="4.5" ry="7" transform="rotate(216 14 14)" />
+                        <ellipse cx="14" cy="7.2" rx="4.5" ry="7" transform="rotate(288 14 14)" />
+                    </g>
+                    <circle class="paper-flower-heart" cx="14" cy="14" r="2.45" />
+                    <circle class="paper-flower-glint" cx="13.25" cy="13.15" r="0.7" />
+                </symbol>
+            </defs>
+        </svg>
+
+        <svg class="site-paper-floral site-paper-floral-left" viewBox="0 0 520 800" preserveAspectRatio="xMinYMax meet" focusable="false">
+            <g class="paper-branch-lines">
+                <path d="M32 792 C86 704 118 642 164 558 C216 463 269 374 331 272 C371 206 405 137 425 64" />
+                <path d="M133 617 C164 579 210 555 270 548 C312 543 349 526 382 495" />
+                <path d="M194 501 C211 443 199 392 172 349 C153 318 147 286 157 252" />
+                <path d="M263 387 C303 352 344 338 397 343 C435 346 463 334 487 308" />
+                <path d="M325 278 C325 229 308 194 279 164 C256 140 247 113 252 82" />
+                <path d="M381 173 C410 151 440 146 477 154" />
+            </g>
+            <g class="paper-branch-leaves">
+                <path d="M113 653 C77 631 64 600 70 568 C104 574 128 597 133 632 C129 643 123 650 113 653Z" />
+                <path d="M171 555 C135 540 116 514 113 483 C148 483 174 501 186 532 C184 542 179 550 171 555Z" />
+                <path d="M216 470 C242 438 274 427 307 435 C296 469 270 490 236 492 C226 487 220 480 216 470Z" />
+                <path d="M286 350 C253 332 238 304 240 274 C273 278 296 299 304 331 C300 341 294 347 286 350Z" />
+                <path d="M352 237 C377 207 408 197 439 205 C428 237 403 256 372 257 C362 252 356 246 352 237Z" />
+                <path d="M380 494 C401 466 429 454 459 460 C451 490 430 510 400 514 C391 509 384 503 380 494Z" />
+            </g>
+            <g class="paper-flower-cluster paper-flower-cluster-low">
+                <use href="#paper-flower" x="221" y="520" width="54" height="54" />
+                <use href="#paper-flower" x="258" y="514" width="44" height="44" />
+                <use href="#paper-flower" x="285" y="534" width="50" height="50" />
+                <use href="#paper-flower" x="315" y="507" width="39" height="39" />
+                <use href="#paper-flower" x="334" y="535" width="45" height="45" />
+            </g>
+            <g class="paper-flower-cluster paper-flower-cluster-mid">
+                <use href="#paper-flower" x="350" y="313" width="52" height="52" />
+                <use href="#paper-flower" x="389" y="316" width="43" height="43" />
+                <use href="#paper-flower" x="418" y="337" width="49" height="49" />
+                <use href="#paper-flower" x="450" y="303" width="40" height="40" />
+                <use href="#paper-flower" x="463" y="341" width="43" height="43" />
+            </g>
+            <g class="paper-flower-cluster paper-flower-cluster-high">
+                <use href="#paper-flower" x="383" y="112" width="54" height="54" />
+                <use href="#paper-flower" x="424" y="124" width="45" height="45" />
+                <use href="#paper-flower" x="445" y="151" width="50" height="50" />
+                <use href="#paper-flower" x="400" y="158" width="41" height="41" />
+            </g>
+        </svg>
+
+        <svg class="site-paper-floral site-paper-floral-right" viewBox="0 0 560 760" preserveAspectRatio="xMaxYMin meet" focusable="false">
+            <g class="paper-branch-lines">
+                <path d="M548 17 C492 81 462 139 433 215 C398 305 356 382 297 455 C252 510 218 577 203 653" />
+                <path d="M454 164 C413 170 376 195 346 233 C318 270 283 292 237 301" />
+                <path d="M398 299 C434 319 461 348 477 389 C490 423 511 448 543 463" />
+                <path d="M308 442 C266 422 221 418 174 431 C133 443 96 440 59 421" />
+                <path d="M251 530 C272 569 275 609 262 651 C253 681 255 709 270 737" />
+                <path d="M365 373 C334 349 301 340 263 344" />
+            </g>
+            <g class="paper-branch-leaves">
+                <path d="M476 105 C507 121 524 149 521 179 C490 176 466 157 457 128 C461 117 467 110 476 105Z" />
+                <path d="M421 223 C452 240 468 267 464 298 C433 294 409 276 400 247 C404 236 411 228 421 223Z" />
+                <path d="M347 345 C319 321 309 291 318 262 C348 272 367 296 370 327 C364 336 357 342 347 345Z" />
+                <path d="M291 454 C258 469 226 464 200 445 C219 419 247 408 278 416 C286 427 290 439 291 454Z" />
+                <path d="M205 646 C173 631 155 605 155 575 C187 576 212 595 223 624 C219 635 213 642 205 646Z" />
+                <path d="M477 389 C507 373 537 377 560 397 C541 422 514 432 485 423 C478 411 475 400 477 389Z" />
+            </g>
+            <g class="paper-flower-cluster paper-flower-cluster-high">
+                <use href="#paper-flower" x="328" y="202" width="48" height="48" />
+                <use href="#paper-flower" x="291" y="220" width="55" height="55" />
+                <use href="#paper-flower" x="258" y="251" width="45" height="45" />
+                <use href="#paper-flower" x="220" y="265" width="50" height="50" />
+                <use href="#paper-flower" x="194" y="290" width="40" height="40" />
+            </g>
+            <g class="paper-flower-cluster paper-flower-cluster-mid">
+                <use href="#paper-flower" x="110" y="397" width="51" height="51" />
+                <use href="#paper-flower" x="73" y="382" width="43" height="43" />
+                <use href="#paper-flower" x="39" y="399" width="48" height="48" />
+                <use href="#paper-flower" x="139" y="421" width="40" height="40" />
+                <use href="#paper-flower" x="174" y="410" width="45" height="45" />
+            </g>
+            <g class="paper-flower-cluster paper-flower-cluster-low">
+                <use href="#paper-flower" x="232" y="618" width="52" height="52" />
+                <use href="#paper-flower" x="260" y="649" width="43" height="43" />
+                <use href="#paper-flower" x="238" y="685" width="47" height="47" />
+                <use href="#paper-flower" x="280" y="699" width="38" height="38" />
+            </g>
+        </svg>
+    </div>
     <!-- 選定授權音樂後，在 audio 加上 src="audio/background.mp3"。 -->
     <audio id="backgroundMusic" loop preload="none"></audio>
 
     <header class="site-header">
         <button id="menuToggle" class="menu-toggle" type="button" aria-label="開啟導覽選單" aria-controls="siteMenu" aria-expanded="false" onclick="openMenu()">
             <svg class="menu-emblem" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-                <path class="menu-emblem-orbit" d="M24.8 9.1A10.8 10.8 0 1 0 26.6 18" />
-                <path class="menu-emblem-land" d="M8.7 20.4c2.4-1.2 3.8-3.7 5.6-5.4 1.1 1.9 2.2 3.2 3.6 4.2 1.3-1.5 2.5-2.4 4.7-3.3M9.6 23c3.8 1 8.2 1 12.3-.4" />
-                <path class="menu-emblem-leaf" d="M22.1 6.3c2.7.2 4 1.8 3.5 4.5-2.6-.1-4-1.7-3.5-4.5Z" />
+                <defs>
+                    <linearGradient id="menuGemBlueOrange" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#8DB7DD" />
+                        <stop offset="0.42" stop-color="#DCEBF7" />
+                        <stop offset="1" stop-color="#FCC26F" />
+                    </linearGradient>
+                    <linearGradient id="menuGemOrangePink" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#FCC26F" />
+                        <stop offset="0.42" stop-color="#FEE4BC" />
+                        <stop offset="1" stop-color="#F3A4B0" />
+                    </linearGradient>
+                </defs>
+                <polygon class="menu-diamond" points="7,16 12,5 17,16 12,27" transform="rotate(-8 12 16)" fill="url(#menuGemBlueOrange)" />
+                <polygon class="menu-diamond" points="14,16 19,5 24,16 19,27" transform="rotate(6 19 16)" fill="url(#menuGemOrangePink)" />
             </svg>
         </button>
         <span class="current-page-label" id="currentPageLabel">理時序</span>
         <span class="site-rail-ornament" aria-hidden="true">
-            <span class="rail-orbit"></span>
-            <span class="rail-crossbar rail-crossbar-upper"></span>
-            <span class="rail-crossbar rail-crossbar-lower"></span>
-            <span class="rail-leaf rail-leaf-left"></span>
-            <span class="rail-leaf rail-leaf-right"></span>
+            <span class="rail-gem-group">
+                <span class="rail-gem rail-gem-blue"></span>
+                <span class="rail-gem rail-gem-blue"></span>
+                <span class="rail-gem rail-gem-blue"></span>
+            </span>
+            <span class="rail-dot"></span>
+            <span class="rail-gem-group">
+                <span class="rail-gem rail-gem-orange"></span>
+                <span class="rail-gem rail-gem-orange"></span>
+                <span class="rail-gem rail-gem-orange"></span>
+            </span>
+            <span class="rail-dot"></span>
+            <span class="rail-gem-group">
+                <span class="rail-gem rail-gem-pink"></span>
+                <span class="rail-gem rail-gem-pink"></span>
+                <span class="rail-gem rail-gem-pink"></span>
+            </span>
         </span>
         <button id="musicToggle" class="music-toggle" type="button" aria-label="播放背景音樂" hidden>音樂 / 播放</button>
         <span id="musicStatus" class="music-status" role="status"></span>
