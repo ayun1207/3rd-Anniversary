@@ -4939,6 +4939,252 @@ main::before {
 
 }
 
+/* 手機版不直接縮小桌機構圖：重新分配框內空間與閱讀順序。 */
+@media (max-width: 768px) {
+    .site-header {
+        height: 68px;
+        padding-inline: 16px;
+        gap: 12px;
+    }
+
+    main {
+        --editorial-frame: calc(100vw - 32px);
+        --glass-frame: calc(100vw - 32px);
+        padding-top: 68px;
+    }
+
+    .page-content,
+    .page-content.active {
+        scroll-margin-top: 68px;
+    }
+
+    .page-content.intro-page {
+        padding: 28px 16px 72px;
+    }
+
+    .intro-layout {
+        width: var(--glass-frame);
+        padding: 46px 18px 28px;
+        gap: 30px;
+        overflow: hidden;
+    }
+
+    .intro-copy {
+        width: 100%;
+        max-width: none;
+        justify-self: stretch;
+        padding-top: 0;
+    }
+
+    .intro-copy h1 {
+        max-width: 100%;
+        font-size: clamp(1.85rem, 9.2vw, 2.55rem);
+        line-height: 1.45;
+        letter-spacing: 0.12em;
+    }
+
+    .intro-rule {
+        margin: 22px 0 24px;
+    }
+
+    .intro-lead,
+    .intro-description {
+        font-size: clamp(0.9rem, 3.9vw, 1rem);
+        line-height: 2;
+        letter-spacing: 0.045em;
+    }
+
+    .solar-cycle {
+        width: min(100%, 340px);
+        margin-inline: auto;
+        justify-self: center;
+        transform: none;
+    }
+
+    .solar-term {
+        --orbit-offset: calc(0px - min(140px, 35vw));
+        width: 3.8em;
+        font-size: clamp(0.62rem, 2.6vw, 0.76rem);
+    }
+
+    .solar-cardinal {
+        font-size: clamp(0.68rem, 2.85vw, 0.82rem);
+    }
+
+    #gallery-page {
+        padding: 62px 0 88px;
+    }
+
+    .gallery-section-heading {
+        width: var(--glass-frame);
+        min-height: 138px;
+        margin-bottom: 20px;
+        padding: 48px 18px 24px;
+        gap: 12px;
+    }
+
+    .gallery-section-heading h2 {
+        min-width: 0;
+        font-size: clamp(1.55rem, 7.5vw, 2.15rem);
+        letter-spacing: 0.12em;
+        white-space: nowrap;
+    }
+
+    .gallery-section-heading .gallery-scroll-progress {
+        padding: 5px 7px 5px 5px;
+        gap: 6px;
+    }
+
+    .gallery-section-heading .gallery-progress-orbit {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+    }
+
+    .gallery-section-heading .gallery-progress-term {
+        font-size: 0.7rem;
+    }
+
+    .gallery-section-heading .gallery-progress-number {
+        font-size: 0.56rem;
+    }
+
+    .gallery-stage {
+        width: calc(100vw - 20px);
+        border-radius: 12px;
+    }
+
+    .gallery-stage .carousel-viewport {
+        width: 100%;
+    }
+
+    .gallery-stage .arrow-btn {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    .gallery-stage .arrow-prev { left: 6px; }
+    .gallery-stage .arrow-next { right: 6px; }
+
+    #gallery-page.is-scene-slide .gallery-stage .slide-item-scene-captioned .caption-description {
+        font-size: clamp(0.65rem, 2.75vw, 0.78rem);
+    }
+
+    #gallery-page.is-scene-slide .gallery-stage .slide-item-scene-15 .caption-description {
+        font-size: clamp(0.58rem, 2.4vw, 0.7rem);
+    }
+
+    #gallery-page.is-scene-slide .gallery-stage .slide-item-scene-22 .caption-description {
+        font-size: clamp(0.62rem, 2.55vw, 0.74rem);
+    }
+
+    .info-page,
+    .page-content.info-page,
+    .page-content.info-page.active {
+        min-height: 0;
+        padding: 56px 0;
+    }
+
+    .info-page .text-container,
+    #text-page .text-container,
+    #thanks-page .text-container {
+        width: var(--glass-frame);
+        min-height: 220px;
+        padding: 50px 20px 30px;
+        border-radius: 26px;
+    }
+
+    .info-page .text-container::after {
+        top: 47px;
+        left: 20px;
+    }
+
+    .info-page .text-container h1,
+    #planning-page .text-container h1,
+    #thanks-page .text-container h1 {
+        margin-top: 42px;
+        font-size: clamp(1.75rem, 8.5vw, 2.45rem);
+        letter-spacing: 0.12em;
+    }
+
+    .messages-page,
+    .page-content.messages-page,
+    .page-content.messages-page.active {
+        padding: 64px 0 92px;
+    }
+
+    .messages-container {
+        width: var(--glass-frame);
+    }
+
+    .messages-heading {
+        padding: 50px 20px 34px;
+        margin-bottom: 30px;
+        border-radius: 26px;
+    }
+
+    .messages-heading h1 {
+        font-size: clamp(1.75rem, 8.5vw, 2.45rem);
+        letter-spacing: 0.12em;
+    }
+
+    .commission-roster-card {
+        padding: 30px 18px;
+    }
+
+    .site-epilogue {
+        width: var(--editorial-frame);
+        min-height: 380px;
+        padding: 72px 0 104px;
+    }
+
+    .site-epilogue-final {
+        width: 100%;
+        min-height: 0;
+        padding: 36px 22px;
+        border-radius: 26px;
+    }
+
+    .site-epilogue-final::before {
+        border-radius: 19px;
+    }
+}
+
+@media (max-width: 560px) {
+    .message-group {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .messages-carousel .message-group .message-card,
+    .messages-carousel .message-group .message-card:nth-child(even),
+    .messages-carousel .message-group .message-card:nth-child(3),
+    .messages-carousel .message-group .message-card:nth-child(4),
+    .message-group[data-count="1"] .message-card:first-child,
+    .message-group[data-count="3"] .message-card:last-child {
+        grid-column: 1;
+        width: 100%;
+        min-height: 150px;
+        margin: 0;
+        justify-self: stretch;
+    }
+
+    .messages-carousel .message-group .message-card {
+        padding: 24px 22px;
+    }
+
+    .message-card p {
+        font-size: 0.98rem;
+        line-height: 1.95;
+    }
+
+    .message-card footer {
+        padding-top: 24px;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     #gallery-page {
         height: auto;
