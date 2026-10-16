@@ -35,7 +35,8 @@ const menuToggle = document.getElementById('menuToggle');
 let menuCloseTimer;
 function openMenu() {
     clearTimeout(menuCloseTimer);
-    if (!siteMenu.open) siteMenu.showModal();
+    updateScrollState();
+    if (!siteMenu.open) siteMenu.show();
     document.body.classList.add('menu-open');
     menuToggle.setAttribute('aria-expanded', 'true');
     void siteMenu.offsetWidth;
@@ -52,6 +53,17 @@ function closeMenu() {
 
 siteMenu.addEventListener('click', (event) => {
     if (event.target === siteMenu) closeMenu();
+});
+document.addEventListener('pointerdown', (event) => {
+    if (!siteMenu.open || !siteMenu.classList.contains('is-open')) return;
+    if (event.target.closest('.menu-panel') || event.target === menuToggle) return;
+    closeMenu();
+});
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && siteMenu.open) {
+        event.preventDefault();
+        closeMenu();
+    }
 });
 siteMenu.addEventListener('cancel', (event) => {
     event.preventDefault();
@@ -438,15 +450,6 @@ function setCurrentSection(pageName) {
         messages: '寄語',
         thanks: '謝花人'
     }[pageName];
-    document.documentElement.style.setProperty('--section-marker-top', {
-        intro: '14%',
-        gallery: '30%',
-        text: '46%',
-        planning: '62%',
-        messages: '78%',
-        thanks: '92%'
-    }[pageName]);
-
     if (pageName === 'gallery') updateGalleryMeta(currentIndex);
 }
 
@@ -463,12 +466,20 @@ function navigateToSection(pageName) {
 
 function updateScrollState() {
     scrollFrame = 0;
+    const scrollRoot = document.scrollingElement || document.documentElement;
+    const maximumScroll = Math.max(0, scrollRoot.scrollHeight - scrollRoot.clientHeight);
+    const pageProgress = maximumScroll > 0 ? scrollRoot.scrollTop / maximumScroll : 0;
+    const markerHeight = 44;
+    const markerTravel = Math.max(0, window.innerHeight - markerHeight);
+    document.documentElement.style.setProperty(
+        '--section-marker-top',
+        `${Math.min(1, Math.max(0, pageProgress)) * markerTravel}px`
+    );
     const sectionLine = Math.min(window.innerHeight * 0.34, 300);
     let visibleSection = pageSections[0];
     pageSections.forEach(section => {
         if (section.getBoundingClientRect().top <= sectionLine) visibleSection = section;
     });
-    const scrollRoot = document.scrollingElement || document.documentElement;
     const remainingScroll = scrollRoot.scrollHeight - scrollRoot.scrollTop - scrollRoot.clientHeight;
     const finalSection = pageSections[pageSections.length - 1];
     const finalSectionLine = Math.min(window.innerHeight * 0.55, 460);

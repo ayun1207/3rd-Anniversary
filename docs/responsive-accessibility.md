@@ -59,7 +59,7 @@
 
 ## Dialog 與焦點
 
-- 開場與選單都使用原生 `dialog`／`showModal()`。
+- 開場使用原生 `dialog`／`showModal()`；選單使用非模態 `dialog`／`show()`，讓抽屜開啟時仍可捲動並更新目前章節。
 - 開場使用 `aria-labelledby`、`aria-describedby`；Esc 以靜音方式進入。
 - 選單以隱藏的 `#menuTitle` 提供 `aria-labelledby` 對應名稱。
 - 選單與開場關閉後，焦點回到 `#menuToggle`。

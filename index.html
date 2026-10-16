@@ -93,6 +93,18 @@
                     <circle class="paper-flower-heart" cx="14" cy="14" r="2.45" />
                     <circle class="paper-flower-glint" cx="13.25" cy="13.15" r="0.7" />
                 </symbol>
+                <symbol id="paper-leaf-slender" viewBox="0 -20 80 40">
+                    <path class="paper-leaf-petiole" d="M0 0 C4 0 8 -1 12 -2" />
+                    <path class="paper-leaf-blade" d="M9 -2 C26 -17 53 -18 75 -3 C57 12 31 14 9 -2Z" />
+                    <path class="paper-leaf-vein" d="M11 -2 C31 -3 52 -3 70 -3" />
+                    <path class="paper-leaf-side-vein" d="M25 -3 L35 -12 M38 -3 L48 -13 M51 -3 L60 -10 M27 -2 L37 7 M41 -3 L51 6 M54 -3 L62 3" />
+                </symbol>
+                <symbol id="paper-leaf-soft" viewBox="0 -23 80 46">
+                    <path class="paper-leaf-petiole" d="M0 0 C5 0 9 -1 13 -2" />
+                    <path class="paper-leaf-blade" d="M10 -2 C24 -21 53 -21 75 -3 C59 17 30 19 10 -2Z" />
+                    <path class="paper-leaf-vein" d="M12 -2 C33 -3 53 -3 70 -3" />
+                    <path class="paper-leaf-side-vein" d="M25 -3 L35 -14 M39 -3 L49 -15 M52 -3 L61 -11 M27 -2 L38 9 M41 -3 L52 8 M54 -3 L63 4" />
+                </symbol>
             </defs>
         </svg>
 
@@ -105,13 +117,14 @@
                 <path d="M325 278 C325 229 308 194 279 164 C256 140 247 113 252 82" />
                 <path d="M381 173 C410 151 440 146 477 154" />
             </g>
-            <g class="paper-branch-leaves">
-                <path d="M113 653 C77 631 64 600 70 568 C104 574 128 597 133 632 C129 643 123 650 113 653Z" />
-                <path d="M171 555 C135 540 116 514 113 483 C148 483 174 501 186 532 C184 542 179 550 171 555Z" />
-                <path d="M216 470 C242 438 274 427 307 435 C296 469 270 490 236 492 C226 487 220 480 216 470Z" />
-                <path d="M286 350 C253 332 238 304 240 274 C273 278 296 299 304 331 C300 341 294 347 286 350Z" />
-                <path d="M352 237 C377 207 408 197 439 205 C428 237 403 256 372 257 C362 252 356 246 352 237Z" />
-                <path d="M380 494 C401 466 429 454 459 460 C451 490 430 510 400 514 C391 509 384 503 380 494Z" />
+            <g class="paper-falling-leaves">
+                <use href="#paper-leaf-slender" width="46" height="24" transform="translate(228 711) rotate(74)" />
+                <use href="#paper-leaf-soft" width="59" height="34" transform="translate(75 603) rotate(-17)" />
+                <use href="#paper-leaf-slender" width="52" height="27" transform="translate(315 589) rotate(128)" />
+                <use href="#paper-leaf-soft" width="45" height="26" transform="translate(91 438) rotate(-96)" />
+                <use href="#paper-leaf-soft" width="62" height="36" transform="translate(318 425) rotate(43)" />
+                <use href="#paper-leaf-slender" width="41" height="21" transform="translate(177 263) rotate(117)" />
+                <use href="#paper-leaf-slender" width="48" height="24" transform="translate(329 191) rotate(-27)" />
             </g>
             <g class="paper-flower-cluster paper-flower-cluster-low">
                 <use href="#paper-flower" x="221" y="520" width="54" height="54" />
@@ -144,13 +157,15 @@
                 <path d="M251 530 C272 569 275 609 262 651 C253 681 255 709 270 737" />
                 <path d="M365 373 C334 349 301 340 263 344" />
             </g>
-            <g class="paper-branch-leaves">
-                <path d="M476 105 C507 121 524 149 521 179 C490 176 466 157 457 128 C461 117 467 110 476 105Z" />
-                <path d="M421 223 C452 240 468 267 464 298 C433 294 409 276 400 247 C404 236 411 228 421 223Z" />
-                <path d="M347 345 C319 321 309 291 318 262 C348 272 367 296 370 327 C364 336 357 342 347 345Z" />
-                <path d="M291 454 C258 469 226 464 200 445 C219 419 247 408 278 416 C286 427 290 439 291 454Z" />
-                <path d="M205 646 C173 631 155 605 155 575 C187 576 212 595 223 624 C219 635 213 642 205 646Z" />
-                <path d="M477 389 C507 373 537 377 560 397 C541 422 514 432 485 423 C478 411 475 400 477 389Z" />
+            <g class="paper-falling-leaves">
+                <use href="#paper-leaf-slender" width="43" height="22" transform="translate(359 103) rotate(81)" />
+                <use href="#paper-leaf-soft" width="57" height="33" transform="translate(502 169) rotate(149)" />
+                <use href="#paper-leaf-slender" width="48" height="24" transform="translate(282 265) rotate(-37)" />
+                <use href="#paper-leaf-soft" width="61" height="35" transform="translate(490 332) rotate(66)" />
+                <use href="#paper-leaf-slender" width="42" height="21" transform="translate(188 389) rotate(136)" />
+                <use href="#paper-leaf-soft" width="55" height="31" transform="translate(397 507) rotate(-19)" />
+                <use href="#paper-leaf-slender" width="49" height="25" transform="translate(137 594) rotate(107)" />
+                <use href="#paper-leaf-soft" width="45" height="26" transform="translate(334 678) rotate(-54)" />
             </g>
             <g class="paper-flower-cluster paper-flower-cluster-high">
                 <use href="#paper-flower" x="328" y="202" width="48" height="48" />

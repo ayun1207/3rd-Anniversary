@@ -74,7 +74,7 @@ body
 ## 主要狀態類別
 
 - `html.entrance-pending`、`html/body.entrance-open`：開場初始化與捲動鎖定。
-- `body.menu-open`：選單開啟時鎖定背景。
+- `body.menu-open`：標示導覽抽屜已開啟；不鎖定背景捲動，章節狀態仍會持續更新。
 - `body.gallery-section-active`：進入觀芳華時顯示作品進度 UI；各章節背景統一由 `body` 的共同暖紙底層提供。
 - `.page-content.active`：目前閱讀章節。
 - `.slide-item.is-current` / `.is-turning`：目前作品與正離場作品；其他作品為 `aria-hidden` 且 `inert`。
