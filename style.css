@@ -355,8 +355,8 @@ body {
 .page-content.messages-page.active {
     position: relative;
     display: block;
-    min-height: 70svh;
-    padding: clamp(96px, 11vw, 160px) 0 clamp(120px, 14vw, 190px);
+    min-height: 0;
+    padding: clamp(64px, 7vw, 96px) 0 clamp(72px, 8vw, 112px);
     border-top: 0;
     background: transparent;
     overflow: clip;
@@ -369,15 +369,15 @@ body {
     width: var(--editorial-frame);
     max-width: 1180px;
     margin: 0 auto;
-    padding-bottom: clamp(42px, 5vw, 70px);
+    padding-bottom: clamp(26px, 3vw, 40px);
 }
 
 .messages-heading {
     position: relative;
     z-index: 1;
     isolation: isolate;
-    padding: clamp(52px, 6vw, 78px) clamp(18px, 3vw, 48px) clamp(58px, 7vw, 92px);
-    margin-bottom: clamp(22px, 3vw, 40px);
+    padding: clamp(38px, 4vw, 54px) clamp(18px, 3vw, 48px) clamp(26px, 3.2vw, 42px);
+    margin-bottom: clamp(12px, 1.5vw, 20px);
     border-top: 1px solid rgba(117, 105, 81, 0.24);
 }
 
@@ -389,10 +389,10 @@ body {
     border: 1px solid var(--glass-border);
     border-radius: clamp(22px, 2.4vw, 34px);
     background:
-        var(--glass-refraction),
-        linear-gradient(130deg, var(--glass-highlight), transparent 46%),
-        linear-gradient(318deg, rgba(243, 164, 176, 0.075), transparent 50%),
-        linear-gradient(154deg, var(--panel-tint), var(--panel-tint-soft));
+        radial-gradient(ellipse at 14% 108%, rgba(243, 164, 176, 0.14), transparent 44%),
+        radial-gradient(ellipse at 84% 108%, rgba(141, 183, 221, 0.12), transparent 46%),
+        linear-gradient(130deg, rgba(255, 255, 255, 0.36), transparent 46%),
+        linear-gradient(154deg, rgba(218, 190, 180, 0.4), rgba(236, 221, 213, 0.3));
     box-shadow:
         0 18px 46px rgba(141, 183, 221, 0.08),
         0 10px 30px rgba(243, 164, 176, 0.055),
@@ -415,14 +415,6 @@ body {
     letter-spacing: 0.16em;
 }
 
-.messages-grid {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: clamp(28px, 5vw, 76px);
-    row-gap: clamp(28px, 4vw, 58px);
-    align-items: start;
-}
-
 .message-card {
     position: relative;
     grid-column: 1 / span 6;
@@ -433,18 +425,19 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.68);
     border-radius: clamp(18px, 2vw, 28px);
     background:
-        var(--glass-refraction),
-        linear-gradient(125deg, rgba(255, 255, 255, 0.32), transparent 58%),
-        linear-gradient(150deg, rgba(212, 180, 169, 0.11), rgba(255, 253, 248, 0.1));
-    -webkit-backdrop-filter: blur(14px) saturate(1.08);
-    backdrop-filter: blur(14px) saturate(1.08);
+        radial-gradient(ellipse at 12% 110%, rgba(141, 183, 221, 0.13), transparent 47%),
+        radial-gradient(ellipse at 102% -8%, rgba(243, 164, 176, 0.08), transparent 42%),
+        linear-gradient(128deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.16) 48%, transparent 72%),
+        rgba(255, 253, 248, 0.38);
+    -webkit-backdrop-filter: blur(18px) saturate(1.12);
+    backdrop-filter: blur(18px) saturate(1.12);
     box-shadow:
-        0 18px 48px rgba(141, 183, 221, 0.075),
-        0 10px 32px rgba(243, 164, 176, 0.05),
-        inset 0 1px rgba(255, 255, 255, 0.82),
-        inset 0 -1px rgba(252, 194, 111, 0.1),
-        inset 1px 0 rgba(141, 183, 221, 0.1),
-        inset -1px 0 rgba(243, 164, 176, 0.09);
+        0 18px 48px rgba(141, 183, 221, 0.065),
+        0 10px 30px rgba(243, 164, 176, 0.045),
+        inset 0 1px rgba(255, 255, 255, 0.94),
+        inset 0 -1px rgba(252, 194, 111, 0.13),
+        inset 1px 0 rgba(141, 183, 221, 0.14),
+        inset -1px 0 rgba(243, 164, 176, 0.12);
 }
 
 .message-card:nth-child(even) {
@@ -464,14 +457,18 @@ body {
 
 .message-card:nth-child(3n + 2) {
     background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.42), transparent 62%),
-        rgba(239, 244, 237, 0.34);
+        radial-gradient(ellipse at 98% 112%, rgba(141, 183, 221, 0.16), transparent 48%),
+        radial-gradient(ellipse at 4% -12%, rgba(170, 210, 190, 0.1), transparent 44%),
+        linear-gradient(136deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.12) 58%, transparent 78%),
+        rgba(236, 244, 240, 0.34);
 }
 
 .message-card:nth-child(3n) {
     background:
-        linear-gradient(120deg, rgba(255, 255, 255, 0.4), transparent 60%),
-        rgba(245, 238, 229, 0.34);
+        radial-gradient(ellipse at 10% 112%, rgba(252, 194, 111, 0.16), transparent 48%),
+        radial-gradient(ellipse at 102% -10%, rgba(243, 164, 176, 0.1), transparent 44%),
+        linear-gradient(122deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.12) 56%, transparent 78%),
+        rgba(248, 240, 229, 0.32);
 }
 
 .message-card::before {
@@ -488,7 +485,7 @@ body {
     z-index: 1;
     margin: 0;
     color: var(--ink-secondary);
-    font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+    font-family: var(--site-font);
     font-size: clamp(1.02rem, 1.35vw, 1.18rem);
     font-weight: 400;
     line-height: 2.05;
@@ -503,6 +500,7 @@ body {
     padding-top: clamp(28px, 4vw, 50px);
     align-self: flex-end;
     color: var(--ink-secondary);
+    font-family: var(--site-font);
     font-size: 0.8rem;
     letter-spacing: 0.16em;
 }
@@ -521,9 +519,10 @@ body {
     .messages-page,
     .page-content.messages-page,
     .page-content.messages-page.active {
-        padding-top: 96px;
-        padding-bottom: 130px;
+        padding-top: 64px;
+        padding-bottom: 84px;
     }
+
 }
 
 @media (max-width: 700px) {
@@ -534,11 +533,6 @@ body {
 
     .messages-heading h1 {
         font-size: clamp(1.85rem, 9vw, 2.8rem);
-    }
-
-    .messages-grid {
-        grid-template-columns: 1fr;
-        gap: 28px;
     }
 
     .message-card,
@@ -600,11 +594,9 @@ body {
     position: relative !important;
     inset: auto !important;
     align-self: start;
-    position: absolute;
-    inset: 0;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(14px, 2vw, 30px) clamp(18px, 3vw, 42px);
+    gap: clamp(10px, 1.3vw, 18px) clamp(16px, 2.4vw, 32px);
     align-items: start;
     visibility: hidden;
     opacity: 0;
@@ -620,27 +612,69 @@ body {
 
 .messages-carousel .message-group .message-card {
     grid-column: auto;
-    width: 94%;
-    min-height: clamp(175px, 17vw, 225px);
+    width: 92%;
+    height: 190px;
+    min-height: 0;
     margin: 0;
-    padding: clamp(24px, 3.2vw, 42px);
+    padding: clamp(20px, 2.3vw, 30px);
+    padding-bottom: clamp(54px, 5vw, 62px);
+}
+
+.messages-carousel .message-group .message-card:nth-child(odd) {
+    justify-self: start;
+}
+
+@media (min-width: 561px) {
+    .messages-carousel .message-group .message-card:nth-child(1) {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .messages-carousel .message-group .message-card:nth-child(2) {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .messages-carousel .message-group .message-card:nth-child(3) {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .messages-carousel .message-group .message-card:nth-child(4) {
+        grid-column: 2;
+        grid-row: 2;
+    }
 }
 
 .messages-carousel .message-group .message-card:nth-child(even) {
     justify-self: end;
-    margin-top: clamp(24px, 3vw, 42px);
+    margin-top: clamp(22px, 2.2vw, 34px);
 }
 
 .messages-carousel .message-group .message-card:nth-child(3) {
-    width: 88%;
-    margin-top: clamp(-4px, -0.4vw, -8px);
-    margin-left: clamp(12px, 2vw, 30px);
+    width: 92%;
+    margin-top: 0;
+    margin-left: 0;
 }
 
 .messages-carousel .message-group .message-card:nth-child(4) {
-    width: 90%;
-    margin-top: clamp(18px, 2.4vw, 34px);
-    margin-right: clamp(10px, 1.5vw, 24px);
+    width: 92%;
+    margin-top: clamp(20px, 2vw, 30px);
+    margin-right: 0;
+}
+
+.messages-carousel .message-card footer {
+    position: absolute;
+    right: clamp(20px, 2.3vw, 30px);
+    bottom: clamp(18px, 2vw, 24px);
+    margin: 0;
+    padding-top: 0;
+}
+
+@media (max-width: 900px) {
+    .messages-carousel .message-group .message-card {
+        height: 200px;
+    }
 }
 
 .message-group[data-count="1"] .message-card:first-child {
@@ -760,14 +794,15 @@ body {
     .messages-carousel .message-group .message-card:nth-child(3),
     .messages-carousel .message-group .message-card:nth-child(4) {
         width: 96%;
-        min-height: 170px;
+        height: 216px;
+        min-height: 0;
         margin-left: 0;
         margin-right: 0;
-        padding: clamp(18px, 5vw, 28px);
+        padding: clamp(18px, 4vw, 24px);
     }
 
     .messages-carousel .message-group .message-card:nth-child(even) {
-        margin-top: 22px;
+        margin-top: 12px;
     }
 
     .message-group[data-count="1"] .message-card:first-child {
@@ -3071,13 +3106,19 @@ body.gallery-section-active .gallery-scroll-progress {
     50% { opacity: 1; }
 }
 
-html.has-scroll-reveal .slide-item {
+html.has-content-reveal .content-reveal {
+    --content-reveal-y: 24px;
     opacity: 0.001;
-    transition: opacity 900ms ease;
+    transform: translate3d(0, var(--content-reveal-y), 0) scale(0.992);
+    transition:
+        opacity 720ms ease,
+        transform 860ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
 }
 
-html.has-scroll-reveal .slide-item.is-revealed {
+html.has-content-reveal .content-reveal.is-content-visible {
     opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
 }
 
 .info-page,
@@ -3183,7 +3224,13 @@ html.has-scroll-reveal .slide-item.is-revealed {
 
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    html.has-scroll-reveal .slide-item { opacity: 1; transition: none; }
+    html.has-content-reveal .content-reveal,
+    html.has-content-reveal .content-reveal.is-content-visible {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        will-change: auto;
+    }
     .gallery-scroll-progress, .cycle-marker { transition: none; }
 }
 
@@ -5267,18 +5314,18 @@ main::before {
     .messages-page,
     .page-content.messages-page,
     .page-content.messages-page.active {
-        padding: 64px 0 92px;
+        padding: 48px 0 64px;
     }
 
     .messages-container {
         width: var(--glass-frame);
-        padding-bottom: 24px;
+        padding-bottom: 20px;
         border-radius: 26px;
     }
 
     .messages-heading {
-        padding: 50px 20px 24px;
-        margin-bottom: 10px;
+        padding: 42px 20px 20px;
+        margin-bottom: 6px;
     }
 
     .messages-heading h1 {
@@ -5322,13 +5369,15 @@ main::before {
     .message-group[data-count="3"] .message-card:last-child {
         grid-column: 1;
         width: 100%;
-        min-height: 116px;
+        height: 170px;
+        min-height: 0;
         margin: 0;
         justify-self: stretch;
     }
 
     .messages-carousel .message-group .message-card {
         padding: 18px 16px;
+        padding-bottom: 50px;
     }
 
     .message-card p {
@@ -5337,7 +5386,9 @@ main::before {
     }
 
     .message-card footer {
-        padding-top: 14px;
+        right: 16px;
+        bottom: 16px;
+        padding-top: 0;
         font-size: 0.72rem;
     }
 }

@@ -509,6 +509,48 @@ updateGalleryProgress(0);
 queueScrollState();
 
 /* =========================
+   主要內容重複進入視窗
+========================= */
+
+const contentRevealTargets = Array.from(document.querySelectorAll([
+    '.gallery-section-heading',
+    '.gallery-stage',
+    '#text-page .text-container',
+    '#planning-page .text-container',
+    '#messages-page .messages-container',
+    '#thanks-page .text-container',
+    '.site-epilogue-final'
+].join(', ')));
+
+if (contentRevealTargets.length && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('has-content-reveal');
+
+    const contentRevealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            const target = entry.target;
+            if (entry.isIntersecting) {
+                target.classList.add('is-content-visible');
+                return;
+            }
+
+            const exitedAboveViewport = entry.boundingClientRect.bottom <= 0;
+            target.style.setProperty('--content-reveal-y', exitedAboveViewport ? '-20px' : '24px');
+            target.classList.remove('is-content-visible');
+        });
+    }, {
+        threshold: 0.14,
+        rootMargin: '0px 0px -7% 0px'
+    });
+
+    contentRevealTargets.forEach((target) => {
+        const startsAboveViewport = target.getBoundingClientRect().bottom <= 0;
+        target.style.setProperty('--content-reveal-y', startsAboveViewport ? '-20px' : '24px');
+        target.classList.add('content-reveal');
+        contentRevealObserver.observe(target);
+    });
+}
+
+/* =========================
    序章節氣環預覽
 ========================= */
 
@@ -747,9 +789,6 @@ if (messagesTrack) {
         group.classList.toggle('is-current', active);
         group.setAttribute('aria-hidden', String(!active));
         group.inert = !active;
-        group.style.removeProperty('transform');
-            group.style.removeProperty('opacity');
-            group.style.removeProperty('position');
     });
     if (messagesStatus) {
         messagesStatus.textContent = `第 ${targetIndex + 1} 組，共 ${messageGroups.length} 組`;
@@ -769,31 +808,35 @@ async function moveMessageGroup(direction) {
         return;
     }
 
-        isMessagesAnimating = true;
-        const transitionVersion = ++messageGroupVersion;
+    isMessagesAnimating = true;
+    const transitionVersion = ++messageGroupVersion;
+    const travel = direction > 0 ? 104 : -104;
     incoming.classList.add('is-current');
     incoming.removeAttribute('aria-hidden');
     incoming.inert = false;
-    const offset = direction > 0 ? 38 : -38;
-    messageGroupAnimations = [
-        outgoing.animate([
-            { opacity: 1, transform: 'translateX(0)' },
-            { opacity: 0, transform: `translateX(${-offset}px)` }
-        ], { duration: 520, easing: 'ease-in-out', fill: 'forwards' }),
-        incoming.animate([
-            { opacity: 0, transform: `translateX(${offset}px)` },
-            { opacity: 1, transform: 'translateX(0)' }
-        ], { duration: 620, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'forwards' })
-    ];
+    const transitionOptions = {
+        duration: 680,
+        easing: 'cubic-bezier(0.65, 0, 0.35, 1)',
+        fill: 'forwards'
+    };
+    const outgoingAnimation = outgoing.animate([
+        { transform: 'translate3d(0, 0, 0)' },
+        { transform: `translate3d(${-travel}%, 0, 0)` }
+    ], transitionOptions);
+    const incomingAnimation = incoming.animate([
+        { transform: `translate3d(${travel}%, 0, 0)` },
+        { transform: 'translate3d(0, 0, 0)' }
+    ], transitionOptions);
+    messageGroupAnimations = [outgoingAnimation, incomingAnimation];
 
     try {
         await Promise.all(messageGroupAnimations.map(animation => animation.finished));
     } catch {
         // 快速切換或 reduced-motion 變更時，由 finishMessageGroup 統一復原。
-        } finally {
-            if (transitionVersion === messageGroupVersion) {
-                finishMessageGroup(incomingIndex);
-            }
+    } finally {
+        if (transitionVersion === messageGroupVersion) {
+            finishMessageGroup(incomingIndex);
+        }
     }
 }
 
