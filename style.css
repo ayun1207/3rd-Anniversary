@@ -6647,3 +6647,41 @@ html.entrance-open main {
         drop-shadow(0 0 1px rgba(251, 254, 252, 0.98))
         drop-shadow(0 0 8px rgba(47, 78, 88, 0.54));
 }
+
+/* 捲動效能：避免長頁面為所有進場面板永久保留獨立合成圖層。 */
+html.has-content-reveal .content-reveal {
+    will-change: auto;
+}
+
+/*
+ * 手機時間環保留固定構圖與季節色回應，但在離開封面後關閉會建立
+ * 超大離屏紋理的 SVG mask、刻痕與局部流光層。環體本身仍固定可見，
+ * data-season 對 .temporal-ring-season-response 的色溫更新亦維持不變。
+ */
+.temporal-sculpture {
+    overflow: hidden;
+    contain: paint;
+}
+
+@media (max-width: 768px) {
+    html.has-content-reveal .content-reveal,
+    html.has-content-reveal .content-reveal.is-content-visible {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        will-change: auto;
+    }
+
+    html:not(.entrance-open) .temporal-sculpture-body {
+        -webkit-mask: none;
+        mask: none;
+    }
+
+    html:not(.entrance-open) .temporal-orbit-stars,
+    html:not(.entrance-open) .temporal-ring-tick-set,
+    html:not(.entrance-open) .temporal-ring-active-aura,
+    html:not(.entrance-open) .temporal-ring-active-glow,
+    html:not(.entrance-open) .temporal-ring-active-core {
+        display: none;
+    }
+}
