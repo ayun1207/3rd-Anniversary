@@ -16,6 +16,12 @@ const notes = [
   '天地逐漸歸於寂靜', '長夜走到盡頭，微光將返', '寒意停在歲末的風裡', '一年最冷，也最接近新生'
 ]
 
+const stories = [
+  '繫上一抹淺綠腰封，寬袖乘著微風舒展。沉睡了一冬的春息，逐漸浮現輪廓。',
+  '雨衣輕攏未歇的雨，裙襬隨步伐悠悠晃動，撐一把與天空同色的傘。讓尋常的陰雨日，也有了值得出門的理由。',
+  '春雷乍響，蝴蝶翩然振翅。撐一柄紙傘走過初醒的街巷，看甦動的春意為沿途添上色彩。'
+]
+
 const tones = [
   '#EFECE6', '#E6EBE0', '#EDF2F4', '#F4EAD4', '#F0E6EF', '#E2ECE9',
   '#EAE4E9', '#FFF1E6', '#FDE2E4', '#DBE7E4', '#E4C1F9', '#D6E2E9',
@@ -37,7 +43,7 @@ export const seasonsData = names.map((name, index) => {
     name,
     season: seasonKeys[Math.floor(index / 6)],
     note: notes[index],
-    story: '在這裡寫下這張作品的故事，或是一句想留給看見它的人的話。',
+    story: stories[index] ?? '在這裡寫下這張作品的故事，或是一句想留給看見它的人的話。',
     hasArtwork: Boolean(artwork),
     image: artwork ? `${basePath}${artwork.full}` : null,
     imageSmall: artwork ? `${basePath}${artwork.compact}` : null,

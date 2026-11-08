@@ -3327,13 +3327,21 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .slide-item.is-current { pointer-events: auto; }
 
-/* 01 正式作品：讓畫面本身成為整個展示框，不沿用預設圖文分欄。 */
+/* 01–03 正式作品：以 16:9 完整排版圖為底，網站字體疊回參考稿位置。 */
 .gallery-stage:has(.slide-item[data-artwork-id="01"].is-current) .carousel-viewport,
-.gallery-stage:has(.slide-item[data-artwork-id="01"].is-turning) .carousel-viewport {
+.gallery-stage:has(.slide-item[data-artwork-id="01"].is-turning) .carousel-viewport,
+.gallery-stage:has(.slide-item[data-artwork-id="02"].is-current) .carousel-viewport,
+.gallery-stage:has(.slide-item[data-artwork-id="02"].is-turning) .carousel-viewport,
+.gallery-stage:has(.slide-item[data-artwork-id="03"].is-current) .carousel-viewport,
+.gallery-stage:has(.slide-item[data-artwork-id="03"].is-turning) .carousel-viewport {
     width: 100%;
 }
 
-.gallery-stage .carousel-viewport .slide-item[data-artwork-id="01"] {
+.gallery-stage .carousel-viewport .slide-item:is(
+    [data-artwork-id="01"],
+    [data-artwork-id="02"],
+    [data-artwork-id="03"]
+) {
     display: block;
     padding: 0;
     overflow: hidden;
@@ -3341,7 +3349,11 @@ html.has-content-reveal .content-reveal.is-content-visible {
     background: #101b2a;
 }
 
-.gallery-stage .carousel-viewport .slide-item[data-artwork-id="01"] .slide-image {
+.gallery-stage .carousel-viewport .slide-item:is(
+    [data-artwork-id="01"],
+    [data-artwork-id="02"],
+    [data-artwork-id="03"]
+) .slide-image {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -3350,24 +3362,28 @@ html.has-content-reveal .content-reveal.is-content-visible {
     border-radius: inherit;
 }
 
-.gallery-stage .carousel-viewport .slide-item[data-artwork-id="01"] .slide-image img {
+.gallery-stage .carousel-viewport .slide-item:is(
+    [data-artwork-id="01"],
+    [data-artwork-id="02"],
+    [data-artwork-id="03"]
+) .slide-image img {
     width: 100%;
     height: 100%;
     max-width: none;
     max-height: none;
     object-fit: cover;
-    /* 上方 39px、下方 10px 為透明輸出邊界，約 80% 可完整對齊實際畫面。 */
-    object-position: 50% 80%;
+    object-position: 50% 50%;
     border-radius: inherit;
 }
 
-.gallery-stage .carousel-viewport .slide-item[data-artwork-id="01"] .slide-caption {
+.gallery-stage .carousel-viewport .slide-item:is(
+    [data-artwork-id="01"],
+    [data-artwork-id="02"],
+    [data-artwork-id="03"]
+) .slide-caption {
     position: absolute;
     z-index: 4;
-    left: 5.5%;
-    bottom: 16.5%;
     display: block;
-    width: 45%;
     max-width: none;
     margin: 0;
     padding: 0;
@@ -3375,31 +3391,77 @@ html.has-content-reveal .content-reveal.is-content-visible {
     pointer-events: none;
 }
 
-.gallery-stage .carousel-viewport .slide-item[data-artwork-id="01"] .caption-label,
-.gallery-stage .carousel-viewport .slide-item[data-artwork-id="01"] .slide-caption::after {
+.gallery-stage .carousel-viewport .slide-item:is(
+    [data-artwork-id="01"],
+    [data-artwork-id="02"],
+    [data-artwork-id="03"]
+) .caption-label,
+.gallery-stage .carousel-viewport .slide-item:is(
+    [data-artwork-id="01"],
+    [data-artwork-id="02"],
+    [data-artwork-id="03"]
+) .slide-caption::after {
     display: none;
 }
 
-.gallery-stage .carousel-viewport .slide-item[data-artwork-id="01"] .slide-caption h2 {
-    margin: 0 0 clamp(8px, 1.3vw, 20px);
+.gallery-stage .carousel-viewport .slide-item:is(
+    [data-artwork-id="01"],
+    [data-artwork-id="02"],
+    [data-artwork-id="03"]
+) .slide-caption h2 {
+    margin: 0 0 2.5%;
     color: #1b241f;
     font-family: var(--site-font);
-    font-size: clamp(0.62rem, 1.7vw, 1.5rem);
-    font-weight: 400;
+    font-size: clamp(0.62rem, 1.72vw, 1.55rem);
+    font-weight: 500;
     line-height: 1.4;
-    letter-spacing: 0.035em;
+    letter-spacing: 0.025em;
     white-space: nowrap;
 }
 
-.gallery-stage .carousel-viewport .slide-item[data-artwork-id="01"] .caption-description {
+.gallery-stage .carousel-viewport .slide-item:is(
+    [data-artwork-id="01"],
+    [data-artwork-id="02"],
+    [data-artwork-id="03"]
+) .caption-description {
     color: #1e2823;
     font-family: var(--site-font);
-    font-size: clamp(0.44rem, 1.32vw, 1.12rem);
-    font-weight: 400;
-    line-height: 1.55;
-    letter-spacing: 0.025em;
+    font-size: clamp(0.55rem, 1.62vw, 1.42rem);
+    font-weight: 500;
+    line-height: 1.48;
+    letter-spacing: 0.018em;
     white-space: nowrap;
     text-shadow: 0 1px 8px rgba(245, 250, 239, 0.68);
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="01"] .slide-caption {
+    left: 5.45%;
+    top: 66.1%;
+    width: 43.5%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="01"] .caption-description {
+    text-align: center;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="02"] .slide-caption {
+    left: 2.8%;
+    top: 35.7%;
+    width: 49%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="02"] .caption-description {
+    text-align: center;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="03"] .slide-caption {
+    left: 6.15%;
+    top: 31.8%;
+    width: 57%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="03"] .caption-description {
+    text-align: center;
 }
 
 /* 第 24 張：同一張透明人物圖形成清晰前景與偏左的大型淡色剪影。 */
@@ -6495,6 +6557,8 @@ html.entrance-open main {
     background: transparent;
     border-color: transparent;
     box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
 }
 
 #gallery-page .gallery-stage .arrow-btn svg {
@@ -6502,11 +6566,8 @@ html.entrance-open main {
     height: 30px;
     stroke-width: 1.75;
     filter:
-        drop-shadow(0 0 1px rgba(248, 252, 250, 0.94))
-        drop-shadow(0 0 6px rgba(54, 82, 91, 0.42));
-    filter:
-        drop-shadow(0 0 1px rgba(248, 252, 249, 0.96))
-        drop-shadow(0 0 6px rgba(55, 84, 92, 0.42));
+        drop-shadow(0 0 1px rgba(251, 254, 252, 0.98))
+        drop-shadow(0 0 5px rgba(202, 226, 224, 0.82));
 }
 
 #gallery-page .gallery-stage .arrow-btn::before {
@@ -6644,8 +6705,25 @@ html.entrance-open main {
 #gallery-page .gallery-stage .arrow-btn:hover svg,
 #gallery-page .gallery-stage .arrow-btn:focus-visible svg {
     filter:
-        drop-shadow(0 0 1px rgba(251, 254, 252, 0.98))
-        drop-shadow(0 0 8px rgba(47, 78, 88, 0.54));
+        drop-shadow(0 0 1px rgba(253, 255, 254, 1))
+        drop-shadow(0 0 7px rgba(191, 222, 221, 0.94));
+}
+
+/* 滿版排版稿的文字靠近左側，控制箭頭再貼邊以避免壓到首字。 */
+#gallery-page .gallery-stage:has(.slide-item:is(
+    [data-artwork-id="01"],
+    [data-artwork-id="02"],
+    [data-artwork-id="03"]
+).is-current) .arrow-prev {
+    left: -6px;
+}
+
+#gallery-page .gallery-stage:has(.slide-item:is(
+    [data-artwork-id="01"],
+    [data-artwork-id="02"],
+    [data-artwork-id="03"]
+).is-current) .arrow-next {
+    right: -6px;
 }
 
 /* 捲動效能：避免長頁面為所有進場面板永久保留獨立合成圖層。 */

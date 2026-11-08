@@ -4,10 +4,30 @@ export const artworkAssets = {
     "number": "01",
     "full": "images/artworks/01.webp",
     "compact": "images/artworks/01-960.webp",
-    "width": 2000,
-    "height": 1175,
+    "width": 1280,
+    "height": 720,
     "compactWidth": 960,
-    "compactHeight": 564,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "2": {
+    "number": "02",
+    "full": "images/artworks/02.webp",
+    "compact": "images/artworks/02-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "3": {
+    "number": "03",
+    "full": "images/artworks/03.webp",
+    "compact": "images/artworks/03-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
     "orientation": "landscape"
   }
 }

@@ -75,7 +75,7 @@ originalSlides.forEach((slide, index) => {
     slide.style.setProperty('--artwork-backdrop-image-small', `url("${artwork.imageSmall}")`);
     image.dataset.src = artwork.image;
     image.dataset.srcset = `${artwork.imageSmall} ${artwork.imageSmallWidth}w, ${artwork.image} ${artwork.imageWidth}w`;
-    image.dataset.sizes = artwork.number === '01'
+    image.dataset.sizes = ['01', '02', '03'].includes(artwork.number)
         ? '(max-width: 768px) 92vw, (max-width: 1552px) 76vw, 1180px'
         : '(max-width: 768px) 58vw, 52vw';
     image.width = artwork.imageWidth;
@@ -254,20 +254,16 @@ async function moveSlide(direction) {
     incoming.classList.add('is-current');
     incoming.setAttribute('aria-hidden', 'false');
     incoming.inert = false;
-    const incomingImage = incoming.querySelector('.slide-image');
     incoming.style.zIndex = '2';
 
     // 目標圖片完成載入與解碼後才切換；舊圖立即退出，避免半透明殘像覆蓋新圖。
-    // 新圖全程保持不透明，只以極輕微縮放復位提示換作。
+    // 圖片本體不做 scale／translate，避免動畫結束移除合成層時產生亞像素晃動。
+    // 僅讓隨圖切換的文字柔和淡入，作品從出現到落定都維持相同座標。
     turnAnimations = [
-        incomingImage.animate([
-            { opacity: 1, transform: 'scale(1.002)' },
-            { opacity: 1, transform: 'scale(1)' }
-        ], { duration: 520, easing: 'ease-out', fill: 'both' }),
         incoming.querySelector('.slide-caption').animate([
             { opacity: 0 },
             { opacity: 1 }
-        ], { duration: 460, delay: 60, easing: 'ease-out', fill: 'both' })
+        ], { duration: 420, easing: 'ease-out', fill: 'both' })
     ];
     try {
         await Promise.all(turnAnimations.map(animation => animation.finished));
