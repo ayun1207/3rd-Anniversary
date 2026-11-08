@@ -1,34 +1,9 @@
-import entranceAtmosphereUrl from './images/intro-atmosphere-v2.webp?url';
+import { seasonsData } from './src/data/seasons.js';
 
 // 24 張圖片對應的低飽和度背景色列表
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
-const backgroundColors = [
-    "#EFECE6",
-    "#E6EBE0",
-    "#EDF2F4",
-    "#F4EAD4",
-    "#F0E6EF",
-    "#E2ECE9",
-    "#EAE4E9",
-    "#FFF1E6",
-    "#FDE2E4",
-    "#DBE7E4",
-    "#E4C1F9",
-    "#D6E2E9",
-    "#E9ECEF",
-    "#F3E9DC",
-    "#D8E2DC",
-    "#FFE5D9",
-    "#ECE4DB",
-    "#E0E1DD",
-    "#F1FAEE",
-    "#E8D8CE",
-    "#DFE7FD",
-    "#F0F3F4",
-    "#EAD7D7",
-    "#DCE1E3"
-];
+const backgroundColors = seasonsData.map(season => season.tone);
 
 const siteMenu = document.getElementById('siteMenu');
 const menuToggle = document.getElementById('menuToggle');
@@ -86,7 +61,26 @@ const originalSlides = Array.from(document.querySelectorAll('.slide-item'));
 const totalSlides = originalSlides.length;
 const galleryPage = document.getElementById('gallery-page');
 const galleryLoadStatus = document.getElementById('galleryLoadStatus');
-const galleryArrowButtons = Array.from(galleryPage?.querySelectorAll('.arrow-btn') || []);
+
+originalSlides.forEach((slide, index) => {
+    const artwork = seasonsData[index];
+    const image = slide.querySelector('.slide-image img');
+    if (!artwork || !image) return;
+
+    slide.dataset.artworkId = artwork.number;
+    image.alt = artwork.alt;
+    if (!artwork.hasArtwork) return;
+
+    slide.style.setProperty('--artwork-backdrop-image', `url("${artwork.image}")`);
+    slide.style.setProperty('--artwork-backdrop-image-small', `url("${artwork.imageSmall}")`);
+    image.dataset.src = artwork.image;
+    image.dataset.srcset = `${artwork.imageSmall} ${artwork.imageSmallWidth}w, ${artwork.image} ${artwork.imageWidth}w`;
+    image.dataset.sizes = artwork.number === '01'
+        ? '(max-width: 768px) 92vw, (max-width: 1552px) 76vw, 1180px'
+        : '(max-width: 768px) 58vw, 52vw';
+    image.width = artwork.imageWidth;
+    image.height = artwork.imageHeight;
+});
 
 let currentIndex = 0;
 let isAnimating = false;
@@ -95,14 +89,9 @@ let turnAnimations = [];
 let turnVersion = 0;
 let cycleRotation = 0;
 let cycleCompleteTimer;
-let sceneControlsTimer;
-let sceneControlsVersion = 0;
-let sceneLayoutIndex = null;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const slideImageLoads = new WeakMap();
 const galleryImageWaitLimit = 8000;
-const sceneSlideIndexes = new Set([8, 14, 21]);
-const sceneControlsDelay = 2000;
 
 document.documentElement.style.setProperty('--cycle-angle', '0deg');
 
@@ -163,45 +152,6 @@ function preloadAdjacentSlides(index) {
     }, 0);
 }
 
-function runWhenBrowserIsIdle(callback, timeout = 2000) {
-    if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(callback, { timeout });
-    } else {
-        window.setTimeout(callback, 250);
-    }
-}
-
-function prepareDeferredEntranceAssets() {
-    const atmosphereImage = new Image();
-    atmosphereImage.decoding = 'async';
-    atmosphereImage.src = entranceAtmosphereUrl;
-
-    const revealAtmosphere = () => {
-        document.documentElement.classList.add('entrance-art-ready');
-    };
-    if (atmosphereImage.complete && atmosphereImage.naturalWidth > 0) {
-        void atmosphereImage.decode().catch(() => {}).finally(revealAtmosphere);
-    } else {
-        atmosphereImage.addEventListener('load', () => {
-            void atmosphereImage.decode().catch(() => {}).finally(revealAtmosphere);
-        }, { once: true });
-    }
-}
-
-function preloadIdleGalleryImages() {
-    if (navigator.connection?.saveData) return;
-
-    const idleSlideIndexes = originalSlides.flatMap((slide, index) =>
-        slide.querySelector('.slide-image img[data-preload="idle"]') ? [index] : []
-    );
-
-    idleSlideIndexes.forEach((index, order) => {
-        window.setTimeout(() => {
-            runWhenBrowserIsIdle(() => void prepareSlideImage(index));
-        }, order * 750);
-    });
-}
-
 function continueGalleryNavigation() {
     preloadAdjacentSlides(currentIndex);
     if (!originalSlides[currentIndex]?.classList.contains('is-image-unavailable') && galleryLoadStatus) {
@@ -211,48 +161,6 @@ function continueGalleryNavigation() {
 
 function updateBackgroundColor() {
     galleryPage?.style.setProperty('--gallery-tone', backgroundColors[currentIndex]);
-}
-
-function setSceneControlsAvailable(available) {
-    galleryArrowButtons.forEach(button => {
-        button.disabled = !available;
-        if (available) button.removeAttribute('aria-hidden');
-        else button.setAttribute('aria-hidden', 'true');
-    });
-}
-
-function setGallerySceneLayout(index) {
-    if (index === sceneLayoutIndex) return;
-    sceneLayoutIndex = index;
-    const isSceneSlide = sceneSlideIndexes.has(index);
-    clearTimeout(sceneControlsTimer);
-    sceneControlsVersion += 1;
-    galleryPage?.classList.toggle('is-scene-slide', isSceneSlide);
-    galleryPage?.classList.toggle('is-scene-controls-waiting', isSceneSlide && !reducedMotion.matches);
-    galleryPage?.classList.toggle('is-scene-controls-ready', isSceneSlide && reducedMotion.matches);
-    setSceneControlsAvailable(!isSceneSlide || reducedMotion.matches);
-}
-
-function scheduleSceneControlsReveal() {
-    clearTimeout(sceneControlsTimer);
-    const version = ++sceneControlsVersion;
-    const isSceneSlide = sceneSlideIndexes.has(currentIndex);
-    if (!isSceneSlide || reducedMotion.matches) {
-        galleryPage?.classList.remove('is-scene-controls-waiting');
-        galleryPage?.classList.toggle('is-scene-controls-ready', isSceneSlide);
-        setSceneControlsAvailable(true);
-        return;
-    }
-
-    galleryPage?.classList.add('is-scene-controls-waiting');
-    galleryPage?.classList.remove('is-scene-controls-ready');
-    setSceneControlsAvailable(false);
-    sceneControlsTimer = setTimeout(() => {
-        if (version !== sceneControlsVersion || !sceneSlideIndexes.has(currentIndex)) return;
-        galleryPage?.classList.remove('is-scene-controls-waiting');
-        galleryPage?.classList.add('is-scene-controls-ready');
-        setSceneControlsAvailable(true);
-    }, sceneControlsDelay);
 }
 
 function finishPageTurn() {
@@ -269,7 +177,6 @@ function finishPageTurn() {
         slide.style.removeProperty('position');
     });
     isAnimating = false;
-    scheduleSceneControlsReveal();
 }
 
 function continueQueuedSlideMove() {
@@ -382,15 +289,7 @@ reducedMotion.addEventListener('change', () => {
 });
 finishPageTurn();
 void prepareSlideImage(0, { highPriority: true }).then(() => {
-    const prepareDeferredAssets = () => {
-        runWhenBrowserIsIdle(() => {
-            prepareDeferredEntranceAssets();
-            preloadIdleGalleryImages();
-        }, 1500);
-    };
-
-    if (document.readyState === 'complete') prepareDeferredAssets();
-    else window.addEventListener('load', prepareDeferredAssets, { once: true });
+    preloadAdjacentSlides(currentIndex);
 });
 
 /* =========================
@@ -399,7 +298,6 @@ void prepareSlideImage(0, { highPriority: true }).then(() => {
 
 const pageSections = Array.from(document.querySelectorAll('.page-content'));
 const galleryProgressTerm = document.getElementById('galleryProgressTerm');
-const galleryProgressNumber = document.getElementById('galleryProgressNumber');
 let currentSection = 'intro';
 let scrollFrame = 0;
 let scrollSettleTimer;
@@ -422,9 +320,8 @@ function updateGalleryProgress(index) {
 
 function updateGalleryMeta(index) {
     const boundedIndex = Math.max(0, Math.min(totalSlides - 1, index));
-    galleryProgressTerm.textContent = originalSlides[boundedIndex]?.querySelector('h2')?.textContent.trim() || '';
-    galleryProgressNumber.textContent = String(boundedIndex + 1).padStart(2, '0');
-    setGallerySceneLayout(boundedIndex);
+    const galleryTitle = originalSlides[boundedIndex]?.querySelector('h2')?.textContent.trim() || '';
+    galleryProgressTerm.textContent = galleryTitle.split(/[｜|]/, 1)[0].trim();
     updateBackgroundColor();
 }
 
@@ -442,6 +339,7 @@ function setCurrentSection(pageName) {
     });
 
     document.body.classList.toggle('gallery-section-active', pageName === 'gallery');
+    document.body.dataset.section = pageName;
     document.getElementById('currentPageLabel').textContent = {
         intro: '理時序',
         gallery: '觀芳華',
@@ -559,6 +457,7 @@ const solarTerms = Array.from(document.querySelectorAll('.solar-term'));
 const solarCenterTerm = document.getElementById('solarCenterTerm');
 const solarCenterNote = document.getElementById('solarCenterNote');
 const solarTrailLayer = document.querySelector('.solar-trail-layer');
+const temporalBackground = document.querySelector('.site-paper-background');
 let solarLeafAngle = 0;
 let solarTypingTimer;
 let solarHoverTimer;
@@ -567,32 +466,7 @@ let solarAutoplayTimer;
 let solarAutoplayIndex = 0;
 const solarAutoplayInterval = 2200;
 const solarAutoplayPreviewDelay = 120;
-const solarTermNotes = [
-    '風開始有了方向',
-    '細雨輕輕落進春天',
-    '雷聲喚醒沉睡的土地',
-    '晝與夜在此刻平衡',
-    '天光澄澈，萬物明淨',
-    '雨水滋養新生的穀物',
-    '日光漸長，夏意初醒',
-    '萬物將滿，仍留一線餘地',
-    '種子趕在盛夏前落土',
-    '白晝走到一年最長',
-    '熱意從風裡慢慢升起',
-    '盛夏抵達最深之處',
-    '第一縷涼意穿過長夏',
-    '暑氣在日暮裡緩緩退去',
-    '清晨開始凝結微光',
-    '晝夜再次平分秋色',
-    '露水帶來更深的涼意',
-    '草木收起最後的秋色',
-    '萬物開始向內收藏',
-    '初雪尚輕，冬意漸濃',
-    '天地逐漸歸於寂靜',
-    '長夜走到盡頭，微光將返',
-    '寒意停在歲末的風裡',
-    '一年最冷，也最接近新生'
-];
+const solarTermNotes = seasonsData.map(season => season.note);
 const solarSeasons = ['spring', 'summer', 'autumn', 'winter'];
 const solarSeasonTrailColors = [
     'rgba(177, 197, 164, 0.62)',
@@ -600,6 +474,20 @@ const solarSeasonTrailColors = [
     'rgba(207, 174, 165, 0.58)',
     'rgba(171, 193, 208, 0.62)'
 ];
+
+function updateTemporalSculpture(index) {
+    if (!temporalBackground) return;
+    const seasonIndex = Math.floor(index / 6);
+    const termsPerSeason = solarTerms.length / solarSeasons.length;
+    const termWithinSeason = index % termsPerSeason;
+    const seasonProgress = termWithinSeason / (termsPerSeason - 1);
+    const visibleArcStart = 0.40;
+    const visibleArcEnd = 0.60;
+    const progress = visibleArcStart + ((visibleArcEnd - visibleArcStart) * seasonProgress);
+    temporalBackground.dataset.season = solarSeasons[seasonIndex];
+    temporalBackground.dataset.termIndex = String(index);
+    temporalBackground.style.setProperty('--temporal-term-progress', progress.toFixed(4));
+}
 
 function typeSolarText(target, text, delay, version, onComplete) {
     const characters = Array.from(text);
@@ -659,6 +547,7 @@ function followSolarTerm(term, index) {
     solarCycle.style.setProperty('--solar-leaf-angle', `${solarLeafAngle}deg`);
     const seasonIndex = Math.floor(index / 6);
     solarCycle.dataset.season = solarSeasons[seasonIndex];
+    updateTemporalSculpture(index);
     solarTerms.forEach(item => item.classList.toggle('is-previewing', item === term));
     solarCycle.classList.add('is-previewing');
 
@@ -724,6 +613,8 @@ function startSolarAutoplay(reset = false) {
     }
     if (!document.hidden && !entrance.open) runSolarAutoplayStep();
 }
+
+updateTemporalSculpture(0);
 
 /* =========================
    後段章節標題交錯與寄語橫向循環

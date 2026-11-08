@@ -2,13 +2,14 @@
 
 > 寄語章節目前不是無限延伸的靜態列表：`script.js` 會把卡片每四人分組，透過左右控制與觸控橫滑循環切換。相關結構與維護方式以 `docs/messages.md` 為準。
 
-最後核對：2026-10-11
+最後核對：2026-11-04
 
 ## 技術型態
 
 - 專案已由 Vite 開發與建置，並保留 Vue 3 作為漸進式遷移技術；目前沒有正在掛載的 Vue 畫面，既有章節仍由 `index.html`、`style.css`、`script.js` 提供。
 - `style.css` 仍負責既有版面、斷點及 CSS 動畫；`script.js` 已改為 Vite module，暫時負責選單、捲動狀態、節氣自動輪轉、開場、音樂與滑鼠回應。
-- `src/data/seasons.js` 是後續 24 節氣資料驅動重構的集中資料來源；正式遷移第一個完整區塊時，再建立 Vue 入口與對應 SFC。
+- `src/data/seasons.js` 集中 24 節氣名稱、短句、色調與作品資料；作品是否存在、路徑、尺寸及方向由自動產生的 `src/data/artworks.js` 合併進來。
+- `src/data/artworks.js` 由 `npm.cmd run optimize:images` 產生，不手動維護；正式遷移第一個完整區塊時，再建立 Vue 入口與對應 SFC。
 - `package.json` 與 `vite.config.js` 提供開發、建置、預覽與靜態素材複製流程。
 - `images/` 與 `fonts/` 為本機素材，沒有外部 CDN 字體依賴。
 
@@ -42,7 +43,7 @@ body
 2. JavaScript 初始化節氣環與作品閱讀進度，接著 `entrance.showModal()`；固定宣紙背景不依賴 JavaScript。
 3. 使用者按「入新章」後關閉開場，從理時序開始正常垂直瀏覽。
 4. 捲動時 `requestAnimationFrame` 節流的 `updateScrollState()` 同步目前章節；作品索引不由滾輪改變。
-5. 第 2–24 張作品依使用路徑按需載入；目前作品在目標圖完成載入與解碼前保持可見。
+5. 目前唯一正式作品是第 24 張；它位於初始第 01 張的循環相鄰位置，因此展廳初始化後會在背景準備。尚未收到的第 01–23 張沒有圖片路徑，不產生請求。未來新增作品仍依使用路徑按需載入，目標圖完成載入與解碼前保持目前作品可見。
 
 ## 核心狀態
 
@@ -61,15 +62,16 @@ body
 
 ## 必須同步的 24 筆資料
 
-下列五組資料以相同索引互相對應：
+節氣名稱、短句與色調的正式資料來源是 `src/data/seasons.js`；`script.js` 的 `solarTermNotes` 與 `backgroundColors` 已由此資料衍生，不再各自手動保存 24 筆副本。
+
+目前漸進式遷移期間仍須核對：
 
 1. HTML 的 24 個 `.solar-term`。
 2. HTML 的 24 個 `.slide-item`。
-3. JavaScript 的 24 筆 `solarTermNotes`。
-4. JavaScript 的 24 筆 `backgroundColors`。
-5. `src/data/seasons.js` 的 24 筆節氣資料。
+3. `src/data/seasons.js` 的 24 筆節氣資料。
+4. 圖片腳本產生的 `src/data/artworks.js`，其項目只代表實際存在的正式作品。
 
-作品進度名稱直接取自各 `.slide-item h2`。任何增刪、排序或名稱修改仍須一起核對四組資料。
+任何節氣增刪、排序或名稱修改仍須同步前三組；新增或替換作品圖則重新執行圖片腳本，不手動編輯作品清單。
 
 ## 主要狀態類別
 

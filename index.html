@@ -6,11 +6,12 @@
     <title>展示網站</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='24' fill='none' stroke='%238f7959' stroke-width='3'/%3E%3Cpath d='M32 12c7 8 7 32 0 40M12 32h40' fill='none' stroke='%238f7959' stroke-width='2' opacity='.65'/%3E%3C/svg%3E">
     <link rel="preload" as="font" type="font/woff2" href="fonts/lxgw-wenkai-tc-300-subset.woff2" crossorigin fetchpriority="high">
+    <link rel="preload" as="font" type="font/woff2" href="fonts/chiron-sung-hk-u7327-subset.woff2" crossorigin>
     <link rel="stylesheet" href="style.css">
     <noscript>
         <style>
             html.font-pending {
-                --site-font: "Noto Serif TC", "Noto Serif CJK TC", "Source Han Serif TC", "Songti TC", "PMingLiU", "MingLiU", serif;
+                --site-font: "LXGW WenKai TC", "Anniversary Rare Glyphs", "Noto Serif TC", "Noto Serif CJK TC", "Source Han Serif TC", "Songti TC", "PMingLiU", "MingLiU", serif;
             }
             html.font-pending body { visibility: visible; opacity: 1; }
         </style>
@@ -80,112 +81,114 @@
         </div>
     </dialog>
     <div class="site-paper-background" aria-hidden="true">
-        <svg class="site-paper-floral-library" focusable="false">
+        <svg class="temporal-sculpture" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" focusable="false" aria-hidden="true">
             <defs>
-                <symbol id="paper-flower" viewBox="0 0 28 28">
-                    <g class="paper-flower-petals">
-                        <ellipse cx="14" cy="7.2" rx="4.5" ry="7" />
-                        <ellipse cx="14" cy="7.2" rx="4.5" ry="7" transform="rotate(72 14 14)" />
-                        <ellipse cx="14" cy="7.2" rx="4.5" ry="7" transform="rotate(144 14 14)" />
-                        <ellipse cx="14" cy="7.2" rx="4.5" ry="7" transform="rotate(216 14 14)" />
-                        <ellipse cx="14" cy="7.2" rx="4.5" ry="7" transform="rotate(288 14 14)" />
-                    </g>
-                    <circle class="paper-flower-heart" cx="14" cy="14" r="2.45" />
-                    <circle class="paper-flower-glint" cx="13.25" cy="13.15" r="0.7" />
-                </symbol>
-                <symbol id="paper-leaf-slender" viewBox="0 -20 80 40">
-                    <path class="paper-leaf-petiole" d="M0 0 C4 0 8 -1 12 -2" />
-                    <path class="paper-leaf-blade" d="M9 -2 C26 -17 53 -18 75 -3 C57 12 31 14 9 -2Z" />
-                    <path class="paper-leaf-vein" d="M11 -2 C31 -3 52 -3 70 -3" />
-                    <path class="paper-leaf-side-vein" d="M25 -3 L35 -12 M38 -3 L48 -13 M51 -3 L60 -10 M27 -2 L37 7 M41 -3 L51 6 M54 -3 L62 3" />
-                </symbol>
-                <symbol id="paper-leaf-soft" viewBox="0 -23 80 46">
-                    <path class="paper-leaf-petiole" d="M0 0 C5 0 9 -1 13 -2" />
-                    <path class="paper-leaf-blade" d="M10 -2 C24 -21 53 -21 75 -3 C59 17 30 19 10 -2Z" />
-                    <path class="paper-leaf-vein" d="M12 -2 C33 -3 53 -3 70 -3" />
-                    <path class="paper-leaf-side-vein" d="M25 -3 L35 -14 M39 -3 L49 -15 M52 -3 L61 -11 M27 -2 L38 9 M41 -3 L52 8 M54 -3 L63 4" />
-                </symbol>
+                <linearGradient id="temporalMetal" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#192a3c"></stop>
+                    <stop offset="0.2" stop-color="#3b4f5f"></stop>
+                    <stop offset="0.43" stop-color="#223548"></stop>
+                    <stop offset="0.66" stop-color="#101f31"></stop>
+                    <stop offset="0.84" stop-color="#314756"></stop>
+                    <stop offset="1" stop-color="#142437"></stop>
+                </linearGradient>
+                <linearGradient id="temporalSeasonFlow" x1="0" y1="1" x2="0.86" y2="0">
+                    <stop offset="0" stop-color="#83a89e" stop-opacity="0.2"></stop>
+                    <stop offset="0.2" stop-color="#adc0b3" stop-opacity="0.34"></stop>
+                    <stop offset="0.39" stop-color="#d2ba8d" stop-opacity="0.25"></stop>
+                    <stop offset="0.56" stop-color="#a97755" stop-opacity="0.3"></stop>
+                    <stop offset="0.77" stop-color="#7e91ad" stop-opacity="0.22"></stop>
+                    <stop offset="1" stop-color="#9a90aa" stop-opacity="0.16"></stop>
+                </linearGradient>
+                <radialGradient id="temporalShade" cx="42%" cy="46%" r="68%">
+                    <stop offset="0" stop-color="#ffffff" stop-opacity="0.96"></stop>
+                    <stop offset="0.48" stop-color="#ffffff" stop-opacity="0.76"></stop>
+                    <stop offset="0.78" stop-color="#ffffff" stop-opacity="0.22"></stop>
+                    <stop offset="1" stop-color="#000000" stop-opacity="0"></stop>
+                </radialGradient>
+                <mask id="temporalReveal">
+                    <rect width="1600" height="1000" fill="url(#temporalShade)"></rect>
+                </mask>
+                <filter id="temporalGlow" x="-35%" y="-35%" width="170%" height="170%">
+                    <feGaussianBlur stdDeviation="11"></feGaussianBlur>
+                </filter>
+                <filter id="temporalBloom" x="-45%" y="-45%" width="190%" height="190%">
+                    <feGaussianBlur stdDeviation="22"></feGaussianBlur>
+                </filter>
+                <filter id="temporalStarGlow" x="-500%" y="-500%" width="1000%" height="1000%">
+                    <feGaussianBlur stdDeviation="3.2"></feGaussianBlur>
+                </filter>
+                <path id="temporalStarOrbitInner" d="M 1290 1188 A 678 678 0 1 1 1290 -168 A 678 678 0 1 1 1290 1188"></path>
+                <path id="temporalStarOrbit" d="M 1290 1198 A 688 688 0 1 1 1290 -178 A 688 688 0 1 1 1290 1198"></path>
+                <path id="temporalStarOrbitOuter" d="M 1290 1208 A 698 698 0 1 1 1290 -188 A 698 698 0 1 1 1290 1208"></path>
             </defs>
-        </svg>
-
-        <svg class="site-paper-floral site-paper-floral-left" viewBox="0 0 520 800" preserveAspectRatio="xMinYMax meet" focusable="false">
-            <g class="paper-branch-lines">
-                <path d="M32 792 C86 704 118 642 164 558 C216 463 269 374 331 272 C371 206 405 137 425 64" />
-                <path d="M133 617 C164 579 210 555 270 548 C312 543 349 526 382 495" />
-                <path d="M194 501 C211 443 199 392 172 349 C153 318 147 286 157 252" />
-                <path d="M263 387 C303 352 344 338 397 343 C435 346 463 334 487 308" />
-                <path d="M325 278 C325 229 308 194 279 164 C256 140 247 113 252 82" />
-                <path d="M381 173 C410 151 440 146 477 154" />
-            </g>
-            <g class="paper-falling-leaves">
-                <use href="#paper-leaf-slender" width="46" height="24" transform="translate(228 711) rotate(74)" />
-                <use href="#paper-leaf-soft" width="59" height="34" transform="translate(75 603) rotate(-17)" />
-                <use href="#paper-leaf-slender" width="52" height="27" transform="translate(315 589) rotate(128)" />
-                <use href="#paper-leaf-soft" width="45" height="26" transform="translate(91 438) rotate(-96)" />
-                <use href="#paper-leaf-soft" width="62" height="36" transform="translate(318 425) rotate(43)" />
-                <use href="#paper-leaf-slender" width="41" height="21" transform="translate(177 263) rotate(117)" />
-                <use href="#paper-leaf-slender" width="48" height="24" transform="translate(329 191) rotate(-27)" />
-            </g>
-            <g class="paper-flower-cluster paper-flower-cluster-low">
-                <use href="#paper-flower" x="221" y="520" width="54" height="54" />
-                <use href="#paper-flower" x="258" y="514" width="44" height="44" />
-                <use href="#paper-flower" x="285" y="534" width="50" height="50" />
-                <use href="#paper-flower" x="315" y="507" width="39" height="39" />
-                <use href="#paper-flower" x="334" y="535" width="45" height="45" />
-            </g>
-            <g class="paper-flower-cluster paper-flower-cluster-mid">
-                <use href="#paper-flower" x="350" y="313" width="52" height="52" />
-                <use href="#paper-flower" x="389" y="316" width="43" height="43" />
-                <use href="#paper-flower" x="418" y="337" width="49" height="49" />
-                <use href="#paper-flower" x="450" y="303" width="40" height="40" />
-                <use href="#paper-flower" x="463" y="341" width="43" height="43" />
-            </g>
-            <g class="paper-flower-cluster paper-flower-cluster-high">
-                <use href="#paper-flower" x="383" y="112" width="54" height="54" />
-                <use href="#paper-flower" x="424" y="124" width="45" height="45" />
-                <use href="#paper-flower" x="445" y="151" width="50" height="50" />
-                <use href="#paper-flower" x="400" y="158" width="41" height="41" />
-            </g>
-        </svg>
-
-        <svg class="site-paper-floral site-paper-floral-right" viewBox="0 0 560 760" preserveAspectRatio="xMaxYMin meet" focusable="false">
-            <g class="paper-branch-lines">
-                <path d="M548 17 C492 81 462 139 433 215 C398 305 356 382 297 455 C252 510 218 577 203 653" />
-                <path d="M454 164 C413 170 376 195 346 233 C318 270 283 292 237 301" />
-                <path d="M398 299 C434 319 461 348 477 389 C490 423 511 448 543 463" />
-                <path d="M308 442 C266 422 221 418 174 431 C133 443 96 440 59 421" />
-                <path d="M251 530 C272 569 275 609 262 651 C253 681 255 709 270 737" />
-                <path d="M365 373 C334 349 301 340 263 344" />
-            </g>
-            <g class="paper-falling-leaves">
-                <use href="#paper-leaf-slender" width="43" height="22" transform="translate(359 103) rotate(81)" />
-                <use href="#paper-leaf-soft" width="57" height="33" transform="translate(502 169) rotate(149)" />
-                <use href="#paper-leaf-slender" width="48" height="24" transform="translate(282 265) rotate(-37)" />
-                <use href="#paper-leaf-soft" width="61" height="35" transform="translate(490 332) rotate(66)" />
-                <use href="#paper-leaf-slender" width="42" height="21" transform="translate(188 389) rotate(136)" />
-                <use href="#paper-leaf-soft" width="55" height="31" transform="translate(397 507) rotate(-19)" />
-                <use href="#paper-leaf-slender" width="49" height="25" transform="translate(137 594) rotate(107)" />
-                <use href="#paper-leaf-soft" width="45" height="26" transform="translate(334 678) rotate(-54)" />
-            </g>
-            <g class="paper-flower-cluster paper-flower-cluster-high">
-                <use href="#paper-flower" x="328" y="202" width="48" height="48" />
-                <use href="#paper-flower" x="291" y="220" width="55" height="55" />
-                <use href="#paper-flower" x="258" y="251" width="45" height="45" />
-                <use href="#paper-flower" x="220" y="265" width="50" height="50" />
-                <use href="#paper-flower" x="194" y="290" width="40" height="40" />
-            </g>
-            <g class="paper-flower-cluster paper-flower-cluster-mid">
-                <use href="#paper-flower" x="110" y="397" width="51" height="51" />
-                <use href="#paper-flower" x="73" y="382" width="43" height="43" />
-                <use href="#paper-flower" x="39" y="399" width="48" height="48" />
-                <use href="#paper-flower" x="139" y="421" width="40" height="40" />
-                <use href="#paper-flower" x="174" y="410" width="45" height="45" />
-            </g>
-            <g class="paper-flower-cluster paper-flower-cluster-low">
-                <use href="#paper-flower" x="232" y="618" width="52" height="52" />
-                <use href="#paper-flower" x="260" y="649" width="43" height="43" />
-                <use href="#paper-flower" x="238" y="685" width="47" height="47" />
-                <use href="#paper-flower" x="280" y="699" width="38" height="38" />
+            <g class="temporal-sculpture-body" mask="url(#temporalReveal)">
+                <ellipse class="temporal-ring-shadow" cx="1290" cy="510" rx="688" ry="688"></ellipse>
+                <ellipse class="temporal-ring-metal" cx="1290" cy="510" rx="688" ry="688"></ellipse>
+                <ellipse class="temporal-ring-season-sheen" cx="1290" cy="510" rx="688" ry="688"></ellipse>
+                <ellipse class="temporal-ring-season-response" cx="1290" cy="510" rx="688" ry="688"></ellipse>
+                <ellipse class="temporal-ring-outer-edge" cx="1290" cy="510" rx="723" ry="723"></ellipse>
+                <ellipse class="temporal-ring-inner-edge" cx="1290" cy="510" rx="653" ry="653"></ellipse>
+                <ellipse class="temporal-ring-material-line" cx="1290" cy="510" rx="678" ry="678" pathLength="1"></ellipse>
+                <g class="temporal-orbit-stars">
+                    <g class="temporal-orbit-star temporal-orbit-star-main">
+                        <circle class="temporal-star-halo" r="14"></circle>
+                        <circle class="temporal-star-core" r="4"></circle>
+                        <animateMotion dur="18s" begin="0s" repeatCount="indefinite">
+                            <mpath href="#temporalStarOrbit"></mpath>
+                        </animateMotion>
+                    </g>
+                    <g class="temporal-orbit-star temporal-orbit-star-soft">
+                        <circle class="temporal-star-halo" r="10"></circle>
+                        <circle class="temporal-star-core" r="3"></circle>
+                        <animateMotion dur="18s" begin="-0.55s" repeatCount="indefinite">
+                            <mpath href="#temporalStarOrbitInner"></mpath>
+                        </animateMotion>
+                    </g>
+                    <g class="temporal-orbit-star temporal-orbit-star-faint">
+                        <circle class="temporal-star-halo" r="8"></circle>
+                        <circle class="temporal-star-core" r="2.3"></circle>
+                        <animateMotion dur="18s" begin="-1.15s" repeatCount="indefinite">
+                            <mpath href="#temporalStarOrbitOuter"></mpath>
+                        </animateMotion>
+                    </g>
+                    <g class="temporal-orbit-star temporal-orbit-star-pin">
+                        <circle class="temporal-star-halo" r="6"></circle>
+                        <circle class="temporal-star-core" r="1.8"></circle>
+                        <animateMotion dur="18s" begin="-1.75s" repeatCount="indefinite">
+                            <mpath href="#temporalStarOrbit"></mpath>
+                        </animateMotion>
+                    </g>
+                </g>
+                <g class="temporal-ring-tick-set">
+                    <line class="temporal-ring-tick temporal-ring-cardinal-tick is-spring" x1="1290" y1="-157" x2="1290" y2="-191"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(15 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(30 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(45 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(60 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(75 1290 510)"></line>
+                    <line class="temporal-ring-tick temporal-ring-cardinal-tick is-summer" x1="1290" y1="-157" x2="1290" y2="-191" transform="rotate(90 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(105 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(120 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(135 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(150 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(165 1290 510)"></line>
+                    <line class="temporal-ring-tick temporal-ring-cardinal-tick is-autumn" x1="1290" y1="-157" x2="1290" y2="-191" transform="rotate(180 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(195 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(210 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(225 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(240 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(255 1290 510)"></line>
+                    <line class="temporal-ring-tick temporal-ring-cardinal-tick is-winter" x1="1290" y1="-157" x2="1290" y2="-191" transform="rotate(270 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(285 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(300 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(315 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(330 1290 510)"></line>
+                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(345 1290 510)"></line>
+                </g>
+                <ellipse class="temporal-ring-active-aura" cx="1290" cy="510" rx="688" ry="688" pathLength="1"></ellipse>
+                <ellipse class="temporal-ring-active-glow" cx="1290" cy="510" rx="688" ry="688" pathLength="1"></ellipse>
+                <ellipse class="temporal-ring-active-core" cx="1290" cy="510" rx="688" ry="688" pathLength="1"></ellipse>
+                <ellipse class="temporal-ring-memory-line" cx="1290" cy="510" rx="752" ry="752" pathLength="1"></ellipse>
             </g>
         </svg>
     </div>
@@ -239,7 +242,9 @@
         <div class="menu-panel">
             <div class="menu-heading">
                 <h2 id="menuTitle" class="visually-hidden">章節導覽</h2>
-                <button class="menu-close" type="button" aria-label="關閉導覽選單" onclick="closeMenu()" autofocus>&times;</button>
+                <button class="menu-close" type="button" aria-label="關閉導覽選單" onclick="closeMenu()" autofocus>
+                    <span class="menu-close-icon" aria-hidden="true"></span>
+                </button>
             </div>
             
             <nav class="menu-navigation" aria-label="網站導覽">
@@ -329,21 +334,20 @@
                     <p id="galleryLabel" class="section-label">
                         <span>02</span><span>觀芳華</span><span class="section-label-line" aria-hidden="true"></span>
                     </p>
-                    <h2 id="galleryTitle">作品展示</h2>
+                    <h2 id="galleryTitle">作品</h2>
                     <aside class="gallery-scroll-progress" aria-label="作品展示狀態">
                         <span class="cycle-orbit gallery-progress-orbit" aria-hidden="true"><span class="cycle-marker"></span></span>
                         <span class="gallery-progress-copy" aria-hidden="true">
                             <span id="galleryProgressTerm" class="gallery-progress-term">立春</span>
-                            <span id="galleryProgressNumber" class="gallery-progress-number">01</span>
                         </span>
                         <span id="galleryLoadStatus" class="visually-hidden" role="status" aria-live="polite"></span>
                     </aside>
                 </div>
 
                 <div class="gallery-stage">
-                <button class="arrow-btn arrow-prev" type="button" onclick="moveSlide(-1)" aria-label="上一張作品" title="上一張作品">
+                <button class="arrow-btn arrow-prev" type="button" onclick="moveSlide(-1)" aria-label="上一張作品">
                     <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-                        <path d="M25 16H7M14 9l-7 7 7 7" />
+                        <path d="M19 5l-6 11 6 11" />
                     </svg>
                 </button>
 
@@ -354,8 +358,8 @@
                         <div class="slide-image"><img alt="圖片 1" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">01</span></span></p>
-                            <h2>立春</h2>
-                            <p class="caption-description">在這裡寫下這張作品的故事，<br>或是一句想留給看見它的人的話。</p>
+                            <h2>立春｜錦衫初試</h2>
+                            <p class="caption-description">繫上一抹淺綠腰封，寬袖乘著微風舒展。<br>沉睡了一冬的春息，逐漸浮現輪廓。</p>
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
@@ -367,7 +371,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo3.jpg" alt="圖片 3" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 3" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">03</span></span></p>
                             <h2>驚蟄</h2>
@@ -375,7 +379,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo4.jpg" alt="圖片 4" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 4" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">04</span></span></p>
                             <h2>春分</h2>
@@ -383,7 +387,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo5.jpg" alt="圖片 5" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 5" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">05</span></span></p>
                             <h2>清明</h2>
@@ -391,7 +395,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo6.jpg" alt="圖片 6" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 6" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">06</span></span></p>
                             <h2>穀雨</h2>
@@ -399,7 +403,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo7.jpg" alt="圖片 7" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 7" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">07</span></span></p>
                             <h2>立夏</h2>
@@ -407,22 +411,23 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo8.jpg" alt="圖片 8" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 8" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">08</span></span></p>
                             <h2>小滿</h2>
                             <p class="caption-description">在這裡寫下這張作品的故事，<br>或是一句想留給看見它的人的話。</p>
                         </figcaption>
                     </figure>
-                    <figure class="slide-item slide-item-landscape slide-item-scene slide-item-scene-captioned">
-                        <div class="slide-image"><img data-src="images/artworks/09.webp" data-srcset="images/artworks/09-960.webp 960w, images/artworks/09.webp 2000w" data-sizes="(max-width: 768px) 92vw, 72vw" data-preload="idle" alt="圖片 9" width="2400" height="1350" decoding="async"></div>
+                    <figure class="slide-item">
+                        <div class="slide-image"><img alt="圖片 9" decoding="async"></div>
                         <figcaption class="slide-caption">
-                            <h2 class="visually-hidden">芒種</h2>
+                            <p class="caption-label"><span class="caption-pagination"><span class="caption-number">09</span></span></p>
+                            <h2>芒種</h2>
                             <p class="caption-description">「我們約好了喔！下個春天、夏天，<br>還有以後的每一天，都要一起度過！」</p>
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo10.jpg" alt="圖片 10" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 10" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">10</span></span></p>
                             <h2>夏至</h2>
@@ -430,7 +435,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo11.jpg" alt="圖片 11" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 11" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">11</span></span></p>
                             <h2>小暑</h2>
@@ -438,7 +443,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo12.jpg" alt="圖片 12" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 12" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">12</span></span></p>
                             <h2>大暑</h2>
@@ -446,7 +451,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo13.jpg" alt="圖片 13" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 13" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">13</span></span></p>
                             <h2>立秋</h2>
@@ -454,22 +459,23 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo14.jpg" alt="圖片 14" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 14" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">14</span></span></p>
                             <h2>處暑</h2>
                             <p class="caption-description">在這裡寫下這張作品的故事，<br>或是一句想留給看見它的人的話。</p>
                         </figcaption>
                     </figure>
-                    <figure class="slide-item slide-item-landscape slide-item-landscape-featured slide-item-scene slide-item-scene-captioned slide-item-scene-15">
-                        <div class="slide-image"><img data-src="images/artworks/15.webp" data-srcset="images/artworks/15-960.webp 960w, images/artworks/15.webp 2000w" data-sizes="(max-width: 768px) 92vw, 72vw" data-preload="idle" alt="圖片 15" width="2800" height="1576" decoding="async"></div>
+                    <figure class="slide-item">
+                        <div class="slide-image"><img alt="圖片 15" decoding="async"></div>
                         <figcaption class="slide-caption">
-                            <h2 class="visually-hidden">白露</h2>
+                            <p class="caption-label"><span class="caption-pagination"><span class="caption-number">15</span></span></p>
+                            <h2>白露</h2>
                             <p class="caption-description">「或許所謂的寶藏，從來都不是我們找到的東西，<br>而是多年以後，還能一起想起這一天的人。」</p>
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo16.jpg" alt="圖片 16" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 16" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">16</span></span></p>
                             <h2>秋分</h2>
@@ -477,7 +483,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo17.jpg" alt="圖片 17" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 17" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">17</span></span></p>
                             <h2>寒露</h2>
@@ -485,7 +491,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo18.jpg" alt="圖片 18" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 18" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">18</span></span></p>
                             <h2>霜降</h2>
@@ -493,7 +499,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo19.jpg" alt="圖片 19" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 19" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">19</span></span></p>
                             <h2>立冬</h2>
@@ -501,7 +507,7 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo20.jpg" alt="圖片 20" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 20" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">20</span></span></p>
                             <h2>小雪</h2>
@@ -509,22 +515,23 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo21.jpg" alt="圖片 21" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 21" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">21</span></span></p>
                             <h2>大雪</h2>
                             <p class="caption-description">在這裡寫下這張作品的故事，<br>或是一句想留給看見它的人的話。</p>
                         </figcaption>
                     </figure>
-                    <figure class="slide-item slide-item-landscape slide-item-scene slide-item-scene-captioned slide-item-scene-22">
-                        <div class="slide-image"><img data-src="images/artworks/22.webp" data-srcset="images/artworks/22-960.webp 960w, images/artworks/22.webp 2000w" data-sizes="(max-width: 768px) 92vw, 72vw" data-preload="idle" alt="圖片 22" width="2400" height="1350" decoding="async"></div>
+                    <figure class="slide-item">
+                        <div class="slide-image"><img alt="圖片 22" decoding="async"></div>
                         <figcaption class="slide-caption">
-                            <h2 class="visually-hidden">冬至</h2>
+                            <p class="caption-label"><span class="caption-pagination"><span class="caption-number">22</span></span></p>
+                            <h2>冬至</h2>
                             <p class="caption-description">「這湯圓…沒問題吧? 」<br>「沒!沒有問題啊!」</p>
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo23.jpg" alt="圖片 23" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 23" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">23</span></span></p>
                             <h2>小寒</h2>
@@ -532,19 +539,22 @@
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
-                        <div class="slide-image"><img data-src="images/photo24.jpg" alt="圖片 24" decoding="async"></div>
+                        <div class="slide-image"><img alt="圖片 24" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">24</span></span></p>
-                            <h2>大寒</h2>
-                            <p class="caption-description">在這裡寫下這張作品的故事，<br>或是一句想留給看見它的人的話。</p>
+                            <h2>大寒｜霜白</h2>
+                            <p class="caption-description caption-description-fixed-lines">
+                                <span class="caption-line">俐落的比例，冷色調不必張揚。</span>
+                                <span class="caption-line">將寒意留在衣襬之外，冬日自有不動聲色的氣場。</span>
+                            </p>
                         </figcaption>
                     </figure>
                 </div>
             </div>
 
-                <button class="arrow-btn arrow-next" type="button" onclick="moveSlide(1)" aria-label="下一張作品" title="下一張作品">
+                <button class="arrow-btn arrow-next" type="button" onclick="moveSlide(1)" aria-label="下一張作品">
                     <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-                        <path d="M7 16h18M18 9l7 7-7 7" />
+                        <path d="M13 5l6 11-6 11" />
                     </svg>
                 </button>
                 </div>
@@ -667,8 +677,24 @@
                         <footer>風夜空</footer>
                     </article>
                     <article class="message-card">
-                        <p>有霓在的每個日子，都充滿了珍貴的回憶，繼續寫下屬於霓們的故事吧！三周年快樂！</p>
-                        <footer>云薯</footer>
+                        <p>三週年快樂希望未來的日子裡妳們也能繼續做自己喜歡的事，繼續發光發熱，妳們超級棒的！</p>
+                        <footer>FangFang </footer>
+                    </article>
+                    <article class="message-card">
+                        <p>我愛阿雷、阿基、租咪、妳們是最棒的</p>
+                        <footer>猧咎</footer>
+                    </article>
+                    <article class="message-card">
+                        <p>霓三週年快樂，這三年有你們的陪伴真的很開心，你們是最棒的</p>
+                        <footer>快斗</footer>
+                    </article>
+                    <article class="message-card">
+                        <p>轉眼間三周年就要到了，祝霓NEO(n)三周年快樂，未來也會陪著你們一起度過的</p>
+                        <footer>三叉</footer>
+                    </article>
+                    <article class="message-card">
+                        <p>你知道的 我一直是霓的粉絲，阿雷澪魂歌聲，租咪強烈反差萌，以及小煌非常的婆，至於阿基，我祝她馬戲團玩的開心</p>
+                        <footer>クマ吉</footer>
                     </article>
                         </div>
                     </div>
@@ -769,11 +795,19 @@
                 return;
             }
 
-            document.fonts.load(
-                '300 1em "LXGW WenKai TC"',
-                '霓影流轉 四時成章'
-            ).then(loadedFonts => {
-                finishFontChoice(loadedFonts.length === 0);
+            Promise.all([
+                document.fonts.load(
+                    '300 1em "LXGW WenKai TC"',
+                    '霓影流轉 四時成章'
+                ),
+                document.fonts.load(
+                    '300 1em "Anniversary Rare Glyphs"',
+                    '猧'
+                )
+            ]).then(([loadedFonts, loadedRareGlyphs]) => {
+                finishFontChoice(
+                    loadedFonts.length === 0 || loadedRareGlyphs.length === 0
+                );
             }).catch(() => {
                 finishFontChoice(true);
             });

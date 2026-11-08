@@ -9,7 +9,6 @@ const errors = []
 const warnings = []
 
 const html = await readFile(resolve(projectRoot, 'index.html'), 'utf8')
-const script = await readFile(resolve(projectRoot, 'script.js'), 'utf8')
 
 const solarTermNames = Array.from(
   html.matchAll(/class="solar-term[^>]*>\s*([^<]+?)\s*<\/span>/g),
@@ -19,9 +18,6 @@ const slideNames = Array.from(
   html.matchAll(/<figure class="slide-item[^>]*>[\s\S]*?<h2[^>]*>([^<]+)<\/h2>[\s\S]*?<\/figure>/g),
   match => match[1].trim()
 )
-const colorBlock = script.match(/const backgroundColors = \[([\s\S]*?)\];/)
-const colorCount = colorBlock?.[1].match(/#[0-9a-f]{6}/gi)?.length ?? 0
-
 function expect(condition, message) {
   if (!condition) errors.push(message)
 }
@@ -29,7 +25,8 @@ function expect(condition, message) {
 expect(seasonsData.length === 24, `seasonsData 應有 24 筆，目前為 ${seasonsData.length} 筆。`)
 expect(solarTermNames.length === 24, `index.html 應有 24 個節氣刻度，目前為 ${solarTermNames.length} 個。`)
 expect(slideNames.length === 24, `index.html 應有 24 件作品，目前為 ${slideNames.length} 件。`)
-expect(colorCount === 24, `backgroundColors 應有 24 筆，目前為 ${colorCount} 筆。`)
+expect(seasonsData.every(item => /^#[0-9a-f]{6}$/i.test(item.tone)), 'seasonsData 的 24 筆色調都應是完整的六位色碼。')
+expect(seasonsData.every(item => item.note), 'seasonsData 的 24 筆節氣短句都不可為空。')
 
 const ids = seasonsData.map(item => item.id)
 expect(new Set(ids).size === seasonsData.length, 'seasonsData 內有重複 id。')
@@ -40,12 +37,17 @@ if (solarTermNames.length === 24) {
   expect(dataNames.every((name, index) => name === solarTermNames[index]), '節氣環順序與 seasonsData 不一致。')
 }
 if (slideNames.length === 24) {
-  expect(dataNames.every((name, index) => name === slideNames[index]), '作品標題順序與 seasonsData 不一致。')
+  const slideTerms = slideNames.map(name => name.split('｜', 1)[0].trim())
+  expect(dataNames.every((name, index) => name === slideTerms[index]), '作品標題順序與 seasonsData 不一致。')
 }
 
 const missingImages = []
 const largeImages = []
 for (const season of seasonsData) {
+  if (!season.hasArtwork || !season.image) {
+    missingImages.push(`${season.number} ${season.name}: 尚未加入正式作品`)
+    continue
+  }
   const relativeImagePath = season.image.replace(/^\/?/, '')
   const imagePath = resolve(projectRoot, relativeImagePath)
   try {

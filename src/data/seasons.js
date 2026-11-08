@@ -1,3 +1,5 @@
+import { artworkAssets } from './artworks.js'
+
 const names = [
   '立春', '雨水', '驚蟄', '春分', '清明', '穀雨',
   '立夏', '小滿', '芒種', '夏至', '小暑', '大暑',
@@ -22,15 +24,12 @@ const tones = [
 ]
 
 const seasonKeys = ['spring', 'summer', 'autumn', 'winter']
-const landscapeIds = new Set([9, 15, 22])
-const optimizedImageIds = new Set([9, 15, 22])
 const basePath = import.meta.env?.BASE_URL || '/'
 
 export const seasonsData = names.map((name, index) => {
   const id = index + 1
-  const extension = id <= 2 ? 'png' : 'jpg'
   const number = String(id).padStart(2, '0')
-  const hasOptimizedImage = optimizedImageIds.has(id)
+  const artwork = artworkAssets[id]
 
   return {
     id,
@@ -39,15 +38,15 @@ export const seasonsData = names.map((name, index) => {
     season: seasonKeys[Math.floor(index / 6)],
     note: notes[index],
     story: '在這裡寫下這張作品的故事，或是一句想留給看見它的人的話。',
-    image: hasOptimizedImage
-      ? `${basePath}images/artworks/${number}.webp`
-      : `${basePath}images/photo${id}.${extension}`,
-    imageSmall: hasOptimizedImage && landscapeIds.has(id)
-      ? `${basePath}images/artworks/${number}-960.webp`
-      : null,
+    hasArtwork: Boolean(artwork),
+    image: artwork ? `${basePath}${artwork.full}` : null,
+    imageSmall: artwork ? `${basePath}${artwork.compact}` : null,
+    imageWidth: artwork?.width ?? null,
+    imageHeight: artwork?.height ?? null,
+    imageSmallWidth: artwork?.compactWidth ?? null,
+    imageSmallHeight: artwork?.compactHeight ?? null,
     alt: `圖片 ${id}`,
     tone: tones[index],
-    landscape: landscapeIds.has(id),
-    featured: id === 15
+    orientation: artwork?.orientation ?? null
   }
 })

@@ -23,7 +23,7 @@
 - Windows PowerShell 若阻擋 `npm.ps1`，使用 `npm.cmd` 執行 npm 指令。
 - 保留鍵盤操作、焦點樣式、觸控滑動、`aria-*`、`inert` 與 `prefers-reduced-motion` 行為。
 - 修改輪播或切頁時，保留 `isAnimating`、`isPageSwitching`、動畫取消與最終狀態復原機制。
-- 修改節氣資料時，同步核對目前仍在使用的 24 個 `.solar-term`、24 個 `.slide-item`、`solarTermNotes`、`backgroundColors`，以及 `src/data/seasons.js` 的數量和順序；若某一資料來源已正式完成遷移並移除，應同步更新此規則與相關文件。
+- 修改節氣資料時，同步核對目前仍在使用的 24 個 `.solar-term`、24 個 `.slide-item` 與 `src/data/seasons.js` 的數量和順序；`solarTermNotes` 與 `backgroundColors` 已由 `seasonsData` 衍生。作品圖片清單由 `scripts/optimize-images.mjs` 依原圖產生至 `src/data/artworks.js`，不要手動編輯；若資料來源再完成遷移，應同步更新此規則與相關文件。
 - 新增或替換圖片時，確認實際檔名、副檔名、尺寸、容量與 HTML 路徑完全一致。
 
 ## 驗證原則
