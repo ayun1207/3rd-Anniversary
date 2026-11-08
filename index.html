@@ -714,7 +714,14 @@
                     <span>06</span><span>謝花人</span><span class="section-label-line" aria-hidden="true"></span>
                 </p>
                 <h1 id="thanksTitle">委託名單</h1>
-                <div class="commission-roster" aria-label="三十六人委託名單">
+                <div class="commission-roster-carousel">
+                    <button id="rosterPrev" class="roster-arrow roster-prev" type="button" aria-label="上一組委託名單">
+                        <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                            <path d="M21 6l-7 10 7 10" />
+                        </svg>
+                    </button>
+                    <div id="rosterViewport" class="commission-roster-viewport" role="region" aria-label="三十六人委託名單輪播" tabindex="0">
+                <div id="commissionRoster" class="commission-roster" aria-label="三十六人委託名單">
                     <section class="commission-roster-card" aria-label="委託名單 01 至 12">
                         <ul>
                             <li>Ahshuo</li>
@@ -763,6 +770,14 @@
                             <li>雞肉河粉</li>
                         </ul>
                     </section>
+                </div>
+                    </div>
+                    <button id="rosterNext" class="roster-arrow roster-next" type="button" aria-label="下一組委託名單">
+                        <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                            <path d="M11 6l7 10-7 10" />
+                        </svg>
+                    </button>
+                    <p id="rosterStatus" class="messages-status" role="status" aria-live="polite"></p>
                 </div>
             </div>
         </section>

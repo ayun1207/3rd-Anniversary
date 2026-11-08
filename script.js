@@ -796,6 +796,74 @@ if (messagesPrev && messagesNext && messagesViewport) {
     finishMessageGroup(0);
 }
 
+const rosterTrack = document.getElementById('commissionRoster');
+const rosterViewport = document.getElementById('rosterViewport');
+const rosterPrev = document.getElementById('rosterPrev');
+const rosterNext = document.getElementById('rosterNext');
+const rosterStatus = document.getElementById('rosterStatus');
+const rosterCards = rosterTrack
+    ? Array.from(rosterTrack.querySelectorAll('.commission-roster-card'))
+    : [];
+const rosterMobile = window.matchMedia('(max-width: 700px)');
+let currentRosterCard = 0;
+let rosterTouchStartX = 0;
+let rosterTouchStartY = 0;
+
+function updateRosterCarousel(targetIndex = currentRosterCard, announce = true) {
+    if (!rosterTrack || !rosterCards.length) return;
+    currentRosterCard = (targetIndex + rosterCards.length) % rosterCards.length;
+    const mobile = rosterMobile.matches;
+
+    rosterTrack.style.setProperty('--roster-offset', `${currentRosterCard * -100}%`);
+    rosterCards.forEach((card, index) => {
+        const active = index === currentRosterCard;
+        if (mobile) {
+            card.setAttribute('aria-hidden', String(!active));
+            card.inert = !active;
+        } else {
+            card.removeAttribute('aria-hidden');
+            card.inert = false;
+        }
+    });
+
+    if (rosterPrev && rosterNext) {
+        const hideControls = !mobile || rosterCards.length <= 1;
+        rosterPrev.hidden = hideControls;
+        rosterNext.hidden = hideControls;
+    }
+    if (announce && rosterStatus && mobile) {
+        rosterStatus.textContent = `第 ${currentRosterCard + 1} 組，共 ${rosterCards.length} 組`;
+    }
+}
+
+function moveRosterCard(direction) {
+    if (!rosterMobile.matches || rosterCards.length <= 1) return;
+    updateRosterCarousel(currentRosterCard + direction);
+}
+
+if (rosterTrack && rosterViewport && rosterPrev && rosterNext) {
+    rosterPrev.addEventListener('click', () => moveRosterCard(-1));
+    rosterNext.addEventListener('click', () => moveRosterCard(1));
+    rosterViewport.addEventListener('keydown', event => {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        moveRosterCard(event.key === 'ArrowRight' ? 1 : -1);
+    });
+    rosterViewport.addEventListener('touchstart', event => {
+        rosterTouchStartX = event.changedTouches[0].clientX;
+        rosterTouchStartY = event.changedTouches[0].clientY;
+    }, { passive: true });
+    rosterViewport.addEventListener('touchend', event => {
+        const deltaX = event.changedTouches[0].clientX - rosterTouchStartX;
+        const deltaY = event.changedTouches[0].clientY - rosterTouchStartY;
+        if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY)) {
+            moveRosterCard(deltaX < 0 ? 1 : -1);
+        }
+    }, { passive: true });
+    rosterMobile.addEventListener('change', () => updateRosterCarousel(currentRosterCard, false));
+    updateRosterCarousel(0, false);
+}
+
 reducedMotion.addEventListener('change', () => {
     if (isMessagesAnimating) finishMessageGroup(currentMessageGroup);
 });

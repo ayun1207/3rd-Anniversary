@@ -4070,8 +4070,17 @@ main::before {
     justify-self: start;
 }
 
-.commission-roster {
+.commission-roster-carousel {
+    position: relative;
     grid-column: 1;
+    min-width: 0;
+}
+
+.commission-roster-viewport {
+    min-width: 0;
+}
+
+.commission-roster {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -4129,23 +4138,93 @@ main::before {
     text-align: center;
 }
 
+.roster-arrow {
+    display: none;
+}
+
 @media (max-width: 700px) {
     #thanks-page .text-container {
         row-gap: 34px;
     }
 
+    .commission-roster-carousel {
+        width: 100%;
+        padding-inline: 36px;
+    }
+
+    .commission-roster-viewport {
+        overflow: hidden;
+        border-radius: 24px;
+        touch-action: pan-y;
+    }
+
     .commission-roster {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 100%;
+        grid-template-columns: none;
+        gap: 0;
+        transform: translate3d(var(--roster-offset, 0%), 0, 0);
+        transition: transform 560ms cubic-bezier(0.22, 0.61, 0.36, 1);
     }
 
     .commission-roster-card {
-        padding: 34px 28px;
+        width: 100%;
+        min-height: 188px;
+        padding: 24px 18px;
     }
 
     .commission-roster-card ul {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: 20px;
+        column-gap: 12px;
+    }
+
+    .commission-roster-card li {
+        font-size: clamp(0.76rem, 3.3vw, 0.88rem);
+        line-height: 1.55;
+        letter-spacing: 0.055em;
+    }
+
+    .roster-arrow {
+        position: absolute;
+        z-index: 3;
+        top: 50%;
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: rgba(189, 207, 212, 0.72);
+        transform: translateY(-50%);
+        cursor: pointer;
+        touch-action: manipulation;
+    }
+
+    .roster-prev {
+        left: -4px;
+    }
+
+    .roster-next {
+        right: -4px;
+    }
+
+    .roster-arrow svg {
+        width: 20px;
+        height: 28px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        filter: drop-shadow(0 0 6px rgba(141, 183, 221, 0.24));
+    }
+
+    .roster-arrow:focus-visible {
+        outline: 2px solid rgba(189, 207, 212, 0.7);
+        outline-offset: 0;
+        border-radius: 50%;
     }
 }
 
@@ -5060,8 +5139,9 @@ main::before {
 
 @media (max-width: 560px) {
     .message-group {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 18px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, 150px);
+        gap: 10px 8px;
     }
 
     .messages-carousel .message-group .message-card,
@@ -5070,29 +5150,125 @@ main::before {
     .messages-carousel .message-group .message-card:nth-child(4),
     .message-group[data-count="1"] .message-card:first-child,
     .message-group[data-count="3"] .message-card:last-child {
-        grid-column: 1;
         width: 100%;
-        height: 170px;
+        height: 150px;
         min-height: 0;
         margin: 0;
         justify-self: stretch;
     }
 
+    .messages-carousel .message-group .message-card:nth-child(1) {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .messages-carousel .message-group .message-card:nth-child(2) {
+        grid-column: 2;
+        grid-row: 1;
+        transform: translateY(12px);
+    }
+
+    .messages-carousel .message-group .message-card:nth-child(3) {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .messages-carousel .message-group .message-card:nth-child(4),
+    .message-group[data-count="3"] .message-card:last-child {
+        grid-column: 2;
+        grid-row: 2;
+        transform: translateY(12px);
+    }
+
+    .message-group[data-count="1"] .message-card:first-child {
+        grid-column: 1 / -1;
+        width: 52%;
+        justify-self: center;
+    }
+
+    .messages-carousel {
+        padding: 0 30px 12px !important;
+    }
+
+    #messagesPrev,
+    #messagesNext {
+        top: 50% !important;
+        bottom: auto !important;
+        width: 44px;
+        height: 44px;
+        transform: translateY(-50%) !important;
+    }
+
+    #messagesPrev {
+        left: -4px !important;
+    }
+
+    #messagesNext {
+        right: -4px !important;
+    }
+
     .messages-carousel .message-group .message-card {
-        padding: 18px 16px;
-        padding-bottom: 50px;
+        padding: 14px 11px 38px;
     }
 
     .message-card p {
-        font-size: 0.9rem;
-        line-height: 1.78;
+        font-size: clamp(0.64rem, 2.75vw, 0.72rem);
+        line-height: 1.55;
+        letter-spacing: 0.025em;
+        overflow-wrap: anywhere;
     }
 
     .message-card footer {
-        right: 16px;
-        bottom: 16px;
+        right: 11px;
+        bottom: 12px;
         padding-top: 0;
-        font-size: 0.72rem;
+        font-size: 0.62rem;
+        letter-spacing: 0.06em;
+    }
+
+    .message-card footer::before {
+        width: 18px;
+        margin-right: 6px;
+    }
+
+    .messages-page,
+    .page-content.messages-page,
+    .page-content.messages-page.active {
+        padding: 36px 0 44px;
+    }
+
+    .messages-container {
+        padding-bottom: 12px;
+    }
+
+    .messages-heading {
+        padding: 34px 16px 14px;
+        margin-bottom: 0;
+    }
+
+    .messages-heading h1 {
+        font-size: clamp(1.65rem, 8vw, 2.1rem);
+    }
+
+    .messages-viewport {
+        min-height: 322px;
+    }
+
+    .messages-track {
+        min-height: 322px;
+    }
+
+    .message-group {
+        min-height: 322px;
+    }
+
+    .messages-carousel .message-group .message-card:nth-child(even) {
+        margin-top: 0;
+    }
+
+    .messages-carousel .message-group .message-card:nth-child(3),
+    .messages-carousel .message-group .message-card:nth-child(4) {
+        width: 100%;
     }
 }
 
@@ -5168,6 +5344,12 @@ main::before {
     }
 }
 
+@media (max-width: 700px) {
+    .commission-roster {
+        gap: 0;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     #gallery-page {
         height: auto;
@@ -5175,6 +5357,10 @@ main::before {
     }
 
     .site-header::after {
+        transition: none;
+    }
+
+    .commission-roster {
         transition: none;
     }
 }
@@ -5695,8 +5881,7 @@ html.entrance-pending body {
     opacity: 0.84;
     transform: translate3d(0, 0, 0) scale(1.015);
     transform-origin: 67% 50%;
-    transition: transform 1500ms cubic-bezier(0.22, 0.61, 0.36, 1),
-        opacity 1200ms ease, filter 1200ms ease;
+    transition: opacity 1200ms ease, filter 1200ms ease;
 }
 
 .temporal-ring-shadow,
@@ -5905,19 +6090,16 @@ html.entrance-open .temporal-orbit-stars {
 body[data-section="gallery"] .temporal-sculpture {
     opacity: 0.42;
     filter: saturate(0.72);
-    transform: translate3d(3.5%, -1%, 0) scale(1.055);
 }
 
 body[data-section="text"] .temporal-sculpture,
 body[data-section="planning"] .temporal-sculpture {
     opacity: 0.7;
-    transform: translate3d(-2%, 1.5%, 0) scale(1.03);
 }
 
 body[data-section="messages"] .temporal-sculpture,
 body[data-section="thanks"] .temporal-sculpture {
     opacity: 0.62;
-    transform: translate3d(-4%, -1%, 0) scale(1.045);
 }
 
 /* The temporal sculpture replaces every legacy entrance illustration layer. */
@@ -6127,12 +6309,7 @@ body[data-section="thanks"] .temporal-sculpture {
         transition: opacity 700ms ease;
     }
 
-    body[data-section="intro"] .temporal-sculpture,
-    body[data-section="gallery"] .temporal-sculpture,
-    body[data-section="text"] .temporal-sculpture,
-    body[data-section="planning"] .temporal-sculpture,
-    body[data-section="messages"] .temporal-sculpture,
-    body[data-section="thanks"] .temporal-sculpture {
+    .temporal-sculpture {
         transform: translate3d(0, 0, 0) scale(1.035);
         filter: none;
     }
