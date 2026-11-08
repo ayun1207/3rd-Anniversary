@@ -4845,18 +4845,18 @@ main::before {
     #text-page .text-container,
     #thanks-page .text-container,
     .site-epilogue-final {
-        -webkit-backdrop-filter: blur(12px) saturate(1.08);
-        backdrop-filter: blur(12px) saturate(1.08);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
     }
 
     .message-card {
-        -webkit-backdrop-filter: blur(10px) saturate(1.06);
-        backdrop-filter: blur(10px) saturate(1.06);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
     }
 
     .commission-roster-card {
-        -webkit-backdrop-filter: blur(6px) saturate(1.04);
-        backdrop-filter: blur(6px) saturate(1.04);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
     }
 
     .intro-copy {
@@ -6124,11 +6124,42 @@ body[data-section="thanks"] .temporal-sculpture {
         width: 165%;
         height: 100%;
         transform-origin: 68% 50%;
+        transition: opacity 700ms ease;
+    }
+
+    body[data-section="intro"] .temporal-sculpture,
+    body[data-section="gallery"] .temporal-sculpture,
+    body[data-section="text"] .temporal-sculpture,
+    body[data-section="planning"] .temporal-sculpture,
+    body[data-section="messages"] .temporal-sculpture,
+    body[data-section="thanks"] .temporal-sculpture {
+        transform: translate3d(0, 0, 0) scale(1.035);
+        filter: none;
     }
 
     body[data-section="gallery"] .temporal-sculpture {
-        opacity: 0.34;
-        transform: translate3d(5%, -1%, 0) scale(1.06);
+        opacity: 0.36;
+    }
+
+    .temporal-ring-shadow,
+    .temporal-ring-active-aura,
+    .temporal-ring-active-glow {
+        filter: none;
+    }
+
+    .temporal-ring-active-aura,
+    .temporal-ring-active-glow {
+        animation: none;
+    }
+
+    .temporal-ring-active-aura {
+        stroke-width: 48;
+        opacity: 0.14;
+    }
+
+    .temporal-ring-active-glow {
+        stroke-width: 26;
+        opacity: 0.4;
     }
 
     .entrance {
@@ -6153,8 +6184,13 @@ body[data-section="thanks"] .temporal-sculpture {
     .info-page .text-container,
     .messages-container::before,
     .site-epilogue-final {
-        -webkit-backdrop-filter: blur(12px) saturate(1.01);
-        backdrop-filter: blur(12px) saturate(1.01);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+
+    .site-header {
+        -webkit-backdrop-filter: blur(5px) saturate(1.01);
+        backdrop-filter: blur(5px) saturate(1.01);
     }
 }
 
@@ -6243,8 +6279,8 @@ html.entrance-open main {
         width: 100%;
         padding-bottom: 10px;
         border-radius: 18px;
-        -webkit-backdrop-filter: blur(12px) saturate(1.01);
-        backdrop-filter: blur(12px) saturate(1.01);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
     }
 
     #gallery-page .gallery-section-heading {

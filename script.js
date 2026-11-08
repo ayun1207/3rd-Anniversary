@@ -327,6 +327,7 @@ function updateGalleryMeta(index) {
 
 function setCurrentSection(pageName) {
     if (!pageName) return;
+    if (pageName === currentSection && document.body.dataset.section === pageName) return;
     currentSection = pageName;
     pageSections.forEach(section => {
         section.classList.toggle('active', section.id === `${pageName}-page`);
@@ -464,6 +465,8 @@ let solarHoverTimer;
 let solarPreviewVersion = 0;
 let solarAutoplayTimer;
 let solarAutoplayIndex = 0;
+let solarActiveIndex = 0;
+let solarCycleVisible = true;
 const solarAutoplayInterval = 2200;
 const solarAutoplayPreviewDelay = 120;
 const solarTermNotes = seasonsData.map(season => season.note);
@@ -540,6 +543,7 @@ function writeSolarPreview(termText, noteText) {
 }
 
 function followSolarTerm(term, index) {
+    solarActiveIndex = index;
     const targetAngle = index * 15;
     const currentAngle = ((solarLeafAngle % 360) + 360) % 360;
     const shortestTurn = ((targetAngle - currentAngle + 540) % 360) - 180;
@@ -548,6 +552,11 @@ function followSolarTerm(term, index) {
     const seasonIndex = Math.floor(index / 6);
     solarCycle.dataset.season = solarSeasons[seasonIndex];
     updateTemporalSculpture(index);
+
+    // Keep the background clock advancing while avoiding off-screen trail and
+    // label work that cannot be seen, especially on mobile devices.
+    if (!solarCycleVisible) return;
+
     solarTerms.forEach(item => item.classList.toggle('is-previewing', item === term));
     solarCycle.classList.add('is-previewing');
 
@@ -563,6 +572,7 @@ function followSolarTerm(term, index) {
 }
 
 function previewSolarTerm(term, index) {
+    if (!solarCycleVisible) return;
     writeSolarPreview(term.textContent.trim(), solarTermNotes[index]);
     solarCycle.classList.add('has-preview');
 }
@@ -615,6 +625,41 @@ function startSolarAutoplay(reset = false) {
 }
 
 updateTemporalSculpture(0);
+
+if (solarCycle && 'IntersectionObserver' in window) {
+    const solarCycleBounds = solarCycle.getBoundingClientRect();
+    solarCycleVisible = solarCycleBounds.bottom >= -180
+        && solarCycleBounds.top <= window.innerHeight + 180;
+
+    const solarCycleVisibilityObserver = new IntersectionObserver((entries) => {
+        const entry = entries[0];
+        if (!entry) return;
+
+        const wasVisible = solarCycleVisible;
+        solarCycleVisible = entry.isIntersecting;
+
+        if (!solarCycleVisible) {
+            clearTimeout(solarHoverTimer);
+            clearTimeout(solarTypingTimer);
+            solarPreviewVersion += 1;
+            solarCenterTerm.getAnimations().forEach(animation => animation.cancel());
+            return;
+        }
+
+        if (!wasVisible && !document.hidden && !entrance.open) {
+            const activeTerm = solarTerms[solarActiveIndex];
+            if (activeTerm) {
+                followSolarTerm(activeTerm, solarActiveIndex);
+                previewSolarTerm(activeTerm, solarActiveIndex);
+            }
+        }
+    }, {
+        rootMargin: '180px 0px',
+        threshold: 0
+    });
+
+    solarCycleVisibilityObserver.observe(solarCycle);
+}
 
 /* =========================
    後段章節標題交錯與寄語橫向循環
