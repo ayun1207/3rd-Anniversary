@@ -120,10 +120,50 @@ export const artworkAssets = {
     "compactHeight": 540,
     "orientation": "landscape"
   },
+  "14": {
+    "number": "14",
+    "full": "images/artworks/14.webp",
+    "compact": "images/artworks/14-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "16": {
+    "number": "16",
+    "full": "images/artworks/16.webp",
+    "compact": "images/artworks/16-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "17": {
+    "number": "17",
+    "full": "images/artworks/17.webp",
+    "compact": "images/artworks/17-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
   "18": {
     "number": "18",
     "full": "images/artworks/18.webp",
     "compact": "images/artworks/18-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "19": {
+    "number": "19",
+    "full": "images/artworks/19.webp",
+    "compact": "images/artworks/19-960.webp",
     "width": 1280,
     "height": 720,
     "compactWidth": 960,

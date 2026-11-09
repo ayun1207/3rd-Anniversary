@@ -3397,7 +3397,13 @@ html.has-content-reveal .content-reveal.is-content-visible {
 }
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="01"] .caption-description {
+    position: relative;
+    top: clamp(6px, 0.55vw, 8px);
+    left: -1.35%;
     text-align: center;
+    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    line-height: 1.24;
+    letter-spacing: 0.006em;
 }
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="02"] .slide-caption {
@@ -3458,7 +3464,12 @@ html.has-content-reveal .content-reveal.is-content-visible {
 }
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="06"] .caption-description {
+    position: relative;
+    top: clamp(6px, 0.55vw, 8px);
     text-align: center;
+    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    line-height: 1.24;
+    letter-spacing: 0.006em;
 }
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="07"] .slide-caption {
@@ -3504,8 +3515,12 @@ html.has-content-reveal .content-reveal.is-content-visible {
 }
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="11"] .caption-description {
+    position: relative;
+    top: clamp(6px, 0.55vw, 8px);
+    left: -3.3%;
     text-align: center;
-    font-size: clamp(0.47rem, 1.43vw, 1.3rem);
+    font-size: clamp(0.48rem, 1.46vw, 1.33rem);
+    line-height: 1.24;
     letter-spacing: 0.006em;
 }
 
@@ -3516,8 +3531,12 @@ html.has-content-reveal .content-reveal.is-content-visible {
 }
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="12"] .caption-description {
+    position: relative;
+    top: clamp(4px, 0.45vw, 6px);
+    left: 2.7%;
     text-align: center;
     font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    line-height: 1.24;
     letter-spacing: 0.008em;
 }
 
@@ -3533,6 +3552,51 @@ html.has-content-reveal .content-reveal.is-content-visible {
     letter-spacing: 0.008em;
 }
 
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="14"] .slide-caption {
+    left: 3.5%;
+    top: 37.9%;
+    width: 50%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="14"] .caption-description {
+    position: relative;
+    top: clamp(3px, 0.35vw, 5px);
+    text-align: center;
+    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    line-height: 1.24;
+    letter-spacing: 0.006em;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="16"] .slide-caption {
+    left: 3%;
+    top: 37.2%;
+    width: 48.5%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="16"] .caption-description {
+    position: relative;
+    top: clamp(3px, 0.35vw, 5px);
+    text-align: center;
+    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    line-height: 1.24;
+    letter-spacing: 0.006em;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="17"] .slide-caption {
+    left: 2.9%;
+    top: 55.7%;
+    width: 48%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="17"] .caption-description {
+    position: relative;
+    top: clamp(3px, 0.35vw, 5px);
+    text-align: center;
+    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    line-height: 1.24;
+    letter-spacing: 0.006em;
+}
+
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="18"] .slide-caption {
     left: 5.5%;
     top: 30.5%;
@@ -3545,6 +3609,21 @@ html.has-content-reveal .content-reveal.is-content-visible {
     letter-spacing: 0.006em;
 }
 
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="19"] .slide-caption {
+    left: 3.35%;
+    top: 36%;
+    width: 62%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="19"] .caption-description {
+    position: relative;
+    top: clamp(3px, 0.35vw, 5px);
+    text-align: center;
+    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    line-height: 1.24;
+    letter-spacing: 0.006em;
+}
+
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="20"] .slide-caption {
     left: 50.7%;
     top: 37.5%;
@@ -3552,20 +3631,26 @@ html.has-content-reveal .content-reveal.is-content-visible {
 }
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="20"] .caption-description {
+    position: relative;
+    top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.48rem, 1.44vw, 1.3rem);
+    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    line-height: 1.24;
     letter-spacing: 0.006em;
 }
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="21"] .slide-caption {
     left: 4.7%;
     top: 7.5%;
-    width: 35.2%;
+    width: 37%;
 }
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="21"] .caption-description {
+    position: relative;
+    top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.48rem, 1.45vw, 1.32rem);
+    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    line-height: 1.24;
     letter-spacing: 0.006em;
 }
 
@@ -3597,6 +3682,10 @@ html.has-content-reveal .content-reveal.is-content-visible {
 }
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="18"] .slide-caption h2,
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="14"] .slide-caption h2,
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="16"] .slide-caption h2,
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="17"] .slide-caption h2,
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="19"] .slide-caption h2,
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="20"] .slide-caption h2,
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="21"] .slide-caption h2,
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="23"] .slide-caption h2,
@@ -6764,9 +6853,13 @@ html.entrance-open main {
 #gallery-page .gallery-stage .slide-item[data-artwork-id="11"] { --artwork-caption-width: 49.5%; }
 #gallery-page .gallery-stage .slide-item[data-artwork-id="12"] { --artwork-caption-width: 47.5%; }
 #gallery-page .gallery-stage .slide-item[data-artwork-id="13"] { --artwork-caption-width: 43.5%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="14"] { --artwork-caption-width: 50%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="16"] { --artwork-caption-width: 48.5%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="17"] { --artwork-caption-width: 48%; }
 #gallery-page .gallery-stage .slide-item[data-artwork-id="18"] { --artwork-caption-width: 56%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="19"] { --artwork-caption-width: 62%; }
 #gallery-page .gallery-stage .slide-item[data-artwork-id="20"] { --artwork-caption-width: 50%; }
-#gallery-page .gallery-stage .slide-item[data-artwork-id="21"] { --artwork-caption-width: 35.2%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="21"] { --artwork-caption-width: 37%; }
 #gallery-page .gallery-stage .slide-item[data-artwork-id="23"] { --artwork-caption-width: 57%; }
 #gallery-page .gallery-stage .slide-item[data-artwork-id="24"] { --artwork-caption-width: 49.1%; }
 
