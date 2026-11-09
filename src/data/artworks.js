@@ -29,5 +29,95 @@ export const artworkAssets = {
     "compactWidth": 960,
     "compactHeight": 540,
     "orientation": "landscape"
+  },
+  "4": {
+    "number": "04",
+    "full": "images/artworks/04.webp",
+    "compact": "images/artworks/04-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "5": {
+    "number": "05",
+    "full": "images/artworks/05.webp",
+    "compact": "images/artworks/05-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "6": {
+    "number": "06",
+    "full": "images/artworks/06.webp",
+    "compact": "images/artworks/06-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "7": {
+    "number": "07",
+    "full": "images/artworks/07.webp",
+    "compact": "images/artworks/07-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "8": {
+    "number": "08",
+    "full": "images/artworks/08.webp",
+    "compact": "images/artworks/08-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "10": {
+    "number": "10",
+    "full": "images/artworks/10.webp",
+    "compact": "images/artworks/10-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "11": {
+    "number": "11",
+    "full": "images/artworks/11.webp",
+    "compact": "images/artworks/11-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "12": {
+    "number": "12",
+    "full": "images/artworks/12.webp",
+    "compact": "images/artworks/12-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "13": {
+    "number": "13",
+    "full": "images/artworks/13.webp",
+    "compact": "images/artworks/13-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
   }
 }

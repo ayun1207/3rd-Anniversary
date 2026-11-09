@@ -3327,21 +3327,12 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .slide-item.is-current { pointer-events: auto; }
 
-/* 01–03 正式作品：以 16:9 完整排版圖為底，網站字體疊回參考稿位置。 */
-.gallery-stage:has(.slide-item[data-artwork-id="01"].is-current) .carousel-viewport,
-.gallery-stage:has(.slide-item[data-artwork-id="01"].is-turning) .carousel-viewport,
-.gallery-stage:has(.slide-item[data-artwork-id="02"].is-current) .carousel-viewport,
-.gallery-stage:has(.slide-item[data-artwork-id="02"].is-turning) .carousel-viewport,
-.gallery-stage:has(.slide-item[data-artwork-id="03"].is-current) .carousel-viewport,
-.gallery-stage:has(.slide-item[data-artwork-id="03"].is-turning) .carousel-viewport {
+/* 已完成作品：以 16:9 無字原圖為底，網站字體依同尺寸排版稿疊回。 */
+.gallery-stage:has(.slide-item.has-artwork:is(.is-current, .is-turning)) .carousel-viewport {
     width: 100%;
 }
 
-.gallery-stage .carousel-viewport .slide-item:is(
-    [data-artwork-id="01"],
-    [data-artwork-id="02"],
-    [data-artwork-id="03"]
-) {
+.gallery-stage .carousel-viewport .slide-item.has-artwork {
     display: block;
     padding: 0;
     overflow: hidden;
@@ -3349,11 +3340,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     background: #101b2a;
 }
 
-.gallery-stage .carousel-viewport .slide-item:is(
-    [data-artwork-id="01"],
-    [data-artwork-id="02"],
-    [data-artwork-id="03"]
-) .slide-image {
+.gallery-stage .carousel-viewport .slide-item.has-artwork .slide-image {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -3362,11 +3349,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     border-radius: inherit;
 }
 
-.gallery-stage .carousel-viewport .slide-item:is(
-    [data-artwork-id="01"],
-    [data-artwork-id="02"],
-    [data-artwork-id="03"]
-) .slide-image img {
+.gallery-stage .carousel-viewport .slide-item.has-artwork .slide-image img {
     width: 100%;
     height: 100%;
     max-width: none;
@@ -3376,11 +3359,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     border-radius: inherit;
 }
 
-.gallery-stage .carousel-viewport .slide-item:is(
-    [data-artwork-id="01"],
-    [data-artwork-id="02"],
-    [data-artwork-id="03"]
-) .slide-caption {
+.gallery-stage .carousel-viewport .slide-item.has-artwork .slide-caption {
     position: absolute;
     z-index: 4;
     display: block;
@@ -3391,24 +3370,12 @@ html.has-content-reveal .content-reveal.is-content-visible {
     pointer-events: none;
 }
 
-.gallery-stage .carousel-viewport .slide-item:is(
-    [data-artwork-id="01"],
-    [data-artwork-id="02"],
-    [data-artwork-id="03"]
-) .caption-label,
-.gallery-stage .carousel-viewport .slide-item:is(
-    [data-artwork-id="01"],
-    [data-artwork-id="02"],
-    [data-artwork-id="03"]
-) .slide-caption::after {
+.gallery-stage .carousel-viewport .slide-item.has-artwork .caption-label,
+.gallery-stage .carousel-viewport .slide-item.has-artwork .slide-caption::after {
     display: none;
 }
 
-.gallery-stage .carousel-viewport .slide-item:is(
-    [data-artwork-id="01"],
-    [data-artwork-id="02"],
-    [data-artwork-id="03"]
-) .slide-caption h2 {
+.gallery-stage .carousel-viewport .slide-item.has-artwork .slide-caption h2 {
     margin: 0 0 2.5%;
     color: #1b241f;
     font-family: var(--site-font);
@@ -3419,11 +3386,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     white-space: nowrap;
 }
 
-.gallery-stage .carousel-viewport .slide-item:is(
-    [data-artwork-id="01"],
-    [data-artwork-id="02"],
-    [data-artwork-id="03"]
-) .caption-description {
+.gallery-stage .carousel-viewport .slide-item.has-artwork .caption-description {
     color: #1e2823;
     font-family: var(--site-font);
     font-size: clamp(0.55rem, 1.62vw, 1.42rem);
@@ -3462,6 +3425,105 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="03"] .caption-description {
     text-align: center;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="04"] .slide-caption {
+    left: 4.7%;
+    top: 31.8%;
+    width: 50%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="05"] .slide-caption {
+    left: 5.3%;
+    top: 7.4%;
+    width: 48%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="05"] .caption-description {
+    position: relative;
+    left: 4.8%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="06"] .slide-caption {
+    left: 5.9%;
+    top: 46.4%;
+    width: 47%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="06"] .caption-description {
+    text-align: center;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="07"] .slide-caption {
+    left: 50.2%;
+    top: 33.1%;
+    width: 47%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="07"] .caption-description {
+    text-align: center;
+    font-size: clamp(0.48rem, 1.45vw, 1.32rem);
+    letter-spacing: 0.01em;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="08"] .slide-caption {
+    left: 43.8%;
+    top: 71.9%;
+    width: 53%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="08"] .caption-description {
+    text-align: center;
+    font-size: clamp(0.48rem, 1.45vw, 1.32rem);
+    letter-spacing: 0.01em;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="10"] .slide-caption {
+    left: 45.7%;
+    top: 24.1%;
+    width: 50.5%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="10"] .caption-description {
+    text-align: center;
+    font-size: clamp(0.47rem, 1.42vw, 1.28rem);
+    letter-spacing: 0.006em;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="11"] .slide-caption {
+    left: 5.2%;
+    top: 35%;
+    width: 49.5%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="11"] .caption-description {
+    text-align: center;
+    font-size: clamp(0.47rem, 1.43vw, 1.3rem);
+    letter-spacing: 0.006em;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="12"] .slide-caption {
+    left: 6.9%;
+    top: 10.4%;
+    width: 47.5%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="12"] .caption-description {
+    text-align: center;
+    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    letter-spacing: 0.008em;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="13"] .slide-caption {
+    left: 53.8%;
+    top: 39.2%;
+    width: 43.5%;
+}
+
+.gallery-stage .carousel-viewport .slide-item[data-artwork-id="13"] .caption-description {
+    text-align: center;
+    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    letter-spacing: 0.008em;
 }
 
 /* 第 24 張：同一張透明人物圖形成清晰前景與偏左的大型淡色剪影。 */
@@ -6710,20 +6772,31 @@ html.entrance-open main {
 }
 
 /* 滿版排版稿的文字靠近左側，控制箭頭再貼邊以避免壓到首字。 */
-#gallery-page .gallery-stage:has(.slide-item:is(
-    [data-artwork-id="01"],
-    [data-artwork-id="02"],
-    [data-artwork-id="03"]
-).is-current) .arrow-prev {
+#gallery-page .gallery-stage:has(.slide-item.has-artwork.is-current) .arrow-prev {
     left: -6px;
 }
 
-#gallery-page .gallery-stage:has(.slide-item:is(
-    [data-artwork-id="01"],
-    [data-artwork-id="02"],
-    [data-artwork-id="03"]
-).is-current) .arrow-next {
+#gallery-page .gallery-stage:has(.slide-item.has-artwork.is-current) .arrow-next {
     right: -6px;
+}
+
+/* 手機的通用雙欄規則會把 caption 改成 100%；正式排版稿改用各自比例。 */
+#gallery-page .gallery-stage .slide-item[data-artwork-id="01"] { --artwork-caption-width: 43.5%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="02"] { --artwork-caption-width: 49%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="03"] { --artwork-caption-width: 57%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="04"] { --artwork-caption-width: 50%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="05"] { --artwork-caption-width: 48%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="06"] { --artwork-caption-width: 47%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="07"] { --artwork-caption-width: 47%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="08"] { --artwork-caption-width: 53%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="10"] { --artwork-caption-width: 50.5%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="11"] { --artwork-caption-width: 49.5%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="12"] { --artwork-caption-width: 47.5%; }
+#gallery-page .gallery-stage .slide-item[data-artwork-id="13"] { --artwork-caption-width: 43.5%; }
+
+#gallery-page .gallery-stage .slide-item.has-artwork .slide-caption {
+    width: var(--artwork-caption-width, 50%);
+    max-width: none;
 }
 
 /* 捲動效能：避免長頁面為所有進場面板永久保留獨立合成圖層。 */

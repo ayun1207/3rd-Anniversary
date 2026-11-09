@@ -68,6 +68,7 @@ originalSlides.forEach((slide, index) => {
     if (!artwork || !image) return;
 
     slide.dataset.artworkId = artwork.number;
+    slide.classList.toggle('has-artwork', artwork.hasArtwork);
     image.alt = artwork.alt;
     if (!artwork.hasArtwork) return;
 
@@ -75,9 +76,7 @@ originalSlides.forEach((slide, index) => {
     slide.style.setProperty('--artwork-backdrop-image-small', `url("${artwork.imageSmall}")`);
     image.dataset.src = artwork.image;
     image.dataset.srcset = `${artwork.imageSmall} ${artwork.imageSmallWidth}w, ${artwork.image} ${artwork.imageWidth}w`;
-    image.dataset.sizes = ['01', '02', '03'].includes(artwork.number)
-        ? '(max-width: 768px) 92vw, (max-width: 1552px) 76vw, 1180px'
-        : '(max-width: 768px) 58vw, 52vw';
+    image.dataset.sizes = '(max-width: 768px) 92vw, (max-width: 1552px) 76vw, 1180px';
     image.width = artwork.imageWidth;
     image.height = artwork.imageHeight;
 });
