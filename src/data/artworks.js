@@ -119,5 +119,55 @@ export const artworkAssets = {
     "compactWidth": 960,
     "compactHeight": 540,
     "orientation": "landscape"
+  },
+  "18": {
+    "number": "18",
+    "full": "images/artworks/18.webp",
+    "compact": "images/artworks/18-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "20": {
+    "number": "20",
+    "full": "images/artworks/20.webp",
+    "compact": "images/artworks/20-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "21": {
+    "number": "21",
+    "full": "images/artworks/21.webp",
+    "compact": "images/artworks/21-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "23": {
+    "number": "23",
+    "full": "images/artworks/23.webp",
+    "compact": "images/artworks/23-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
+  },
+  "24": {
+    "number": "24",
+    "full": "images/artworks/24.webp",
+    "compact": "images/artworks/24-960.webp",
+    "width": 1280,
+    "height": 720,
+    "compactWidth": 960,
+    "compactHeight": 540,
+    "orientation": "landscape"
   }
 }
