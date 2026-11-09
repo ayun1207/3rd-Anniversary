@@ -5962,6 +5962,11 @@ body.gallery-section-active .site-botanical {
     --time-midnight-900: #101b2a;
     --time-indigo-800: #1b263b;
     --time-slate-700: #2a3b4e;
+    /* 主視覺背景配色測試。午夜藍原值依序為 #101b2a、#0a1420、#172338、#111d2c。 */
+    --time-background-base: #7c9482;
+    --time-background-deep: #607565;
+    --time-background-light: #91a695;
+    --time-background-shade: #6d8574;
     --time-mist-500: #71949a;
     --time-champagne-400: #d7bd91;
     --time-silver-300: #aebfd0;
@@ -5981,7 +5986,7 @@ body.gallery-section-active .site-botanical {
     --temporal-accent: var(--time-season-spring);
     --temporal-term-progress: 0;
 
-    --paper-base: var(--time-midnight-900);
+    --paper-base: var(--time-background-base);
     --paper-light: var(--time-indigo-800);
     --paper-depth: var(--time-midnight-950);
     --ink-primary: var(--time-ink-primary);
@@ -6004,17 +6009,17 @@ html,
 body,
 html.entrance-pending,
 html.entrance-pending body {
-    background: var(--time-midnight-900);
+    background: var(--time-background-base);
     color: var(--time-ink-primary);
 }
 
 .site-paper-background {
     background:
         linear-gradient(118deg,
-            #0a1420 0%,
-            #101b2a 38%,
-            #172338 72%,
-            #111d2c 100%);
+            var(--time-background-deep) 0%,
+            var(--time-background-base) 38%,
+            var(--time-background-light) 72%,
+            var(--time-background-shade) 100%);
 }
 
 .site-paper-background::before {
@@ -6023,15 +6028,15 @@ html.entrance-pending body {
     z-index: 0;
     inset: 0;
     background:
-        linear-gradient(112deg, transparent 0 18%, rgba(113, 148, 154, 0.055) 18% 33%, transparent 33% 100%),
-        linear-gradient(180deg, rgba(9, 17, 27, 0.12), transparent 31% 72%, rgba(5, 11, 20, 0.24));
+        linear-gradient(112deg, transparent 0 18%, rgba(221, 234, 223, 0.08) 18% 33%, transparent 33% 100%),
+        linear-gradient(180deg, rgba(51, 73, 59, 0.12), transparent 31% 72%, rgba(43, 62, 50, 0.2));
 }
 
 .site-paper-background::after {
     z-index: 3;
     background:
-        linear-gradient(90deg, rgba(4, 10, 18, 0.3), transparent 22% 78%, rgba(4, 10, 18, 0.22)),
-        linear-gradient(180deg, rgba(3, 9, 17, 0.16), transparent 24% 74%, rgba(3, 9, 17, 0.26));
+        linear-gradient(90deg, rgba(47, 68, 55, 0.24), transparent 22% 78%, rgba(47, 68, 55, 0.18)),
+        linear-gradient(180deg, rgba(42, 62, 50, 0.13), transparent 24% 74%, rgba(42, 62, 50, 0.2));
     mix-blend-mode: normal;
 }
 
@@ -6069,9 +6074,10 @@ html.entrance-pending body {
 }
 
 .temporal-ring-shadow {
-    stroke: rgba(1, 6, 13, 0.68);
-    stroke-width: 108;
-    filter: url(#temporalGlow);
+    stroke: url(#temporalAmbient);
+    stroke-width: 104;
+    opacity: 0.2;
+    filter: url(#temporalBloom);
 }
 
 .temporal-ring-metal {
@@ -6094,13 +6100,15 @@ html.entrance-pending body {
 }
 
 .temporal-ring-outer-edge {
-    stroke: rgba(176, 202, 207, 0.25);
+    stroke: url(#temporalAmbient);
     stroke-width: 1.5;
+    opacity: 0.42;
 }
 
 .temporal-ring-inner-edge {
-    stroke: rgba(8, 16, 27, 0.72);
-    stroke-width: 2.5;
+    stroke: url(#temporalAmbient);
+    stroke-width: 1.5;
+    opacity: 0.28;
 }
 
 .temporal-ring-material-line {
@@ -6389,8 +6397,11 @@ body[data-section="thanks"] .temporal-sculpture {
 }
 
 .site-header {
-    background: linear-gradient(90deg, rgba(9, 18, 29, 0.9), rgba(17, 29, 43, 0.76));
-    border-right-color: rgba(157, 184, 190, 0.18);
+    background:
+        var(--glass-refraction),
+        linear-gradient(132deg, rgba(207, 224, 226, 0.08), transparent 48%),
+        linear-gradient(154deg, var(--time-surface), var(--time-surface-soft));
+    border-right-color: var(--time-border);
     -webkit-backdrop-filter: blur(18px) saturate(1.04);
     backdrop-filter: blur(18px) saturate(1.04);
 }
@@ -6411,6 +6422,67 @@ body[data-section="thanks"] .temporal-sculpture {
     border-color: rgba(157, 184, 190, 0.23);
     background: rgba(24, 39, 55, 0.74);
     color: var(--time-ink-secondary);
+}
+
+.site-header .menu-toggle,
+.site-header .music-toggle {
+    border-color: var(--time-border);
+    background:
+        linear-gradient(145deg, rgba(207, 224, 226, 0.1), transparent 48%),
+        var(--time-surface-card);
+    box-shadow:
+        0 0 14px rgba(141, 183, 221, 0.08),
+        inset 0 1px rgba(212, 228, 229, 0.16),
+        inset 0 -1px rgba(2, 9, 17, 0.28),
+        inset 0 0 0 3px rgba(166, 193, 199, 0.055);
+}
+
+.site-header .menu-toggle:hover,
+.site-header .menu-toggle:focus-visible {
+    background:
+        linear-gradient(145deg, rgba(218, 232, 234, 0.14), transparent 48%),
+        rgba(35, 52, 69, 0.82);
+}
+
+.site-header .current-page-label {
+    border-color: var(--time-border-bright);
+    background:
+        var(--glass-refraction),
+        linear-gradient(155deg, rgba(207, 224, 226, 0.1), transparent 48%),
+        var(--time-surface-card);
+    box-shadow:
+        0 0 20px rgba(141, 183, 221, 0.08),
+        inset 0 1px rgba(212, 228, 229, 0.16),
+        inset 1px 0 rgba(113, 148, 154, 0.08),
+        inset -1px 0 rgba(165, 154, 185, 0.07),
+        inset 0 -1px rgba(2, 9, 17, 0.28);
+}
+
+@media (min-width: 901px) {
+    /* 透明開口精確貼合章節書籤；四個圓角外仍延續左列材質。 */
+    .site-header {
+        background:
+            radial-gradient(circle at 100% 100%, transparent 22px, var(--time-surface) 23px) 24px 86px / 24px 23px no-repeat,
+            radial-gradient(circle at 0 100%, transparent 22px, var(--time-surface) 23px) 48px 86px / 24px 23px no-repeat,
+            radial-gradient(circle at 100% 0, transparent 22px, var(--time-surface) 23px) 24px 239px / 24px 23px no-repeat,
+            radial-gradient(circle at 0 0, transparent 22px, var(--time-surface) 23px) 48px 239px / 24px 23px no-repeat,
+            linear-gradient(var(--time-surface) 0 0) 0 0 / 100% 86px no-repeat,
+            linear-gradient(var(--time-surface) 0 0) 0 262px / 100% calc(100% - 262px) no-repeat,
+            linear-gradient(var(--time-surface) 0 0) 0 86px / 24px 176px no-repeat,
+            linear-gradient(var(--time-surface) 0 0) 72px 86px / 24px 176px no-repeat;
+    }
+
+    .site-header .current-page-label {
+        border-color: transparent;
+        background:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 176' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='gem-edge' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238DB7DD' stop-opacity='.72'/%3E%3Cstop offset='.34' stop-color='%238DB7DD' stop-opacity='.48'/%3E%3Cstop offset='.56' stop-color='%23FCC26F' stop-opacity='.64'/%3E%3Cstop offset='1' stop-color='%23F3A4B0' stop-opacity='.68'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='.75' y='.75' width='46.5' height='174.5' rx='22.5' fill='none' stroke='url(%23gem-edge)' stroke-width='1.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+        box-shadow:
+            0 -3px 8px rgba(141, 183, 221, 0.1),
+            0 2px 8px rgba(243, 164, 176, 0.08),
+            0 0 6px rgba(252, 194, 111, 0.055);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
 }
 
 .menu-panel {
@@ -6555,6 +6627,28 @@ body[data-section="thanks"] .temporal-sculpture {
     .temporal-ring-active-core {
         animation: none;
         transition: none;
+    }
+}
+
+/* 結語只保留外框；移除舊版殘留的側邊短線。 */
+.site-epilogue-final::before,
+.site-epilogue-final::after {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .site-epilogue-final {
+        padding-inline: 14px;
+    }
+
+    .site-epilogue-final .site-epilogue-text {
+        font-size: clamp(0.62rem, 3.1vw, 0.78rem);
+        line-height: 2.05;
+        letter-spacing: 0.02em;
+    }
+
+    .site-epilogue-line {
+        white-space: nowrap;
     }
 }
 
