@@ -6801,6 +6801,51 @@ html.entrance-open main {
     }
 }
 
+/* 寬螢幕三個主要內容框共用理時序的實際高度；窄螢幕仍依內容自然伸展。 */
+@media (min-width: 1280px) {
+    main {
+        --intro-panel-height: calc(
+            min(560px, 43vw, calc(100vh - 150px))
+            + clamp(28px, 3vw, 48px)
+            + clamp(28px, 3vw, 48px)
+        );
+    }
+
+    #text-page .text-container,
+    #messages-page .messages-container {
+        height: var(--intro-panel-height);
+        min-height: var(--intro-panel-height);
+    }
+
+    #messages-page .messages-container {
+        padding-bottom: 22px;
+    }
+
+    #messages-page .messages-heading {
+        padding-top: clamp(38px, 3.6vw, 53px);
+        padding-bottom: 28px;
+        margin-bottom: 8px;
+    }
+}
+
+/* 繪春信沿用作品章節的標題組節奏：章節標籤下方緊接主標題。 */
+#text-page .text-container h1 {
+    position: absolute;
+    top: calc(
+        clamp(14px, 1.4vw, 20px)
+        + 11.5px
+        + clamp(18px, 1.4vw, 23px)
+    );
+    right: 0;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    #text-page .text-container h1 {
+        top: 36px;
+    }
+}
+
 /* 作品章節：維持作品舞台尺寸，只收整標題比例、外框留白與導覽符號。 */
 #gallery-page .gallery-sticky-shell {
     padding-bottom: max(10px, calc((min(1180px, 82vw) - min(1130px, 73vw)) / 2));
@@ -6816,11 +6861,13 @@ html.entrance-open main {
     font-size: clamp(2.35rem, 4vw, 3.5625rem);
     line-height: 1.35;
     letter-spacing: 0.16em;
+    transform: translateY(clamp(4px, 0.55vw, 8px));
 }
 
 #gallery-page .gallery-section-heading .gallery-scroll-progress {
     gap: 12px;
     padding: 10px 16px 10px 10px;
+    transform: translateY(clamp(4px, 0.55vw, 8px));
 }
 
 #gallery-page .gallery-section-heading .gallery-progress-orbit {
