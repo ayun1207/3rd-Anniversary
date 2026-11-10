@@ -36,7 +36,9 @@
 | `artworks/10.webp`–`14.webp`、`16.webp`–`21.webp`、`23.webp`–`24.webp` | 1280×720；約 26–49 KB | 對應正式作品的桌機版 |
 | 對應的 `*-960.webp` | 960×540；約 15–28 KB | 對應正式作品的輕量版 |
 | `artwork-originals/01.png`–`08.png`、`10.png`–`14.png`、`16.png`–`21.png`、`23.png`–`24.png` | 1280×720 | 不提交、不部署的無字原圖，由圖片腳本讀取 |
-| 09、15、22 | 尚未放入無字原圖 | 保留預留狀態，網頁不發出缺檔請求 |
+| `artworks/09.webp`、`15.webp`、`22.webp` | 2000×1126；約 295–409 KB | 第 09、15、22 張無網頁疊字作品的桌機版 |
+| `artworks/09-960.webp`、`15-960.webp`、`22-960.webp` | 960×540；約 82–119 KB | 第 09、15、22 張作品的輕量版 |
+| `artwork-originals/09.png`、`15.png`、`22.png` | 4398×2475；約 23–26 MB | 不提交、不部署的高解析無字原圖，由圖片腳本讀取 |
 
 檔案路徑區分大小寫風險雖在 Windows 不明顯，上線環境可能不同；命名與副檔名必須精確一致。
 
@@ -57,11 +59,12 @@
 
 ## 字體
 
-- LXGW WenKai TC：`lxgw-wenkai-tc-300.woff2` 保留為完整原始字型；網站實際使用由 `npm.cmd run optimize:font` 依 `index.html`、`script.js` 與 `src/` 現有文字產生的 `lxgw-wenkai-tc-300-subset.woff2`。子集來源是300字重，CSS將同一字形提供給目前使用的300–400字重範圍。全站以此字體作為唯一主字體，並在首屏以高優先度 preload 取得；字體判定程式放在文件底部，確保正式建置重排後的 CSS 已註冊，並不等待整頁 `load` 就以入口中文實際驗證。字體確實載入完成前只顯示暖紙底色，不先繪製回退文字，因此不會發生可見的換字或版面跳動，也不會因固定逾時而放棄尚在下載的字體。只有字體請求明確失敗或瀏覽器不支援字體載入判定時，才會在內容首次顯示前固定選用中文襯線回退，該次瀏覽不再切換。新增會使用此字體顯示的文字後需重新執行子集指令。
+- LXGW WenKai TC：`lxgw-wenkai-tc-300.woff2` 保留為完整原始字型；網站實際使用由 `npm.cmd run optimize:font` 依 `index.html`、`script.js` 與 `src/` 現有文字產生的 `lxgw-wenkai-tc-300-subset.woff2`。子集來源是300字重，CSS將同一字形提供給目前使用的300–400字重範圍。除已完成作品圖上的標題與敘述外，全站以此字體作為主字體，並在首屏以高優先度 preload 取得；字體判定程式放在文件底部，確保正式建置重排後的 CSS 已註冊，並不等待整頁 `load` 就以入口中文實際驗證。字體確實載入完成前只顯示暖紙底色，不先繪製回退文字，因此不會發生可見的換字或版面跳動，也不會因固定逾時而放棄尚在下載的字體。只有字體請求明確失敗或瀏覽器不支援字體載入判定時，才會在內容首次顯示前固定選用中文襯線回退，該次瀏覽不再切換。新增會使用此字體顯示的文字後需重新執行子集指令。
 - 2026-11-09 已依目前頁面文案（含新增與更新的 01、06、11、12、14、16、17、19–21 作品文字）重新產生 980 字元、約 287 KB 的子集。主要中文與一般拉丁字使用 LXGW WenKai TC；原始字型未收錄的「猧」（U+7327）由 Chiron Sung HK 的單字補充子集提供。彩色 emoji 與兩套字型都未收錄的特殊符號仍由作業系統對應字型補足，內容不因此刪改。
+- 作品圖上的標題與敘述使用 `ChenYuluoyan-2.0-Thin.ttf`；原始字型與 OFL 授權文件保留於 `fonts/`，網站實際載入由 `npm.cmd run optimize:font` 依全部 `.slide-caption` 文字產生的 `chenyuluoyan-2.0-thin-artwork-subset.woff2`。新增或修改作品文字後需重新執行同一指令，避免缺字並維持載入效能。
 - Chiron Sung HK 不以完整分片樣式於執行期載入，避免大量額外請求；專案僅保留由官方 `bf_2.woff2` 製作、約 2 KB 的「猧」單字補充檔。
 - 一般回退包含 Noto Serif TC、Noto Serif CJK TC、Source Han Serif TC、Songti TC、PMingLiU、MingLiU、serif。
-- 授權文件位於 `fonts/OFL-LXGW-WenKai-TC.txt` 與 `fonts/LICENSE-Chiron-Sung-HK.md`。
+- 授權文件位於 `fonts/OFL-LXGW-WenKai-TC.txt`、`fonts/LICENSE-Chiron-Sung-HK.md` 與 `fonts/OFL-ChenYuluoyan.txt`。
 
 ## 音樂
 

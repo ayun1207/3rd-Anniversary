@@ -25,5 +25,20 @@ const font = await readFile(sourceFont)
 const subset = await subsetFont(font, characters, { targetFormat: 'woff2' })
 await writeFile(outputFont, subset)
 
+const html = sourceText[0]
+const artworkText = Array.from(
+  html.matchAll(/<figcaption class="slide-caption">([\s\S]*?)<\/figcaption>/g),
+  match => match[1].replace(/<[^>]+>/g, ' ')
+).join('\n')
+const artworkCharacters = [...new Set(artworkText)].join('')
+const artworkSourceFont = resolve('fonts/ChenYuluoyan-2.0-Thin.ttf')
+const artworkOutputFont = resolve('fonts/chenyuluoyan-2.0-thin-artwork-subset.woff2')
+const artworkFont = await readFile(artworkSourceFont)
+const artworkSubset = await subsetFont(artworkFont, artworkCharacters, { targetFormat: 'woff2' })
+await writeFile(artworkOutputFont, artworkSubset)
+
+const artworkKilobytes = Math.round(artworkSubset.length / 1024)
+console.log(`作品文字字體：收錄 ${artworkCharacters.length} 個字元，輸出 ${artworkKilobytes} KB`)
+
 const kilobytes = Math.round(subset.length / 1024)
 console.log(`字型子集已更新：${characters.length} 個字元，${kilobytes} KB`)

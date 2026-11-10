@@ -202,6 +202,7 @@
     <audio id="backgroundMusic" loop preload="none"></audio>
 
     <header class="site-header">
+        <span class="site-header-surface" aria-hidden="true"></span>
         <button id="menuToggle" class="menu-toggle" type="button" aria-label="開啟導覽選單" aria-controls="siteMenu" aria-expanded="false" onclick="openMenu()">
             <svg class="menu-emblem" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
                 <defs>
@@ -362,7 +363,7 @@
                         <div class="slide-image"><img alt="圖片 1" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">01</span></span></p>
-                            <h2>立春｜錦衫初試</h2>
+                            <h2>立春 ｜ 錦衫初試</h2>
                             <p class="caption-description">繫上一抹淺綠腰封，寬袖乘著微風舒展。<br>沉睡了一冬的春息，逐漸浮現輪廓。</p>
                         </figcaption>
                     </figure>
@@ -370,7 +371,7 @@
                         <div class="slide-image"><img alt="圖片 2" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">02</span></span></p>
-                            <h2>雨水｜雨中漫步</h2>
+                            <h2>雨水 ｜ 雨中漫步</h2>
                             <p class="caption-description">雨衣輕攏未歇的雨，裙襬隨步伐悠悠晃動，<br>撐一把與天空同色的傘。<br>讓尋常的陰雨日，也有了值得出門的理由。</p>
                         </figcaption>
                     </figure>
@@ -378,7 +379,7 @@
                         <div class="slide-image"><img alt="圖片 3" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">03</span></span></p>
-                            <h2>驚蟄｜蝶影入春</h2>
+                            <h2>驚蟄 ｜ 蝶影入春</h2>
                             <p class="caption-description">春雷乍響，蝴蝶翩然振翅。<br>撐一柄紙傘走過初醒的街巷，看甦動的春意為沿途添上色彩。</p>
                         </figcaption>
                     </figure>
@@ -386,7 +387,7 @@
                         <div class="slide-image"><img alt="圖片 4" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">04</span></span></p>
-                            <h2>春分｜系裁春色</h2>
+                            <h2>春分 ｜ 系裁春色</h2>
                             <p class="caption-description">粉花點綴素白衣裳，朱紅輕收寬袖輪廓。<br>如同將未曾言明的心事，悄悄繡入衣料的紋理間。</p>
                         </figcaption>
                     </figure>
@@ -394,7 +395,7 @@
                         <div class="slide-image"><img alt="圖片 5" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">05</span></span></p>
-                            <h2>清明｜書與微風</h2>
+                            <h2>清明 ｜ 書與微風</h2>
                             <p class="caption-description">貝蕾帽輕覆髮梢，裙與針織襯出幾許恬靜。<br>指尖翻過書頁，思緒隨風流轉於字裡行間。</p>
                         </figcaption>
                     </figure>
@@ -402,7 +403,7 @@
                         <div class="slide-image"><img alt="圖片 6" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">06</span></span></p>
-                            <h2>穀雨｜輕紗沐雨</h2>
+                            <h2>穀雨 ｜ 輕紗沐雨</h2>
                             <p class="caption-description">嫩綠裙襬與衣袖相映，宛如掠過山間的薄霧細雨，<br>將一片春日煙雨輕披於身。</p>
                         </figcaption>
                     </figure>
@@ -410,7 +411,7 @@
                         <div class="slide-image"><img alt="圖片 7" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">07</span></span></p>
-                            <h2>立夏｜藍色日常</h2>
+                            <h2>立夏 ｜ 藍色日常</h2>
                             <p class="caption-description">簡約是夏天最不費力的答案。推了推眼鏡，<br>如穿著般自在的心情和餘裕，即是夏日最好的節奏。</p>
                         </figcaption>
                     </figure>
@@ -418,23 +419,19 @@
                         <div class="slide-image"><img alt="圖片 8" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">08</span></span></p>
-                            <h2>小滿｜風的餘白</h2>
+                            <h2>小滿 ｜ 風的餘白</h2>
                             <p class="caption-description">不必用繁複填滿每一寸留白，一襲長衣勾勒便如此輕透。<br>盈盈顧盼間，那不經意的回眸，宛若最柔和的風景。</p>
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
                         <div class="slide-image"><img alt="圖片 9" decoding="async"></div>
-                        <figcaption class="slide-caption">
-                            <p class="caption-label"><span class="caption-pagination"><span class="caption-number">09</span></span></p>
-                            <h2>芒種</h2>
-                            <p class="caption-description">「我們約好了喔！下個春天、夏天，<br>還有以後的每一天，都要一起度過！」</p>
-                        </figcaption>
+                        <figcaption class="slide-caption" hidden><h2>芒種</h2></figcaption>
                     </figure>
                     <figure class="slide-item">
                         <div class="slide-image"><img alt="圖片 10" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">10</span></span></p>
-                            <h2>夏至｜長晝午後</h2>
+                            <h2>夏至 ｜ 長晝午後</h2>
                             <p class="caption-description">水手領、百褶裙，和一只方正的書包。<br>將鈴聲、蟬鳴與漫長的午後一併帶走，無論去向何方，<br>總能再與熟悉的青春相逢。</p>
                         </figcaption>
                     </figure>
@@ -442,7 +439,7 @@
                         <div class="slide-image"><img alt="圖片 11" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">11</span></span></p>
-                            <h2>小暑｜晴隙絮語</h2>
+                            <h2>小暑 ｜ 晴隙絮語</h2>
                             <p class="caption-description">把厚重與拘束都留在衣櫃深處。<br>輕薄的著裝、冷氣吹送的房間，<br>與掌心那抹冰涼的紅，拼湊出暑氣之中的一隅清涼。</p>
                         </figcaption>
                     </figure>
@@ -450,7 +447,7 @@
                         <div class="slide-image"><img alt="圖片 12" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">12</span></span></p>
-                            <h2>大暑｜盛放之夏</h2>
+                            <h2>大暑 ｜ 盛放之夏</h2>
                             <p class="caption-description">迎著烈日，向日葵恣意綻放。往日所追尋的陽光，<br>此刻化作落滿肩頭的一片燦爛。</p>
                         </figcaption>
                     </figure>
@@ -458,7 +455,7 @@
                         <div class="slide-image"><img alt="圖片 13" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">13</span></span></p>
-                            <h2>立秋｜深色序曲</h2>
+                            <h2>立秋 ｜ 深色序曲</h2>
                             <p class="caption-description">夏日的亮色逐漸褪去，黑與灰接續登場。<br>待喧囂散去，沉靜而內斂的姿態才得以顯露。</p>
                         </figcaption>
                     </figure>
@@ -466,23 +463,19 @@
                         <div class="slide-image"><img alt="圖片 14" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">14</span></span></p>
-                            <h2>處暑｜夏末餘溫</h2>
+                            <h2>處暑 ｜ 夏末餘溫</h2>
                             <p class="caption-description">晴空般的湛藍輕攏於足尖。夏日雖已悄然走遠，<br>卻仍留下些許溫度，捨不得匆匆告別。</p>
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
                         <div class="slide-image"><img alt="圖片 15" decoding="async"></div>
-                        <figcaption class="slide-caption">
-                            <p class="caption-label"><span class="caption-pagination"><span class="caption-number">15</span></span></p>
-                            <h2>白露</h2>
-                            <p class="caption-description">「或許所謂的寶藏，從來都不是我們找到的東西，<br>而是多年以後，還能一起想起這一天的人。」</p>
-                        </figcaption>
+                        <figcaption class="slide-caption" hidden><h2>白露</h2></figcaption>
                     </figure>
                     <figure class="slide-item">
                         <div class="slide-image"><img alt="圖片 16" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">16</span></span></p>
-                            <h2>秋分｜色韻交融</h2>
+                            <h2>秋分 ｜ 色韻交融</h2>
                             <p class="caption-description">秋風輕落肩頭，格紋沿裙襬靜靜延伸。<br>一葉便可知秋，讓暖色與涼風交織出秋日最好的比例。</p>
                         </figcaption>
                     </figure>
@@ -490,7 +483,7 @@
                         <div class="slide-image"><img alt="圖片 17" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">17</span></span></p>
-                            <h2>寒露｜拾秋徐徐</h2>
+                            <h2>寒露 ｜ 拾秋徐徐</h2>
                             <p class="caption-description">暖棕色帽子映著秋光，將幾分閒適留在眉間。<br>放慢腳步，細心收藏起散落的光景與詩意，<br>隨著時光緩緩沉澱</p>
                         </figcaption>
                     </figure>
@@ -498,7 +491,7 @@
                         <div class="slide-image"><img alt="圖片 18" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">18</span></span></p>
-                            <h2>霜降｜秋色凝霜</h2>
+                            <h2>霜降 ｜ 秋色凝霜</h2>
                             <p class="caption-description">寒意漸起，霜華初染。<br>層層堆疊的冷冽色彩，蔓延著秋意已然凝結的意象。</p>
                         </figcaption>
                     </figure>
@@ -506,7 +499,7 @@
                         <div class="slide-image"><img alt="圖片 19" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">19</span></span></p>
-                            <h2>立冬｜初寒躍色</h2>
+                            <h2>立冬 ｜ 初寒躍色</h2>
                             <p class="caption-description">圍巾與短裙碰撞出強烈的對比，一身輕快不因時節更替而收斂。<br>無畏冷風迎面，料峭之中添上幾分熱情。</p>
                         </figcaption>
                     </figure>
@@ -514,7 +507,7 @@
                         <div class="slide-image"><img alt="圖片 20" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">20</span></span></p>
-                            <h2>小雪｜雪落衣間</h2>
+                            <h2>小雪 ｜ 雪落衣間</h2>
                             <p class="caption-description">枝枒點綴衣袖之間，隨步伐微微搖曳。<br>把和煦的雅致留給冬日，<br>讓每一次轉身，都如雪花輕落在庭院般優美。</p>
                         </figcaption>
                     </figure>
@@ -522,23 +515,19 @@
                         <div class="slide-image"><img alt="圖片 21" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">21</span></span></p>
-                            <h2>大雪｜長夜漫行</h2>
+                            <h2>大雪 ｜ 長夜漫行</h2>
                             <p class="caption-description">凜冬將至，雪意漸濃。<br>冷冽披於長衣之上，溫度留於衣襟之間，<br>穿過漫漫冬色，尋一處暖意停留。</p>
                         </figcaption>
                     </figure>
                     <figure class="slide-item">
                         <div class="slide-image"><img alt="圖片 22" decoding="async"></div>
-                        <figcaption class="slide-caption">
-                            <p class="caption-label"><span class="caption-pagination"><span class="caption-number">22</span></span></p>
-                            <h2>冬至</h2>
-                            <p class="caption-description">「這湯圓…沒問題吧? 」<br>「沒!沒有問題啊!」</p>
-                        </figcaption>
+                        <figcaption class="slide-caption" hidden><h2>冬至</h2></figcaption>
                     </figure>
                     <figure class="slide-item">
                         <div class="slide-image"><img alt="圖片 23" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">23</span></span></p>
-                            <h2>小寒｜靜謐暖冬</h2>
+                            <h2>小寒 ｜ 靜謐暖冬</h2>
                             <p class="caption-description">長裙與暖調平衡了冬日的清冷。將自己包裹得舒服一些，<br>寒風之外，還有值得細細品味的日常約會。</p>
                         </figcaption>
                     </figure>
@@ -546,7 +535,7 @@
                         <div class="slide-image"><img alt="圖片 24" decoding="async"></div>
                         <figcaption class="slide-caption">
                             <p class="caption-label"><span class="caption-pagination"><span class="caption-number">24</span></span></p>
-                            <h2>大寒｜冷色凝鋒</h2>
+                            <h2>大寒 ｜ 冷色凝鋒</h2>
                             <p class="caption-description">簡潔俐落的衣著比例，不張揚的冷色調。<br>任憑寒意掠過衣襬，不動聲色之間，自有一份沉毅氣場。</p>
                         </figcaption>
                     </figure>

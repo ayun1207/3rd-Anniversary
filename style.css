@@ -15,8 +15,17 @@
     unicode-range: U+7327;
 }
 
+@font-face {
+    font-family: "ChenYuluoyan Thin";
+    src: url("fonts/chenyuluoyan-2.0-thin-artwork-subset.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 300;
+    font-display: block;
+}
+
 :root {
     --site-font: "LXGW WenKai TC", "Anniversary Rare Glyphs", serif;
+    --artwork-font: "ChenYuluoyan Thin", var(--site-font);
     --paper-base: #d8cfc3;
     --paper-light: #e5ddd2;
     --paper-depth: #c8bcae;
@@ -3368,12 +3377,17 @@ html.has-content-reveal .content-reveal.is-content-visible {
     display: none;
 }
 
+.gallery-stage .carousel-viewport .slide-item.has-artwork .slide-caption[hidden] {
+    display: none !important;
+}
+
 .gallery-stage .carousel-viewport .slide-item.has-artwork .slide-caption h2 {
     margin: 0 0 2.5%;
     color: #1b241f;
-    font-family: var(--site-font);
-    font-size: clamp(0.62rem, 1.72vw, 1.55rem);
-    font-weight: 500;
+    font-family: var(--artwork-font) !important;
+    font-size: clamp(0.65rem, 1.82vw, 1.64rem);
+    font-weight: 300;
+    font-synthesis: none;
     line-height: 1.4;
     letter-spacing: 0.025em;
     white-space: nowrap;
@@ -3381,9 +3395,10 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item.has-artwork .caption-description {
     color: #1e2823;
-    font-family: var(--site-font);
-    font-size: clamp(0.55rem, 1.62vw, 1.42rem);
-    font-weight: 500;
+    font-family: var(--artwork-font) !important;
+    font-size: clamp(0.58rem, 1.7vw, 1.5rem);
+    font-weight: 300;
+    font-synthesis: none;
     line-height: 1.48;
     letter-spacing: 0.018em;
     white-space: nowrap;
@@ -3401,7 +3416,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     top: clamp(6px, 0.55vw, 8px);
     left: -1.35%;
     text-align: center;
-    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3435,7 +3450,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="04"] .caption-description {
     position: relative;
     top: clamp(2px, 0.3vw, 4px);
-    font-size: clamp(0.48rem, 1.48vw, 1.3rem);
+    font-size: clamp(0.51rem, 1.57vw, 1.38rem);
     line-height: 1.25;
     letter-spacing: 0.006em;
     text-align: left;
@@ -3467,7 +3482,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(6px, 0.55vw, 8px);
     text-align: center;
-    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3480,7 +3495,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="07"] .caption-description {
     text-align: center;
-    font-size: clamp(0.48rem, 1.45vw, 1.32rem);
+    font-size: clamp(0.51rem, 1.54vw, 1.4rem);
     letter-spacing: 0.01em;
 }
 
@@ -3492,7 +3507,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="08"] .caption-description {
     text-align: center;
-    font-size: clamp(0.48rem, 1.45vw, 1.32rem);
+    font-size: clamp(0.51rem, 1.54vw, 1.4rem);
     letter-spacing: 0.01em;
 }
 
@@ -3504,7 +3519,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="10"] .caption-description {
     text-align: center;
-    font-size: clamp(0.47rem, 1.42vw, 1.28rem);
+    font-size: clamp(0.5rem, 1.5vw, 1.36rem);
     letter-spacing: 0.006em;
 }
 
@@ -3519,7 +3534,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     top: clamp(6px, 0.55vw, 8px);
     left: -3.3%;
     text-align: center;
-    font-size: clamp(0.48rem, 1.46vw, 1.33rem);
+    font-size: clamp(0.51rem, 1.55vw, 1.41rem);
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3535,7 +3550,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     top: clamp(4px, 0.45vw, 6px);
     left: 2.7%;
     text-align: center;
-    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
     line-height: 1.24;
     letter-spacing: 0.008em;
 }
@@ -3548,7 +3563,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="13"] .caption-description {
     text-align: center;
-    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
     letter-spacing: 0.008em;
 }
 
@@ -3562,7 +3577,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3577,7 +3592,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3592,7 +3607,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3605,7 +3620,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="18"] .caption-description {
     text-align: center;
-    font-size: clamp(0.48rem, 1.44vw, 1.3rem);
+    font-size: clamp(0.51rem, 1.53vw, 1.38rem);
     letter-spacing: 0.006em;
 }
 
@@ -3619,7 +3634,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3634,7 +3649,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3649,7 +3664,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.49rem, 1.48vw, 1.34rem);
+    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3664,7 +3679,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(1px, 0.2vw, 3px);
     text-align: center;
-    font-size: clamp(0.49rem, 1.49vw, 1.34rem);
+    font-size: clamp(0.52rem, 1.58vw, 1.42rem);
     line-height: 1.28;
     letter-spacing: 0.004em;
 }
@@ -3677,7 +3692,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="24"] .caption-description {
     text-align: center;
-    font-size: clamp(0.47rem, 1.42vw, 1.28rem);
+    font-size: clamp(0.5rem, 1.5vw, 1.36rem);
     letter-spacing: 0.004em;
 }
 
@@ -6406,6 +6421,10 @@ body[data-section="thanks"] .temporal-sculpture {
     backdrop-filter: blur(18px) saturate(1.04);
 }
 
+.site-header-surface {
+    display: none;
+}
+
 .current-page-label,
 .nav-btn,
 .menu-eyebrow,
@@ -6461,15 +6480,35 @@ body[data-section="thanks"] .temporal-sculpture {
 @media (min-width: 901px) {
     /* 透明開口精確貼合章節書籤；四個圓角外仍延續左列材質。 */
     .site-header {
-        background:
-            radial-gradient(circle at 100% 100%, transparent 22px, var(--time-surface) 23px) 24px 86px / 24px 23px no-repeat,
-            radial-gradient(circle at 0 100%, transparent 22px, var(--time-surface) 23px) 48px 86px / 24px 23px no-repeat,
-            radial-gradient(circle at 100% 0, transparent 22px, var(--time-surface) 23px) 24px 239px / 24px 23px no-repeat,
-            radial-gradient(circle at 0 0, transparent 22px, var(--time-surface) 23px) 48px 239px / 24px 23px no-repeat,
-            linear-gradient(var(--time-surface) 0 0) 0 0 / 100% 86px no-repeat,
-            linear-gradient(var(--time-surface) 0 0) 0 262px / 100% calc(100% - 262px) no-repeat,
-            linear-gradient(var(--time-surface) 0 0) 0 86px / 24px 176px no-repeat,
-            linear-gradient(var(--time-surface) 0 0) 72px 86px / 24px 176px no-repeat;
+        background: transparent;
+    }
+
+    .site-header-surface {
+        position: absolute;
+        z-index: -1;
+        inset: 0;
+        display: block;
+        pointer-events: none;
+        background: linear-gradient(90deg,
+            rgba(15, 30, 43, 0.92) 0%,
+            rgba(29, 47, 61, 0.84) 20%,
+            rgba(50, 69, 81, 0.82) 48%,
+            rgba(27, 45, 60, 0.86) 76%,
+            rgba(13, 29, 41, 0.94) 100%);
+        -webkit-mask-image:
+            linear-gradient(#fff 0 0),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 176'%3E%3Crect width='48' height='176' rx='23' fill='white'/%3E%3C/svg%3E");
+        -webkit-mask-position: 0 0, 24px 86px;
+        -webkit-mask-size: 100% 100%, 48px 176px;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-composite: xor;
+        mask-image:
+            linear-gradient(#fff 0 0),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 176'%3E%3Crect width='48' height='176' rx='23' fill='white'/%3E%3C/svg%3E");
+        mask-position: 0 0, 24px 86px;
+        mask-size: 100% 100%, 48px 176px;
+        mask-repeat: no-repeat;
+        mask-composite: exclude;
     }
 
     .site-header .current-page-label {
@@ -6482,6 +6521,36 @@ body[data-section="thanks"] .temporal-sculpture {
             0 0 6px rgba(252, 194, 111, 0.055);
         -webkit-backdrop-filter: none;
         backdrop-filter: none;
+    }
+
+    /* 桌機左列如書背般微微隆起：以冷色折射與裝幀壓線塑造厚度，不使用黑色投影。 */
+    .site-header {
+        border-right-color: rgba(178, 203, 205, 0.34);
+        box-shadow:
+            inset 13px 0 20px -18px rgba(205, 224, 225, 0.42),
+            inset -20px 0 28px -18px rgba(29, 52, 61, 0.64),
+            inset 3px 0 0 rgba(141, 183, 221, 0.055),
+            inset -3px 0 0 rgba(252, 194, 111, 0.045),
+            12px 0 28px rgba(42, 66, 67, 0.2),
+            3px 0 8px rgba(141, 183, 221, 0.08);
+    }
+
+    .site-header::before {
+        right: -1px;
+        width: 3px;
+        border-radius: 3px 0 0 3px;
+        background: linear-gradient(
+            to bottom,
+            transparent,
+            rgba(141, 183, 221, 0.58) 12%,
+            rgba(169, 192, 177, 0.46) 34%,
+            rgba(252, 194, 111, 0.5) 58%,
+            rgba(243, 164, 176, 0.52) 86%,
+            transparent
+        );
+        box-shadow:
+            -3px 0 8px rgba(141, 183, 221, 0.1),
+            3px 0 10px rgba(53, 78, 76, 0.16);
     }
 }
 
@@ -6927,11 +6996,21 @@ html.entrance-open main {
 
 /* 滿版排版稿的文字靠近左側，控制箭頭再貼邊以避免壓到首字。 */
 #gallery-page .gallery-stage:has(.slide-item.has-artwork.is-current) .arrow-prev {
-    left: -6px;
+    left: -12px;
 }
 
 #gallery-page .gallery-stage:has(.slide-item.has-artwork.is-current) .arrow-next {
-    right: -6px;
+    right: -12px;
+}
+
+@media (max-width: 768px) {
+    #gallery-page .gallery-stage:has(.slide-item.has-artwork.is-current) .arrow-prev {
+        left: -8px;
+    }
+
+    #gallery-page .gallery-stage:has(.slide-item.has-artwork.is-current) .arrow-next {
+        right: -8px;
+    }
 }
 
 /* 手機的通用雙欄規則會把 caption 改成 100%；正式排版稿改用各自比例。 */
