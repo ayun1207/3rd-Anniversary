@@ -6844,6 +6844,20 @@ html.entrance-open main {
     #text-page .text-container h1 {
         top: 36px;
     }
+
+    .intro-lead {
+        font-size: clamp(0.64rem, 3.2vw, 0.9rem);
+        line-height: 2.3;
+        letter-spacing: 0.025em;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 340px) {
+    .intro-copy {
+        width: calc(100% + 12px);
+        margin-inline: -6px;
+    }
 }
 
 /* 作品章節：維持作品舞台尺寸，只收整標題比例、外框留白與導覽符號。 */
