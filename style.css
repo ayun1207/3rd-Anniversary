@@ -958,6 +958,14 @@ main {
     color: var(--ink-secondary);
 }
 
+.intro-line {
+    display: block;
+}
+
+.intro-line-break {
+    margin-top: 2.3em;
+}
+
 .solar-cycle {
     --solar-leaf-angle: 0deg;
     --season-accent: #817d75;
@@ -6849,6 +6857,9 @@ html.entrance-open main {
         font-size: clamp(0.64rem, 3.2vw, 0.9rem);
         line-height: 2.3;
         letter-spacing: 0.025em;
+    }
+
+    .intro-line {
         white-space: nowrap;
     }
 }
