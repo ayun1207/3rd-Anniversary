@@ -26,10 +26,14 @@ const subset = await subsetFont(font, characters, { targetFormat: 'woff2' })
 await writeFile(outputFont, subset)
 
 const html = sourceText[0]
-const artworkText = Array.from(
+const artworkCaptions = Array.from(
   html.matchAll(/<figcaption class="slide-caption">([\s\S]*?)<\/figcaption>/g),
   match => match[1].replace(/<[^>]+>/g, ' ')
 ).join('\n')
+const entrancePromptText = html
+  .match(/<span class="entrance-prompt">([\s\S]*?)<\/span>/)?.[1]
+  ?.replace(/<[^>]+>/g, ' ') ?? ''
+const artworkText = `${artworkCaptions}\n${entrancePromptText}`
 const artworkCharacters = [...new Set(artworkText)].join('')
 const artworkSourceFont = resolve('fonts/ChenYuluoyan-2.0-Thin.ttf')
 const artworkOutputFont = resolve('fonts/chenyuluoyan-2.0-thin-artwork-subset.woff2')

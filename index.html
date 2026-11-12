@@ -71,7 +71,10 @@
             </span>
         </div>
         <div class="entrance-content">
-            <h1 id="entranceTitle">霓影流轉 四時成章</h1>
+            <h1 id="entranceTitle">
+                <span class="entrance-title-line">霓影流轉</span>
+                <span class="entrance-title-line entrance-title-line-lower">四時成章</span>
+            </h1>
             <p id="entranceDescription">踏歲偕行續年華 來春共赴啟新篇</p>
             <button id="enterExhibition" class="entrance-enter" type="button">
                 <span class="entrance-prompt">入新章</span>
@@ -105,6 +108,29 @@
                     <stop offset="0.62" stop-color="#FCC26F"></stop>
                     <stop offset="1" stop-color="#F3A4B0"></stop>
                 </linearGradient>
+                <linearGradient id="temporalCoverPointer" gradientUnits="userSpaceOnUse" x1="1290" y1="510" x2="714" y2="842">
+                    <stop offset="0" stop-color="#DCE9E9" stop-opacity="0.34"></stop>
+                    <stop offset="0.48" stop-color="#8DB7DD" stop-opacity="0.7"></stop>
+                    <stop offset="0.8" stop-color="#F7F4E2" stop-opacity="0.94"></stop>
+                    <stop offset="1" stop-color="#FCC26F"></stop>
+                </linearGradient>
+                <linearGradient id="temporalTickLight" gradientUnits="userSpaceOnUse" x1="1290" y1="-164" x2="1290" y2="-183">
+                    <stop offset="0" stop-color="#8DB7DD" stop-opacity="0.3"></stop>
+                    <stop offset="0.58" stop-color="#DCE9E9" stop-opacity="0.72"></stop>
+                    <stop offset="1" stop-color="#F7F4E2" stop-opacity="0.96"></stop>
+                </linearGradient>
+                <linearGradient id="temporalCoverGem" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#F7FCFF"></stop>
+                    <stop offset="0.26" stop-color="#8DB7DD"></stop>
+                    <stop offset="0.64" stop-color="#FCC26F"></stop>
+                    <stop offset="1" stop-color="#F3A4B0"></stop>
+                </linearGradient>
+                <radialGradient id="temporalCoverPivot" cx="32%" cy="27%" r="76%">
+                    <stop offset="0" stop-color="#FFFFFF"></stop>
+                    <stop offset="0.55" stop-color="#F7FAF7"></stop>
+                    <stop offset="0.82" stop-color="#E4ECE9"></stop>
+                    <stop offset="1" stop-color="#B7C8C6"></stop>
+                </radialGradient>
                 <radialGradient id="temporalShade" cx="42%" cy="46%" r="68%">
                     <stop offset="0" stop-color="#ffffff" stop-opacity="0.96"></stop>
                     <stop offset="0.48" stop-color="#ffffff" stop-opacity="0.76"></stop>
@@ -120,12 +146,6 @@
                 <filter id="temporalBloom" x="-45%" y="-45%" width="190%" height="190%">
                     <feGaussianBlur stdDeviation="22"></feGaussianBlur>
                 </filter>
-                <filter id="temporalStarGlow" x="-500%" y="-500%" width="1000%" height="1000%">
-                    <feGaussianBlur stdDeviation="3.2"></feGaussianBlur>
-                </filter>
-                <path id="temporalStarOrbitInner" d="M 1290 1188 A 678 678 0 1 1 1290 -168 A 678 678 0 1 1 1290 1188"></path>
-                <path id="temporalStarOrbit" d="M 1290 1198 A 688 688 0 1 1 1290 -178 A 688 688 0 1 1 1290 1198"></path>
-                <path id="temporalStarOrbitOuter" d="M 1290 1208 A 698 698 0 1 1 1290 -188 A 698 698 0 1 1 1290 1208"></path>
             </defs>
             <g class="temporal-sculpture-body" mask="url(#temporalReveal)">
                 <ellipse class="temporal-ring-shadow" cx="1290" cy="510" rx="688" ry="688"></ellipse>
@@ -134,37 +154,9 @@
                 <ellipse class="temporal-ring-season-response" cx="1290" cy="510" rx="688" ry="688"></ellipse>
                 <ellipse class="temporal-ring-outer-edge" cx="1290" cy="510" rx="723" ry="723"></ellipse>
                 <ellipse class="temporal-ring-inner-edge" cx="1290" cy="510" rx="653" ry="653"></ellipse>
+                <ellipse class="temporal-ring-dial-edge-glow" cx="1290" cy="510" rx="669" ry="669"></ellipse>
+                <ellipse class="temporal-ring-dial-edge-core" cx="1290" cy="510" rx="669" ry="669"></ellipse>
                 <ellipse class="temporal-ring-material-line" cx="1290" cy="510" rx="678" ry="678" pathLength="1"></ellipse>
-                <g class="temporal-orbit-stars">
-                    <g class="temporal-orbit-star temporal-orbit-star-main">
-                        <circle class="temporal-star-halo" r="14"></circle>
-                        <circle class="temporal-star-core" r="4"></circle>
-                        <animateMotion dur="18s" begin="0s" repeatCount="indefinite">
-                            <mpath href="#temporalStarOrbit"></mpath>
-                        </animateMotion>
-                    </g>
-                    <g class="temporal-orbit-star temporal-orbit-star-soft">
-                        <circle class="temporal-star-halo" r="10"></circle>
-                        <circle class="temporal-star-core" r="3"></circle>
-                        <animateMotion dur="18s" begin="-0.55s" repeatCount="indefinite">
-                            <mpath href="#temporalStarOrbitInner"></mpath>
-                        </animateMotion>
-                    </g>
-                    <g class="temporal-orbit-star temporal-orbit-star-faint">
-                        <circle class="temporal-star-halo" r="8"></circle>
-                        <circle class="temporal-star-core" r="2.3"></circle>
-                        <animateMotion dur="18s" begin="-1.15s" repeatCount="indefinite">
-                            <mpath href="#temporalStarOrbitOuter"></mpath>
-                        </animateMotion>
-                    </g>
-                    <g class="temporal-orbit-star temporal-orbit-star-pin">
-                        <circle class="temporal-star-halo" r="6"></circle>
-                        <circle class="temporal-star-core" r="1.8"></circle>
-                        <animateMotion dur="18s" begin="-1.75s" repeatCount="indefinite">
-                            <mpath href="#temporalStarOrbit"></mpath>
-                        </animateMotion>
-                    </g>
-                </g>
                 <g class="temporal-ring-tick-set">
                     <line class="temporal-ring-tick temporal-ring-cardinal-tick is-spring" x1="1290" y1="-157" x2="1290" y2="-191"></line>
                     <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(15 1290 510)"></line>
@@ -190,6 +182,12 @@
                     <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(315 1290 510)"></line>
                     <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(330 1290 510)"></line>
                     <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(345 1290 510)"></line>
+                </g>
+                <g class="temporal-cover-pointer" aria-hidden="true">
+                    <line class="temporal-cover-pointer-line" x1="1290" y1="510" x2="724.4" y2="836"></line>
+                    <circle class="temporal-cover-pointer-pivot" cx="1290" cy="510" r="8"></circle>
+                    <path class="temporal-cover-pointer-gem" d="M 714 830 L 723 842 L 714 854 L 705 842 Z" transform="rotate(60 714 842)"></path>
+                    <path class="temporal-cover-pointer-gem-facet" d="M 714 830 L 723 842 L 714 844 L 709 840 Z" transform="rotate(60 714 842)"></path>
                 </g>
                 <ellipse class="temporal-ring-active-aura" cx="1290" cy="510" rx="688" ry="688" pathLength="1"></ellipse>
                 <ellipse class="temporal-ring-active-glow" cx="1290" cy="510" rx="688" ry="688" pathLength="1"></ellipse>
@@ -558,7 +556,16 @@
                     <span>03</span><span>繪春信</span><span class="section-label-line" aria-hidden="true"></span>
                 </p>
                 <h1 id="artistTitle">繪師資訊</h1>
-                <!-- 可在這裡補上繪師介紹、社群帳號與作品連結。 -->
+                <figure class="artist-profile-panel">
+                    <img
+                        src="/images/artist/25.webp"
+                        width="2400"
+                        height="848"
+                        loading="lazy"
+                        decoding="async"
+                        alt="繪師酥米 sumi 的作品介紹與三周年賀詞"
+                    >
+                </figure>
             </div>
         </section>
         <!-- 籌花事：可在這裡補上企劃緣起與製作過程。 -->
