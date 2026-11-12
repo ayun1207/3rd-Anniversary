@@ -82,6 +82,9 @@
             <p id="entranceMusicHint" class="entrance-hint" hidden>進入後將播放背景音樂，可隨時暫停。</p>
             <button id="enterQuietly" class="entrance-quiet" type="button" hidden>靜音進入</button>
         </div>
+        <div class="entrance-transition-curtain" aria-hidden="true">
+            <span class="entrance-transition-dimmer"></span>
+        </div>
     </dialog>
     <div class="site-paper-background" aria-hidden="true">
         <svg class="temporal-sculpture" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" focusable="false" aria-hidden="true">
@@ -140,9 +143,6 @@
                 <mask id="temporalReveal">
                     <rect width="1600" height="1000" fill="url(#temporalShade)"></rect>
                 </mask>
-                <filter id="temporalGlow" x="-35%" y="-35%" width="170%" height="170%">
-                    <feGaussianBlur stdDeviation="11"></feGaussianBlur>
-                </filter>
                 <filter id="temporalBloom" x="-45%" y="-45%" width="190%" height="190%">
                     <feGaussianBlur stdDeviation="22"></feGaussianBlur>
                 </filter>
@@ -151,7 +151,6 @@
                 <ellipse class="temporal-ring-shadow" cx="1290" cy="510" rx="688" ry="688"></ellipse>
                 <ellipse class="temporal-ring-metal" cx="1290" cy="510" rx="688" ry="688"></ellipse>
                 <ellipse class="temporal-ring-season-sheen" cx="1290" cy="510" rx="688" ry="688"></ellipse>
-                <ellipse class="temporal-ring-season-response" cx="1290" cy="510" rx="688" ry="688"></ellipse>
                 <ellipse class="temporal-ring-outer-edge" cx="1290" cy="510" rx="723" ry="723"></ellipse>
                 <ellipse class="temporal-ring-inner-edge" cx="1290" cy="510" rx="653" ry="653"></ellipse>
                 <ellipse class="temporal-ring-dial-edge-glow" cx="1290" cy="510" rx="669" ry="669"></ellipse>
@@ -189,9 +188,6 @@
                     <path class="temporal-cover-pointer-gem" d="M 714 830 L 723 842 L 714 854 L 705 842 Z" transform="rotate(60 714 842)"></path>
                     <path class="temporal-cover-pointer-gem-facet" d="M 714 830 L 723 842 L 714 844 L 709 840 Z" transform="rotate(60 714 842)"></path>
                 </g>
-                <ellipse class="temporal-ring-active-aura" cx="1290" cy="510" rx="688" ry="688" pathLength="1"></ellipse>
-                <ellipse class="temporal-ring-active-glow" cx="1290" cy="510" rx="688" ry="688" pathLength="1"></ellipse>
-                <ellipse class="temporal-ring-active-core" cx="1290" cy="510" rx="688" ry="688" pathLength="1"></ellipse>
                 <ellipse class="temporal-ring-memory-line" cx="1290" cy="510" rx="752" ry="752" pathLength="1"></ellipse>
             </g>
         </svg>

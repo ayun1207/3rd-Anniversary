@@ -453,7 +453,6 @@ const solarTerms = Array.from(document.querySelectorAll('.solar-term'));
 const solarCenterTerm = document.getElementById('solarCenterTerm');
 const solarCenterNote = document.getElementById('solarCenterNote');
 const solarTrailLayer = document.querySelector('.solar-trail-layer');
-const temporalBackground = document.querySelector('.site-paper-background');
 let solarLeafAngle = 0;
 let solarTypingTimer;
 let solarHoverTimer;
@@ -472,20 +471,6 @@ const solarSeasonTrailColors = [
     'rgba(207, 174, 165, 0.58)',
     'rgba(171, 193, 208, 0.62)'
 ];
-
-function updateTemporalSculpture(index) {
-    if (!temporalBackground) return;
-    const seasonIndex = Math.floor(index / 6);
-    const termsPerSeason = solarTerms.length / solarSeasons.length;
-    const termWithinSeason = index % termsPerSeason;
-    const seasonProgress = termWithinSeason / (termsPerSeason - 1);
-    const visibleArcStart = 0.40;
-    const visibleArcEnd = 0.60;
-    const progress = visibleArcStart + ((visibleArcEnd - visibleArcStart) * seasonProgress);
-    temporalBackground.dataset.season = solarSeasons[seasonIndex];
-    temporalBackground.dataset.termIndex = String(index);
-    temporalBackground.style.setProperty('--temporal-term-progress', progress.toFixed(4));
-}
 
 function typeSolarText(target, text, delay, version, onComplete) {
     const characters = Array.from(text);
@@ -546,7 +531,6 @@ function followSolarTerm(term, index) {
     solarCycle.style.setProperty('--solar-leaf-angle', `${solarLeafAngle}deg`);
     const seasonIndex = Math.floor(index / 6);
     solarCycle.dataset.season = solarSeasons[seasonIndex];
-    updateTemporalSculpture(index);
 
     // Keep the background clock advancing while avoiding off-screen trail and
     // label work that cannot be seen, especially on mobile devices.
@@ -594,7 +578,8 @@ function stopSolarAutoplay() {
 }
 
 function runSolarAutoplayStep() {
-    if (document.hidden || entrance.open) return;
+    const entranceStillBlocking = entrance.open && !entrance.classList.contains('is-opening');
+    if (document.hidden || entranceStillBlocking) return;
     const index = solarAutoplayIndex;
     const term = solarTerms[index];
 
@@ -616,10 +601,9 @@ function startSolarAutoplay(reset = false) {
         solarAutoplayIndex = 0;
         solarLeafAngle = 0;
     }
-    if (!document.hidden && !entrance.open) runSolarAutoplayStep();
+    const entranceStillBlocking = entrance.open && !entrance.classList.contains('is-opening');
+    if (!document.hidden && !entranceStillBlocking) runSolarAutoplayStep();
 }
-
-updateTemporalSculpture(0);
 
 if (solarCycle && 'IntersectionObserver' in window) {
     const solarCycleBounds = solarCycle.getBoundingClientRect();
@@ -920,6 +904,8 @@ const entrance = document.getElementById('entrance');
 const backgroundMusic = document.getElementById('backgroundMusic');
 const musicToggle = document.getElementById('musicToggle');
 const musicStatus = document.getElementById('musicStatus');
+const entranceTransitionCurtain = entrance.querySelector('.entrance-transition-curtain');
+const temporalSculpture = document.querySelector('.temporal-sculpture');
 const hasBackgroundMusic = Boolean(backgroundMusic.getAttribute('src')?.trim());
 let enteringExhibition = false;
 let musicFadeFrame;
@@ -997,18 +983,122 @@ async function enterExhibition(withMusic = true) {
     enteringExhibition = true;
     resetExhibitionToStart();
     if (withMusic) startMusic();
+    const transitionAnimations = [];
+    let sculptureFocusAnimation;
+    let solarAutoplayStartedDuringEntrance = false;
     try {
         if (!reducedMotion.matches && typeof entrance.animate === 'function') {
-            await entrance.animate([{ opacity: 1 }, { opacity: 0 }], {
-                duration: 1100, easing: 'ease-in-out', fill: 'forwards'
-            }).finished;
+            const triggerBounds = entranceTrigger.getBoundingClientRect();
+            const focusX = Math.max(0, Math.min(window.innerWidth, triggerBounds.left + triggerBounds.width / 2));
+            const focusY = Math.max(0, Math.min(window.innerHeight, triggerBounds.top + triggerBounds.height / 2));
+            entranceTransitionCurtain.style.setProperty('--entrance-focus-x', `${focusX}px`);
+            entranceTransitionCurtain.style.setProperty('--entrance-focus-y', `${focusY}px`);
+            entrance.style.setProperty('--entrance-focus-x', `${focusX}px`);
+            entrance.style.setProperty('--entrance-focus-y', `${focusY}px`);
+            document.documentElement.classList.add('entrance-transitioning');
+            entrance.classList.add('is-transitioning');
+
+            const fadingElements = [
+                entrance.querySelector('h1'),
+                document.getElementById('entranceDescription'),
+                document.getElementById('entranceMusicHint'),
+                document.getElementById('enterQuietly')
+            ].filter(element => element && !element.hidden);
+
+            const focusAnimations = fadingElements.map(element => element.animate([
+                { opacity: 1, transform: 'translate3d(0, 0, 0)' },
+                { opacity: 0, transform: 'translate3d(0, -8px, 0)' }
+            ], {
+                duration: 560,
+                easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                fill: 'forwards'
+            }));
+
+            const entranceAtmosphere = entrance.querySelector('.entrance-atmosphere');
+            if (entranceAtmosphere) {
+                focusAnimations.push(entranceAtmosphere.animate([
+                    { opacity: 1 },
+                    { opacity: 0 }
+                ], {
+                    duration: 680,
+                    easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                    fill: 'forwards'
+                }));
+            }
+
+            if (temporalSculpture) {
+                sculptureFocusAnimation = temporalSculpture.animate([
+                    { opacity: Number.parseFloat(getComputedStyle(temporalSculpture).opacity) || 1 },
+                    { opacity: 0 }
+                ], {
+                    duration: 600,
+                    easing: 'ease-in-out',
+                    fill: 'forwards'
+                });
+                focusAnimations.push(sculptureFocusAnimation);
+            }
+
+            transitionAnimations.push(...focusAnimations);
+            // 不等待封面所有元素完全消失；讓退場與圓形開口重疊，避免空白底色停頓。
+            await new Promise(resolve => window.setTimeout(resolve, 250));
+
+            // 入口與光暈先完整退場，避免圓形遮罩邊緣穿過文字。
+            const entranceExitAnimation = entranceTrigger.animate([
+                { opacity: 1, transform: 'scale(1.08)' },
+                { opacity: 0, transform: 'scale(1.16)' }
+            ], {
+                duration: 180,
+                easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                fill: 'forwards'
+            });
+            transitionAnimations.push(entranceExitAnimation);
+            await Promise.race([
+                entranceExitAnimation.finished,
+                new Promise(resolve => window.setTimeout(resolve, 220))
+            ]);
+
+            const revealStartRadius = Math.hypot(triggerBounds.width, triggerBounds.height) / 2 + 28;
+            entrance.style.setProperty('--entrance-reveal-start-radius', `${revealStartRadius}px`);
+            entrance.classList.add('is-reveal-ready');
+            getComputedStyle(entrance).getPropertyValue('--entrance-reveal-radius');
+            await new Promise(resolve => requestAnimationFrame(resolve));
+            entrance.classList.add('is-opening');
+
+            // 直接在真實封面上打開圓形缺口；內頁本身不再參與裁切動畫。
+            document.body.classList.remove('entrance-open');
+            document.documentElement.classList.remove('entrance-open');
+            await new Promise(resolve => window.setTimeout(resolve, 900));
+            startSolarAutoplay(true);
+            solarAutoplayStartedDuringEntrance = true;
+            await new Promise(resolve => window.setTimeout(resolve, 350));
         }
     } finally {
         resetExhibitionToStart();
         entrance.close();
         document.body.classList.remove('entrance-open');
         document.documentElement.classList.remove('entrance-open');
-        startSolarAutoplay(true);
+        document.documentElement.classList.remove('entrance-transitioning');
+        entrance.classList.remove('is-transitioning', 'is-reveal-ready', 'is-opening');
+        entranceTransitionCurtain.style.removeProperty('--entrance-focus-x');
+        entranceTransitionCurtain.style.removeProperty('--entrance-focus-y');
+        entrance.style.removeProperty('--entrance-focus-x');
+        entrance.style.removeProperty('--entrance-focus-y');
+        entrance.style.removeProperty('--entrance-reveal-start-radius');
+        transitionAnimations.forEach(animation => animation.cancel());
+
+        if (sculptureFocusAnimation && temporalSculpture) {
+            sculptureFocusAnimation.cancel();
+            const targetOpacity = Number.parseFloat(getComputedStyle(temporalSculpture).opacity) || 0.44;
+            temporalSculpture.animate([
+                { opacity: 0 },
+                { opacity: targetOpacity }
+            ], {
+                duration: 720,
+                easing: 'ease-out'
+            });
+        }
+
+        if (!solarAutoplayStartedDuringEntrance) startSolarAutoplay(true);
         menuToggle.focus({ preventScroll: true });
     }
 }

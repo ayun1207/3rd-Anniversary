@@ -5813,6 +5813,143 @@ body.gallery-section-active .site-botanical {
     font-size: clamp(1.12rem, 1.8vw, 1.32rem);
 }
 
+@property --entrance-reveal-radius {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+
+/* 進站轉場：封面先收束至「入新章」，內頁再由入口中心柔和向外擴散。 */
+.entrance-transition-curtain {
+    --entrance-focus-x: 50vw;
+    --entrance-focus-y: 64vh;
+    position: fixed;
+    z-index: 3;
+    inset: 0;
+    visibility: hidden;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.entrance.is-transitioning .entrance-transition-curtain {
+    visibility: visible;
+}
+
+.entrance.is-transitioning {
+    background:
+        radial-gradient(30% 42% at 84% 48%, rgba(185, 204, 187, 0.14) 0%, rgba(162, 184, 166, 0.07) 38%, transparent 70%),
+        linear-gradient(118deg, #607565 0%, #687d6d 34%, #788e7d 61%, #849989 80%, #6d8574 100%);
+}
+
+.entrance.is-reveal-ready {
+    --entrance-reveal-radius: var(--entrance-reveal-start-radius, 96px);
+    -webkit-mask-image: radial-gradient(
+        circle at var(--entrance-focus-x) var(--entrance-focus-y),
+        transparent 0 var(--entrance-reveal-radius),
+        rgba(0, 0, 0, 0.18) calc(var(--entrance-reveal-radius) + 12px),
+        #000 calc(var(--entrance-reveal-radius) + 48px)
+    );
+    mask-image: radial-gradient(
+        circle at var(--entrance-focus-x) var(--entrance-focus-y),
+        transparent 0 var(--entrance-reveal-radius),
+        rgba(0, 0, 0, 0.18) calc(var(--entrance-reveal-radius) + 12px),
+        #000 calc(var(--entrance-reveal-radius) + 48px)
+    );
+    will-change: -webkit-mask-image, mask-image;
+}
+
+.entrance.is-reveal-ready.is-opening {
+    transition: --entrance-reveal-radius 1250ms cubic-bezier(0.45, 0, 0.55, 1);
+}
+
+.entrance-transition-dimmer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background:
+        linear-gradient(112deg, rgba(7, 15, 13, 0.42), rgba(15, 27, 22, 0.3) 62%, rgba(28, 40, 34, 0.24));
+    transition: opacity 360ms cubic-bezier(0.4, 0, 0.2, 1);
+    contain: strict;
+    will-change: opacity;
+}
+
+.entrance.is-transitioning .entrance-transition-dimmer {
+    opacity: 1;
+}
+
+.entrance.is-opening .entrance-transition-dimmer {
+    opacity: 0;
+}
+
+.entrance.is-opening {
+    --entrance-reveal-radius: 110vmax;
+    box-shadow: none;
+}
+
+.entrance.is-transitioning .entrance-content {
+    z-index: 4;
+}
+
+.entrance.is-transitioning .entrance-content::before {
+    opacity: 0;
+    transition: opacity 420ms ease;
+}
+
+.entrance.is-transitioning .entrance-enter {
+    position: relative;
+    z-index: 5;
+    border-color: transparent;
+    transform: scale(1.08);
+    transition:
+        opacity 900ms cubic-bezier(0.4, 0, 0.2, 1),
+        transform 680ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.entrance.is-transitioning .entrance-enter::before {
+    opacity: 0.62;
+    background: radial-gradient(ellipse, rgba(229, 240, 232, 0.34), rgba(213, 230, 218, 0.12) 42%, transparent 74%);
+}
+
+.entrance.is-transitioning .entrance-prompt {
+    position: relative;
+    z-index: 1;
+    color: #edf3ef;
+    opacity: 1;
+    text-shadow:
+        0 0 12px rgba(237, 246, 240, 0.58),
+        0 0 28px rgba(198, 220, 204, 0.28);
+}
+
+.entrance.is-opening .entrance-enter {
+    opacity: 0;
+    transform: scale(1.22);
+}
+
+.entrance.is-transitioning::before,
+.entrance.is-transitioning::after {
+    transition: opacity 700ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.entrance.is-opening::before,
+.entrance.is-opening::after {
+    opacity: 0;
+}
+
+html.entrance-transitioning .temporal-sculpture {
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .entrance-transition-curtain {
+        display: none;
+    }
+
+    .entrance.is-transitioning .entrance-enter {
+        transition: none;
+    }
+
+}
+
 /* Calm, colored glass surfaces keep content above the garden without turning white. */
 .intro-layout::before,
 .gallery-section-heading,
@@ -6007,9 +6144,6 @@ body.gallery-section-active .site-botanical {
     --time-border: rgba(157, 184, 190, 0.24);
     --time-border-bright: rgba(201, 216, 218, 0.34);
     --time-shadow: 0 26px 70px rgba(2, 8, 16, 0.34);
-    --temporal-accent: var(--time-season-spring);
-    --temporal-term-progress: 0;
-
     --paper-base: var(--time-background-base);
     --paper-light: var(--time-indigo-800);
     --paper-depth: var(--time-midnight-950);
@@ -6105,15 +6239,11 @@ html.entrance-open .site-paper-background {
 .temporal-ring-shadow,
 .temporal-ring-metal,
 .temporal-ring-season-sheen,
-.temporal-ring-season-response,
 .temporal-ring-outer-edge,
 .temporal-ring-inner-edge,
 .temporal-ring-dial-edge-glow,
 .temporal-ring-dial-edge-core,
 .temporal-ring-material-line,
-.temporal-ring-active-aura,
-.temporal-ring-active-glow,
-.temporal-ring-active-core,
 .temporal-ring-memory-line {
     fill: none;
 }
@@ -6135,13 +6265,6 @@ html.entrance-open .site-paper-background {
     stroke: url(#temporalSeasonFlow);
     stroke-width: 40;
     opacity: 0.52;
-}
-
-.temporal-ring-season-response {
-    stroke: var(--temporal-accent);
-    stroke-width: 44;
-    opacity: 0.055;
-    transition: stroke 1200ms ease, opacity 1200ms ease;
 }
 
 .temporal-ring-outer-edge {
@@ -6250,13 +6373,6 @@ html.entrance-open .temporal-ring-dial-edge-core {
     stroke-linecap: round;
 }
 
-/* 首頁維持完全靜態；進站後使用的寬幅節氣反射不在封面顯示。 */
-html.entrance-open .temporal-ring-active-aura,
-html.entrance-open .temporal-ring-active-glow,
-html.entrance-open .temporal-ring-active-core {
-    display: none;
-}
-
 /* 首頁遮罩開啟時，暫停後方尚未顯示的節氣環圓心動畫。 */
 html.entrance-open .solar-pivot {
     animation-play-state: paused;
@@ -6305,37 +6421,6 @@ html.entrance-open .temporal-ring-cardinal-tick {
     opacity: 0.92;
 }
 
-.temporal-ring-active-aura,
-.temporal-ring-active-glow,
-.temporal-ring-active-core {
-    stroke: var(--temporal-accent);
-    stroke-dashoffset: calc(-1 * var(--temporal-term-progress));
-    stroke-linecap: round;
-    transition: stroke 1200ms ease, stroke-dashoffset 1800ms cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-
-.temporal-ring-active-aura {
-    stroke-width: 72;
-    stroke-dasharray: 0.12 0.88;
-    opacity: 0.2;
-    filter: url(#temporalBloom);
-    animation: temporal-aura-breathe 10s ease-in-out infinite;
-}
-
-.temporal-ring-active-glow {
-    stroke-width: 40;
-    stroke-dasharray: 0.095 0.905;
-    opacity: 0.52;
-    filter: url(#temporalGlow);
-    animation: temporal-light-breathe 10s ease-in-out infinite;
-}
-
-.temporal-ring-active-core {
-    stroke-width: 5.4;
-    stroke-dasharray: 0.044 0.956;
-    opacity: 0.98;
-}
-
 .temporal-ring-memory-line {
     stroke: rgba(155, 180, 187, 0.16);
     stroke-width: 1.2;
@@ -6343,73 +6428,77 @@ html.entrance-open .temporal-ring-cardinal-tick {
     stroke-linecap: round;
 }
 
-.site-paper-background[data-season="spring"] {
-    --temporal-accent: var(--time-season-spring);
-}
-
-.site-paper-background[data-season="summer"] {
-    --temporal-accent: var(--time-season-summer);
-}
-
-.site-paper-background[data-season="autumn"] {
-    --temporal-accent: var(--time-season-autumn);
-}
-
-.site-paper-background[data-season="winter"] {
-    --temporal-accent: var(--time-season-winter);
-}
-
-@keyframes temporal-light-breathe {
-    0%,
-    100% {
-        opacity: 0.3;
+/*
+ * 桌機內頁測試：沿用首頁的靜態時鐘造型，但退到低對比背景層。
+ * 手機版暫時維持既有配置，待桌機方向確認後再統一。
+ */
+@media (min-width: 769px) {
+    html:not(.entrance-open) .temporal-sculpture {
+        opacity: 0.44;
+        filter: none;
+        transition: none;
     }
 
-    50% {
-        opacity: 0.48;
-    }
-}
-
-@keyframes temporal-aura-breathe {
-    0%,
-    100% {
-        opacity: 0.14;
+    html:not(.entrance-open) .temporal-sculpture-body {
+        transform: scale(0.92);
+        transform-box: view-box;
+        transform-origin: 1290px 510px;
     }
 
-    50% {
-        opacity: 0.25;
+    html:not(.entrance-open) .temporal-ring-shadow,
+    html:not(.entrance-open) .temporal-ring-outer-edge,
+    html:not(.entrance-open) .temporal-ring-inner-edge,
+    html:not(.entrance-open) .temporal-ring-dial-edge-glow,
+    html:not(.entrance-open) .temporal-ring-dial-edge-core,
+    html:not(.entrance-open) .temporal-ring-tick,
+    html:not(.entrance-open) .temporal-cover-pointer-line,
+    html:not(.entrance-open) .temporal-cover-pointer-pivot,
+    html:not(.entrance-open) .temporal-cover-pointer-gem {
+        filter: none;
     }
-}
 
-.site-paper-background[data-season="spring"] {
-    --temporal-accent: var(--time-season-spring);
-}
+    html:not(.entrance-open) .temporal-ring-shadow {
+        opacity: 0.08;
+    }
 
-.site-paper-background[data-season="summer"] {
-    --temporal-accent: var(--time-season-summer);
-}
+    html:not(.entrance-open) .temporal-cover-pointer {
+        opacity: 0.55;
+    }
 
-.site-paper-background[data-season="autumn"] {
-    --temporal-accent: var(--time-season-autumn);
-}
+    html:not(.entrance-open) .temporal-ring-outer-edge {
+        stroke: url(#temporalAmbient);
+        stroke-width: 2;
+        opacity: 0.6;
+    }
 
-.site-paper-background[data-season="winter"] {
-    --temporal-accent: var(--time-season-winter);
-}
+    html:not(.entrance-open) .temporal-ring-inner-edge {
+        stroke-width: 1.2;
+        opacity: 0.1;
+    }
 
-body[data-section="gallery"] .temporal-sculpture {
-    opacity: 0.42;
-    filter: saturate(0.72);
-}
+    html:not(.entrance-open) .temporal-ring-dial-edge-glow {
+        stroke: url(#temporalAmbient);
+        stroke-width: 4;
+        opacity: 0.08;
+    }
 
-body[data-section="text"] .temporal-sculpture,
-body[data-section="planning"] .temporal-sculpture {
-    opacity: 0.7;
-}
+    html:not(.entrance-open) .temporal-ring-dial-edge-core {
+        stroke: rgba(238, 246, 241, 0.7);
+        stroke-width: 1;
+        opacity: 0.52;
+    }
 
-body[data-section="messages"] .temporal-sculpture,
-body[data-section="thanks"] .temporal-sculpture {
-    opacity: 0.62;
+    html:not(.entrance-open) .temporal-ring-tick {
+        stroke: url(#temporalTickLight);
+        stroke-width: 1.5;
+        opacity: 0.46;
+    }
+
+    html:not(.entrance-open) .temporal-ring-cardinal-tick {
+        stroke: url(#temporalTickLight);
+        stroke-width: 2;
+        opacity: 0.62;
+    }
 }
 
 /* The temporal sculpture replaces every legacy entrance illustration layer. */
@@ -6809,25 +6898,8 @@ body[data-section="thanks"] .temporal-sculpture {
         opacity: 0.36;
     }
 
-    .temporal-ring-shadow,
-    .temporal-ring-active-aura,
-    .temporal-ring-active-glow {
+    .temporal-ring-shadow {
         filter: none;
-    }
-
-    .temporal-ring-active-aura,
-    .temporal-ring-active-glow {
-        animation: none;
-    }
-
-    .temporal-ring-active-aura {
-        stroke-width: 48;
-        opacity: 0.14;
-    }
-
-    .temporal-ring-active-glow {
-        stroke-width: 26;
-        opacity: 0.4;
     }
 
     .entrance {
@@ -6884,12 +6956,6 @@ body[data-section="thanks"] .temporal-sculpture {
         transition: none;
     }
 
-    .temporal-ring-active-aura,
-    .temporal-ring-active-glow,
-    .temporal-ring-active-core {
-        animation: none;
-        transition: none;
-    }
 }
 
 /* 結語只保留外框；移除舊版殘留的側邊短線。 */
@@ -7304,11 +7370,7 @@ html.has-content-reveal .content-reveal {
     will-change: auto;
 }
 
-/*
- * 手機時間環保留固定構圖與季節色回應，但在離開封面後關閉會建立
- * 超大離屏紋理的 SVG mask、刻痕與局部流光層。環體本身仍固定可見，
- * data-season 對 .temporal-ring-season-response 的色溫更新亦維持不變。
- */
+/* 手機仍使用既有的低成本固定環體；桌機內頁的新靜態時鐘先獨立測試。 */
 .temporal-sculpture {
     overflow: hidden;
     contain: paint;
@@ -7328,10 +7390,7 @@ html.has-content-reveal .content-reveal {
         mask: none;
     }
 
-    html:not(.entrance-open) .temporal-ring-tick-set,
-    html:not(.entrance-open) .temporal-ring-active-aura,
-    html:not(.entrance-open) .temporal-ring-active-glow,
-    html:not(.entrance-open) .temporal-ring-active-core {
+    html:not(.entrance-open) .temporal-ring-tick-set {
         display: none;
     }
 }
