@@ -401,7 +401,7 @@ function fitCurrentChapter() {
     if (isReadingChapter(currentSection)) {
         readingSections.forEach(section => section.querySelector('.chapter-page-fit').style.removeProperty('--chapter-fit-scale'));
         const [first, last] = readingSections.map(section => section.querySelector('.chapter-page-fit').offsetHeight);
-        chapterScroller.style.setProperty('--reading-start-space', `${Math.max(24, (chapterScroller.clientHeight - first) / 2)}px`);
+        chapterScroller.style.setProperty('--reading-start-space', `${Math.max(24, (chapterScroller.clientHeight - first) / 3)}px`);
         chapterScroller.style.setProperty('--reading-end-space', `${Math.max(24, (chapterScroller.clientHeight - last) / 2)}px`);
         queueReadingProgress();
         return;

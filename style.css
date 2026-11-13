@@ -7452,7 +7452,7 @@ main > .page-content.active {
         min-height: 0 !important;
         padding: 0 !important;
     }
-    main.is-reading-flow > #planning-page { margin-top: 48px; }
+    main.is-reading-flow > #planning-page { margin-top: 72px; }
     main.is-reading-flow > :is(#text-page, #planning-page) > .chapter-page-fit {
         transform: none;
     }
