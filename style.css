@@ -7822,9 +7822,9 @@ main .section-label-line {
     }
     #gallery-page .gallery-section-heading .gallery-progress-term { font-size: 14px; }
     #text-page .text-container {
-        width: calc(100% - 16px);
+        width: calc(100% - 8px);
         margin-inline: auto;
-        padding: 44px 10px 16px;
+        padding: 44px 3px 6px;
     }
     #text-page .text-container h1 {
         position: static;
@@ -7833,7 +7833,7 @@ main .section-label-line {
     }
     #text-page .artist-profile-panel {
         top: 0;
-        margin-top: 16px;
+        margin-top: 10px;
     }
     #intro-page .intro-layout {
         width: calc(100% - 20px);
