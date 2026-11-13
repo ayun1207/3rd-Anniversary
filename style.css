@@ -4548,7 +4548,7 @@ main::before {
         padding: 0;
         border: 0;
         background: transparent;
-        color: rgba(189, 207, 212, 0.72);
+        color: #324d42;
         transform: translateY(-50%);
         cursor: pointer;
         touch-action: manipulation;
@@ -7876,6 +7876,8 @@ main .section-label-line {
         max-width: none;
         margin-left: -2.6%;
     }
+    #thanks-page .text-container { padding-top: 44px; }
+    #thanks-page .text-container h1 { margin-top: 0; }
     #intro-page .intro-layout {
         width: calc(100% - 20px);
         grid-template-columns: minmax(0, 1fr);

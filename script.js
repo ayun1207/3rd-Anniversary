@@ -698,17 +698,21 @@ const rosterMobile = window.matchMedia('(max-width: 700px)');
 let currentRosterCard = 0;
 let rosterTouchStartX = 0;
 let rosterTouchStartY = 0;
+let rosterTween;
+let rosterWrapClone;
+let isRosterAnimating = false;
 
 function updateRosterCarousel(targetIndex = currentRosterCard, announce = true) {
     if (!rosterTrack || !rosterCards.length) return;
+    rosterTween?.kill();
+    rosterTween = null;
+    rosterWrapClone?.remove();
+    rosterWrapClone = null;
+    isRosterAnimating = false;
     currentRosterCard = (targetIndex + rosterCards.length) % rosterCards.length;
     const mobile = rosterMobile.matches;
 
-    gsap.to(rosterTrack, {
-        '--roster-offset': `${currentRosterCard * -100}%`,
-        duration: mobile && announce && !reducedMotion.matches ? 0.56 : 0,
-        ease: 'power2.inOut', overwrite: 'auto'
-    });
+    gsap.set(rosterTrack, { '--roster-offset': `${currentRosterCard * -100}%` });
     rosterCards.forEach((card, index) => {
         const active = index === currentRosterCard;
         if (mobile) {
@@ -731,8 +735,32 @@ function updateRosterCarousel(targetIndex = currentRosterCard, announce = true) 
 }
 
 function moveRosterCard(direction) {
-    if (!rosterMobile.matches || rosterCards.length <= 1) return;
-    updateRosterCarousel(currentRosterCard + direction);
+    if (!rosterMobile.matches || rosterCards.length <= 1 || isRosterAnimating) return;
+    const next = currentRosterCard + direction;
+    const target = (next + rosterCards.length) % rosterCards.length;
+    if (reducedMotion.matches) {
+        updateRosterCarousel(target);
+        return;
+    }
+    let destination = next * -100;
+    if (next < 0 || next === rosterCards.length) {
+        // 首尾交接只在軌道外暫放一張不可聚焦的副本，收尾立即還原原卡片。
+        rosterWrapClone = rosterCards[target].cloneNode(true);
+        rosterWrapClone.setAttribute('aria-hidden', 'true');
+        rosterWrapClone.inert = true;
+        if (direction > 0) {
+            rosterTrack.append(rosterWrapClone);
+        } else {
+            rosterTrack.prepend(rosterWrapClone);
+            gsap.set(rosterTrack, { '--roster-offset': '-100%' });
+            destination = 0;
+        }
+    }
+    isRosterAnimating = true;
+    rosterTween = gsap.to(rosterTrack, {
+        '--roster-offset': `${destination}%`, duration: 0.56, ease: 'power2.inOut',
+        onComplete: () => updateRosterCarousel(target)
+    });
 }
 
 if (rosterTrack && rosterViewport && rosterPrev && rosterNext) {
