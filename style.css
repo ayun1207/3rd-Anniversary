@@ -462,6 +462,7 @@ button:not(#enterExhibition) { scale: var(--press-scale, 1); }
     height: 44px;
     margin: 0;
     border: 1px solid rgba(181, 204, 210, 0.3);
+    border-radius: 50%;
     background: transparent;
     box-shadow: none;
 }
@@ -475,6 +476,7 @@ button:not(#enterExhibition) { scale: var(--press-scale, 1); }
     body > .site-header { padding-top: 86px; }
 }
 .chapter-navigation :focus-visible { outline: 1px solid #c7d8ce; outline-offset: 2px; border-radius: 8px; }
+.chapter-navigation .chapter-home:focus-visible { border-radius: 50%; }
 .chapter-navigation-trigger { display: none; }
 .page-content { scroll-margin-top: 78px; }
 html.entrance-open #chapter-navigation,
