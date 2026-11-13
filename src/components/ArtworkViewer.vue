@@ -13,6 +13,7 @@ const viewport = ref(null);
 const closeButton = ref(null);
 const opened = ref(false);
 const zoom = ref(1);
+const pointerFocus = ref(true);
 const mobile = matchMedia('(max-width: 900px)');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let placeholder;
@@ -84,9 +85,10 @@ function fitReading() {
     paintZoom();
 }
 
-async function openViewer() {
+async function openViewer(fromKeyboard = false) {
     if (opened.value || !mobile.matches || props.currentChapter.value !== 'gallery') return;
     returnFocus = document.activeElement;
+    pointerFocus.value = !fromKeyboard;
     placeholder = document.createElement('div');
     const style = getComputedStyle(props.stage);
     Object.assign(placeholder.style, {
@@ -179,6 +181,7 @@ function endGesture(event) {
 }
 
 function handleKey(event) {
+    pointerFocus.value = false;
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
         event.preventDefault();
         event.stopPropagation();
@@ -211,7 +214,8 @@ defineExpose({ openViewer });
 </script>
 
 <template>
-    <dialog ref="dialog" class="artwork-viewer" aria-label="放大閱讀作品" @cancel.prevent="closeViewer" @keydown.capture="handleKey">
+    <dialog ref="dialog" class="artwork-viewer" :class="{ 'has-pointer-focus': pointerFocus }" aria-label="放大閱讀作品"
+        @pointerdown.capture="pointerFocus = true" @cancel.prevent="closeViewer" @keydown.capture="handleKey">
         <div class="artwork-viewer-shade" aria-hidden="true" @click="closeViewer"></div>
         <button ref="closeButton" class="artwork-viewer-close" type="button" aria-label="關閉放大作品" @click="closeViewer">×</button>
         <div ref="viewport" class="artwork-viewer-viewport"
@@ -283,4 +287,5 @@ defineExpose({ openViewer });
 .artwork-viewer-close { position: absolute; right: max(12px, env(safe-area-inset-right)); top: max(78px, calc(env(safe-area-inset-top) + 78px)); z-index: 2; font-size: 30px; }
 .artwork-viewer-controls { position: absolute; bottom: max(12px, env(safe-area-inset-bottom)); left: 12px; right: 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .artwork-viewer button:focus-visible { outline: 1px solid #e0eade; border-radius: 8px; }
+.artwork-viewer.has-pointer-focus button:focus-visible { outline: none; }
 </style>

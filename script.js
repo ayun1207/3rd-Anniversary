@@ -274,7 +274,7 @@ carouselViewport.addEventListener('click', event => {
 carouselViewport.addEventListener('keydown', event => {
     if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
-        artworkViewer.openViewer();
+        artworkViewer.openViewer(true);
     }
 });
 let currentSection = 'intro';
@@ -282,12 +282,17 @@ let requestedChapter = 'intro';
 let chapterTimeline;
 const chapterScroller = document.querySelector('main');
 const readingMedia = window.matchMedia('(max-width: 900px)');
-const readingSections = pageSections.filter(section => section.id === 'text-page' || section.id === 'planning-page');
+const readingGroups = [['text', 'planning'], ['messages', 'thanks']].map(names => names.map(name => document.getElementById(`${name}-page`)));
 let readingScrollTween;
 let readingProgressFrame = 0;
 
 function isReadingChapter(pageName) {
-    return readingMedia.matches && (pageName === 'text' || pageName === 'planning');
+    return readingSectionsFor(pageName).length > 0;
+}
+
+function readingSectionsFor(pageName) {
+    if (!readingMedia.matches) return [];
+    return readingGroups.find(group => group.some(section => section.id === `${pageName}-page`)) || [];
 }
 
 function readingScrollTop(section) {
@@ -313,6 +318,7 @@ function setCurrentSection(pageName, force = false) {
     if (!pageName) return;
     if (!force && pageName === currentSection && document.body.dataset.section === pageName) return;
     const reading = isReadingChapter(pageName);
+    const readingSections = readingSectionsFor(pageName);
     chapterScroller.classList.toggle('is-reading-flow', reading);
     currentSection = pageName;
     currentChapter.value = pageName;
@@ -349,7 +355,9 @@ function navigateToSection(pageName) {
         targetPage.setAttribute('tabindex', '-1');
         targetPage.focus({ preventScroll: true });
     };
-    if (isReadingChapter(currentSection) && isReadingChapter(pageName)) {
+    const outgoingGroup = readingSectionsFor(currentSection);
+    const incomingGroup = readingSectionsFor(pageName);
+    if (outgoingGroup.length && outgoingGroup === incomingGroup) {
         gsap.set(pageSections, { clearProps: 'opacity' });
         const finishScroll = () => {
             readingScrollTween = null;
@@ -366,8 +374,8 @@ function navigateToSection(pageName) {
         }
         return;
     }
-    const outgoing = isReadingChapter(currentSection) ? readingSections : document.getElementById(`${currentSection}-page`);
-    const incoming = isReadingChapter(pageName) ? readingSections : targetPage;
+    const outgoing = outgoingGroup.length ? outgoingGroup : document.getElementById(`${currentSection}-page`);
+    const incoming = incomingGroup.length ? incomingGroup : targetPage;
     const commit = () => {
         setCurrentSection(pageName);
         fitCurrentChapter();
@@ -400,6 +408,7 @@ function navigateToSection(pageName) {
 function fitCurrentChapter() {
     chapterFitFrame = 0;
     if (isReadingChapter(currentSection)) {
+        const readingSections = readingSectionsFor(currentSection);
         readingSections.forEach(section => section.querySelector('.chapter-page-fit').style.removeProperty('--chapter-fit-scale'));
         const [first, last] = readingSections.map(section => section.querySelector('.chapter-page-fit').offsetHeight);
         chapterScroller.style.setProperty('--reading-start-space', `${Math.max(24, Math.min(64, (chapterScroller.clientHeight - first) / 6))}px`);
@@ -430,10 +439,10 @@ function queueReadingProgress() {
     readingProgressFrame = requestAnimationFrame(() => {
         readingProgressFrame = 0;
         if (!isReadingChapter(currentSection) || chapterTimeline) return;
-        const text = document.getElementById('text-page');
-        const planning = document.getElementById('planning-page');
-        const switchPosition = (readingScrollTop(text) + readingScrollTop(planning)) / 2;
-        const pageName = chapterScroller.scrollTop >= switchPosition ? 'planning' : 'text';
+        const [first, last] = readingSectionsFor(currentSection);
+        const switchPosition = (readingScrollTop(first) + readingScrollTop(last)) / 2;
+        const section = chapterScroller.scrollTop >= switchPosition ? last : first;
+        const pageName = section.id.replace('-page', '');
         setCurrentSection(pageName);
         if (!readingScrollTween) requestedChapter = pageName;
     });

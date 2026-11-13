@@ -12,6 +12,7 @@ const chapters = [
     { id: 'thanks', label: '銘同錄' }
 ];
 const expanded = ref(false);
+const pointerFocus = ref(true);
 const root = ref(null);
 const trigger = ref(null);
 const links = ref(null);
@@ -47,7 +48,11 @@ function selectChapter(id) {
     props.navigate(id);
 }
 function closeOutside(event) {
+    pointerFocus.value = true;
     if (!root.value?.contains(event.target)) expanded.value = false;
+}
+function showKeyboardFocus() {
+    pointerFocus.value = false;
 }
 function closeWithEscape(event) {
     if (event.key !== 'Escape' || !expanded.value) return;
@@ -57,6 +62,7 @@ function closeWithEscape(event) {
 }
 onMounted(() => {
     document.addEventListener('pointerdown', closeOutside);
+    document.addEventListener('keydown', showKeyboardFocus, true);
     motionPreference.addEventListener('change', updateIndicator);
     resizeObserver = new ResizeObserver(updateIndicator);
     resizeObserver.observe(root.value);
@@ -65,6 +71,7 @@ onMounted(() => {
 });
 onBeforeUnmount(() => {
     document.removeEventListener('pointerdown', closeOutside);
+    document.removeEventListener('keydown', showKeyboardFocus, true);
     motionPreference.removeEventListener('change', updateIndicator);
     resizeObserver?.disconnect();
     indicatorTween?.kill();
@@ -72,7 +79,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <nav ref="root" class="chapter-navigation" :class="{ 'is-expanded': expanded }" aria-label="章節導覽" @keydown="closeWithEscape" @focusout="event => { if (!root.contains(event.relatedTarget)) expanded = false; }">
+    <nav ref="root" class="chapter-navigation" :class="{ 'is-expanded': expanded, 'has-pointer-focus': pointerFocus }" aria-label="章節導覽"
+        @keydown="closeWithEscape" @focusout="event => { if (!root.contains(event.relatedTarget)) expanded = false; }">
         <button id="chapterHome" class="menu-toggle chapter-home" type="button" aria-label="回到理時序" @click="selectChapter('intro')">
             <svg class="menu-emblem" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
                 <defs>
@@ -102,3 +110,7 @@ onBeforeUnmount(() => {
         </div>
     </nav>
 </template>
+
+<style>
+.chapter-navigation.has-pointer-focus :focus-visible { outline: none; }
+</style>

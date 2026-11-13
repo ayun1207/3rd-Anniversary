@@ -3,16 +3,17 @@ import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { gsap } from 'gsap';
 
 const props = defineProps({ currentChapter: { type: Object, required: true } });
-const lines = [
-    '願來年仍可共觀春華、同聽夏雨、並賞秋月、相守冬雪；',
-    '歲歲更迭，年年相續，縱時序流轉，亦願與君偕行。'
+const passages = [
+    ['願來年仍可共觀春華、同聽夏雨、', '並賞秋月、相守冬雪；'],
+    ['歲歲更迭，年年相續，', '縱時序流轉，亦願與君偕行。']
 ];
+const lines = passages.map(parts => parts.join(''));
 const trigger = ref(null);
 const gem = ref(null);
 const dialog = ref(null);
 const shade = ref(null);
 const panel = ref(null);
-const closeButton = ref(null);
+const chapterScroller = document.querySelector('main');
 const opened = ref(false);
 const closing = ref(false);
 const gemPosition = ref(null);
@@ -47,6 +48,7 @@ function positionGem() {
 
 function queueGemPosition() {
     cancelAnimationFrame(positionFrame);
+    if (props.currentChapter.value !== 'thanks') return;
     positionFrame = requestAnimationFrame(() => {
         positionFrame = requestAnimationFrame(positionGem);
     });
@@ -69,14 +71,6 @@ function completeWriting() {
     writingAnimation?.progress(1);
 }
 
-function keepFocusInside(event) {
-    const buttons = Array.from(panel.value.querySelectorAll('button'));
-    const index = buttons.indexOf(document.activeElement);
-    const nextIndex = (index + (event.shiftKey ? -1 : 1) + buttons.length) % buttons.length;
-    event.preventDefault();
-    buttons[nextIndex].focus({ preventScroll: true });
-}
-
 async function openEpilogue() {
     if (opened.value || props.currentChapter.value !== 'thanks') return;
     opened.value = true;
@@ -91,7 +85,7 @@ async function openEpilogue() {
     if (motionPreference.matches) {
         gsap.set([shade.value, panel.value, ...characters], { opacity: 1 });
         gsap.set(panel.value, { scale: 1 });
-        closeButton.value.focus({ preventScroll: true });
+        panel.value.focus({ preventScroll: true });
         return;
     }
     gsap.set(characters, { opacity: 0 });
@@ -117,7 +111,7 @@ async function openEpilogue() {
         }, position);
         position += interval + punctuationPause;
     });
-    closeButton.value.focus({ preventScroll: true });
+    panel.value.focus({ preventScroll: true });
 }
 
 function finishClosing() {
@@ -161,6 +155,7 @@ onMounted(() => {
     frameObserver = new ResizeObserver(queueGemPosition);
     if (frame) frameObserver.observe(frame);
     window.addEventListener('resize', queueGemPosition);
+    chapterScroller.addEventListener('scroll', queueGemPosition, { passive: true });
     document.addEventListener('visibilitychange', updateGemMotion);
 });
 motionPreference.addEventListener('change', updateMotionPreference);
@@ -168,6 +163,7 @@ onBeforeUnmount(() => {
     cancelAnimationFrame(positionFrame);
     frameObserver?.disconnect();
     window.removeEventListener('resize', queueGemPosition);
+    chapterScroller.removeEventListener('scroll', queueGemPosition);
     gemAnimation?.kill();
     openingAnimation?.kill();
     writingAnimation?.kill();
@@ -189,15 +185,16 @@ onBeforeUnmount(() => {
         </span>
     </button>
     <dialog ref="dialog" class="epilogue-dialog" aria-labelledby="epilogueTitle" aria-describedby="epilogueDescription"
-        @cancel.prevent="closeEpilogue()" @keydown.tab="keepFocusInside">
+        @cancel.prevent="closeEpilogue()" @keydown.tab.prevent>
         <div ref="shade" class="epilogue-shade" aria-hidden="true" @click="closeEpilogue()"></div>
-        <section ref="panel" class="epilogue-panel">
+        <section ref="panel" class="epilogue-panel" tabindex="-1">
             <h2 id="epilogueTitle" class="epilogue-accessible">結語</h2>
             <p id="epilogueDescription" class="epilogue-accessible">{{ lines.join('') }}</p>
-            <button ref="closeButton" type="button" class="epilogue-close" aria-label="關閉結語" @click="closeEpilogue()">×</button>
             <p class="epilogue-writing" aria-hidden="true">
-                <span v-for="(line, lineIndex) in lines" :key="lineIndex" class="epilogue-line" aria-hidden="true">
-                    <span v-for="(character, index) in Array.from(line)" :key="index" class="epilogue-character">{{ character }}</span>
+                <span v-for="(parts, lineIndex) in passages" :key="lineIndex" class="epilogue-line" aria-hidden="true">
+                    <span v-for="(part, partIndex) in parts" :key="partIndex" class="epilogue-segment">
+                        <span v-for="(character, index) in Array.from(part)" :key="index" class="epilogue-character">{{ character }}</span>
+                    </span>
                 </span>
             </p>
         </section>
@@ -339,23 +336,7 @@ onBeforeUnmount(() => {
     font-family: var(--artwork-font) !important;
 }
 .epilogue-character { opacity: 0; }
-.epilogue-close {
-    position: absolute;
-    top: 14px;
-    right: 16px;
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: #e4ece3;
-    font: inherit;
-    font-size: 28px;
-    cursor: pointer;
-}
-.epilogue-close:focus-visible { outline: 1px solid #e4ece3; outline-offset: 5px; border-radius: 6px; }
+.epilogue-panel:focus { outline: none; }
 .epilogue-accessible {
     position: absolute;
     width: 1px;
@@ -371,5 +352,6 @@ onBeforeUnmount(() => {
     .epilogue-panel::before { border-radius: 18px; }
     .epilogue-writing { font-size: clamp(20px, 5.6vw, 26px); line-height: 1.9; letter-spacing: 0.03em; }
     .epilogue-line + .epilogue-line { margin-top: 0.7em; }
+    .epilogue-segment { display: block; white-space: nowrap; }
 }
 </style>

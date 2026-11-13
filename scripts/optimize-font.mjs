@@ -34,7 +34,7 @@ const entrancePromptText = html
   .match(/<span class="entrance-prompt">([\s\S]*?)<\/span>/)?.[1]
   ?.replace(/<[^>]+>/g, ' ') ?? ''
 const epilogueSource = await readFile(resolve('src/components/EpilogueGem.vue'), 'utf8')
-const epilogueLines = epilogueSource.match(/const lines = \[([\s\S]*?)\]/)?.[1] ?? ''
+const epilogueLines = epilogueSource.match(/const (?:passages|lines) = \[([\s\S]*?)\r?\n\];?/)?.[1] ?? ''
 const artworkText = `${artworkCaptions}\n${entrancePromptText}\n${epilogueLines}`
 const artworkCharacters = [...new Set(artworkText)].join('')
 const artworkSourceFont = resolve('fonts/ChenYuluoyan-2.0-Thin.ttf')

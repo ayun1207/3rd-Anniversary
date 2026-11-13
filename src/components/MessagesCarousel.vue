@@ -25,6 +25,10 @@ const preparedImages = new Map();
 let preloadTimer;
 let preloadVersion = 0;
 
+function isReadingMessages() {
+    return props.currentChapter.value === 'messages' || (mobile.value && props.currentChapter.value === 'thanks');
+}
+
 function prepareImage(src, srcset, priority = 'auto') {
     const key = srcset ? `${srcset}:${innerWidth}:${devicePixelRatio}` : src;
     if (!preparedImages.has(key)) {
@@ -119,7 +123,7 @@ async function openNote(note, event) {
     selectedNote.value = { ...note, displaySrc: preparedImages.get(note.src)?.ready ? note.src : note.small };
     const prepared = prepareImage(note.src, undefined, 'high');
     await nextTick();
-    if (request !== noteVersion || !mobile.value || props.currentChapter.value !== 'messages') return;
+    if (request !== noteVersion || !mobile.value || !isReadingMessages()) return;
     dialog.value.showModal();
     dialog.value.focus({ preventScroll: true });
     dialogTween?.kill();
@@ -137,7 +141,7 @@ function closeNote() {
     if (!dialog.value?.open) return;
     dialog.value.close();
     selectedNote.value = null;
-    if (props.currentChapter.value === 'messages') returnFocus?.focus({ preventScroll: true });
+    if (isReadingMessages()) returnFocus?.focus({ preventScroll: true });
 }
 
 function startSwipe(event) {
@@ -167,8 +171,8 @@ function changeMotion() {
         dialogTween?.progress(1);
     }
 }
-watch(() => props.currentChapter.value, chapter => {
-    if (chapter !== 'messages') {
+watch(() => props.currentChapter.value, () => {
+    if (!isReadingMessages()) {
         closeNote();
         finishPage();
     }
