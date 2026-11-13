@@ -4,6 +4,7 @@ import ChapterNavigation from './src/components/ChapterNavigation.vue';
 import ChapterBackground from './src/components/ChapterBackground.vue';
 import EpilogueGem from './src/components/EpilogueGem.vue';
 import ArtworkViewer from './src/components/ArtworkViewer.vue';
+import MessagesCarousel from './src/components/MessagesCarousel.vue';
 import { gsap } from 'gsap';
 
 // 單次過場依真實經過時間收束，避免低幀率或分頁節流延長入口等待。
@@ -683,100 +684,7 @@ if (solarCycle && 'IntersectionObserver' in window) {
         }
     });
 
-    const messagesTrack = document.getElementById('messagesTrack');
-const messagesViewport = document.getElementById('messagesViewport');
-const messagesPrev = document.getElementById('messagesPrev');
-const messagesNext = document.getElementById('messagesNext');
-const messagesStatus = document.getElementById('messagesStatus');
-const messageSheets = messagesTrack ? Array.from(messagesTrack.querySelectorAll('.message-sheet')) : [];
-const messageGroups = [];
-let currentMessageGroup = 0;
-    let isMessagesAnimating = false;
-    let messageGroupVersion = 0;
-let messageGroupAnimations = [];
-let messagesTouchStartX = 0;
-let messagesTouchStartY = 0;
-
-if (messagesTrack) {
-    messageSheets.forEach(sheet => {
-        const group = document.createElement('div');
-        group.className = 'message-group';
-        group.dataset.count = '1';
-        group.setAttribute('role', 'group');
-        group.append(sheet);
-        messagesTrack.append(group);
-        messageGroups.push(group);
-    });
-}
-
-    function finishMessageGroup(targetIndex = currentMessageGroup) {
-        messageGroupVersion += 1;
-    messageGroupAnimations.forEach(animation => animation.kill());
-    messageGroupAnimations = [];
-    currentMessageGroup = targetIndex;
-    messageGroups.forEach((group, index) => {
-        const active = index === targetIndex;
-        group.classList.toggle('is-current', active);
-        group.setAttribute('aria-hidden', String(!active));
-        group.inert = !active;
-        gsap.set(group, { clearProps: 'transform' });
-    });
-    if (messagesStatus) {
-        messagesStatus.textContent = `第 ${targetIndex + 1} 頁，共 ${messageGroups.length} 頁`;
-    }
-    isMessagesAnimating = false;
-}
-
-async function moveMessageGroup(direction) {
-    if (messageGroups.length <= 1 || isMessagesAnimating) return;
-    const outgoingIndex = currentMessageGroup;
-    const incomingIndex = (outgoingIndex + direction + messageGroups.length) % messageGroups.length;
-    const outgoing = messageGroups[outgoingIndex];
-    const incoming = messageGroups[incomingIndex];
-
-    if (reducedMotion.matches) {
-        finishMessageGroup(incomingIndex);
-        return;
-    }
-
-    isMessagesAnimating = true;
-    const transitionVersion = ++messageGroupVersion;
-    const travel = direction > 0 ? 104 : -104;
-    incoming.classList.add('is-current');
-    incoming.removeAttribute('aria-hidden');
-    incoming.inert = false;
-    try {
-        await new Promise(resolve => {
-            const timeline = gsap.timeline({ onComplete: () => resolve(), onInterrupt: () => resolve() });
-            messageGroupAnimations = [timeline];
-            timeline
-                .fromTo(outgoing, { xPercent: 0 }, { xPercent: -travel, duration: 0.68, ease: 'power2.inOut' }, 0)
-                .fromTo(incoming, { xPercent: travel }, { xPercent: 0, duration: 0.68, ease: 'power2.inOut' }, 0);
-        });
-    } finally {
-        if (transitionVersion === messageGroupVersion) finishMessageGroup(incomingIndex);
-    }
-}
-
-if (messagesPrev && messagesNext && messagesViewport) {
-    const hasMultipleGroups = messageGroups.length > 1;
-    messagesPrev.hidden = !hasMultipleGroups;
-    messagesNext.hidden = !hasMultipleGroups;
-    messagesPrev.addEventListener('click', () => moveMessageGroup(-1));
-    messagesNext.addEventListener('click', () => moveMessageGroup(1));
-    messagesViewport.addEventListener('touchstart', event => {
-        messagesTouchStartX = event.changedTouches[0].clientX;
-        messagesTouchStartY = event.changedTouches[0].clientY;
-    }, { passive: true });
-    messagesViewport.addEventListener('touchend', event => {
-        const deltaX = event.changedTouches[0].clientX - messagesTouchStartX;
-        const deltaY = event.changedTouches[0].clientY - messagesTouchStartY;
-        if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY)) {
-            moveMessageGroup(deltaX < 0 ? 1 : -1);
-        }
-    }, { passive: true });
-    finishMessageGroup(0);
-}
+createApp(MessagesCarousel, { currentChapter }).mount('#messages-carousel-root');
 
 const rosterTrack = document.getElementById('commissionRoster');
 const rosterViewport = document.getElementById('rosterViewport');
@@ -851,7 +759,6 @@ if (rosterTrack && rosterViewport && rosterPrev && rosterNext) {
 }
 
 reducedMotion.addEventListener('change', () => {
-    if (isMessagesAnimating) finishMessageGroup(currentMessageGroup);
     if (reducedMotion.matches) {
         gsap.getTweensOf([document.documentElement, rosterTrack, galleryPage]).forEach(tween => tween.progress(1));
         document.querySelectorAll('button').forEach(button => {

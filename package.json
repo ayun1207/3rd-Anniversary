@@ -8,6 +8,7 @@
     "build": "vite build",
     "optimize:font": "node scripts/optimize-font.mjs",
     "optimize:images": "node scripts/optimize-images.mjs",
+    "optimize:message-notes": "node scripts/optimize-message-notes.mjs",
     "optimize:backgrounds": "node scripts/optimize-backgrounds.mjs",
     "validate": "node scripts/validate-content.mjs",
     "validate:release": "node scripts/validate-content.mjs --strict",

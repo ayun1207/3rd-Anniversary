@@ -49,6 +49,8 @@ cleanup／refactor 原則上只限本次修改涉及的區域。若發現問題�
 
 ## 已完成的第一階段
 
+- 寄墨箋輪播已完整移入 `MessagesCarousel.vue`，桌機整頁圖與手機獨立便條紙共用五頁資料，元件管理切頁、取消復原與單張 dialog。原生分組、輪播事件與狀態已由 `script.js` 移除，詳見 `messages.md`。
+
 - 新增 Vite、Vue 3 與 SFC 支援，production build 可完成。
 - `src/data/seasons.js` 集中 24 節氣名稱、短句與色調；`script.js` 的短句、色調與圖片初始化已改由這份資料衍生。
 - 圖片處理腳本會依 `artwork-originals/` 的實際檔案產生網站版 WebP 與 `src/data/artworks.js`，再由 `seasonsData` 合併作品路徑、尺寸與方向，避免 HTML、JavaScript 與素材資料各自維護一份清單。
