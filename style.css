@@ -449,7 +449,11 @@ button:not(#enterExhibition) { scale: var(--press-scale, 1); }
     background: transparent;
     box-shadow: none;
 }
-.chapter-navigation .chapter-home:hover { transform: none; }
+.chapter-navigation .chapter-home:hover {
+    transform: none;
+    background: transparent;
+    box-shadow: none;
+}
 .chapter-navigation .chapter-home:hover .menu-emblem { transform: rotate(10deg); }
 @media (min-width: 901px) {
     body > .site-header { padding-top: 86px; }
@@ -5987,14 +5991,8 @@ body.gallery-section-active .site-botanical {
     visibility: visible;
 }
 
-.entrance.is-transitioning {
-    background:
-        radial-gradient(30% 42% at 84% 48%, rgba(185, 204, 187, 0.14) 0%, rgba(162, 184, 166, 0.07) 38%, transparent 70%),
-        linear-gradient(118deg, #607565 0%, #687d6d 34%, #788e7d 61%, #849989 80%, #6d8574 100%);
-}
-
 .entrance.is-reveal-ready {
-    --entrance-reveal-radius: var(--entrance-reveal-start-radius, 96px);
+    --entrance-reveal-radius: -48px;
     -webkit-mask-image: radial-gradient(
         circle at var(--entrance-focus-x) var(--entrance-focus-y),
         transparent 0 var(--entrance-reveal-radius),
@@ -6010,31 +6008,17 @@ body.gallery-section-active .site-botanical {
     will-change: -webkit-mask-image, mask-image;
 }
 
-.entrance.is-reveal-ready.is-opening {
-    transition: --entrance-reveal-radius 1450ms cubic-bezier(0.45, 0, 0.55, 1);
-}
-
 .entrance-transition-dimmer {
     position: absolute;
     inset: 0;
     opacity: 0;
     background:
         linear-gradient(112deg, rgba(7, 15, 13, 0.42), rgba(15, 27, 22, 0.3) 62%, rgba(28, 40, 34, 0.24));
-    transition: opacity 360ms cubic-bezier(0.4, 0, 0.2, 1);
     contain: strict;
     will-change: opacity;
 }
 
-.entrance.is-transitioning .entrance-transition-dimmer {
-    opacity: 1;
-}
-
-.entrance.is-opening .entrance-transition-dimmer {
-    opacity: 0;
-}
-
 .entrance.is-opening {
-    --entrance-reveal-radius: 110vmax;
     box-shadow: none;
 }
 
@@ -6051,10 +6035,6 @@ body.gallery-section-active .site-botanical {
     position: relative;
     z-index: 5;
     border-color: transparent;
-    transform: scale(1.08);
-    transition:
-        opacity 900ms cubic-bezier(0.4, 0, 0.2, 1),
-        transform 680ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .entrance.is-transitioning .entrance-enter::before {
@@ -6070,21 +6050,6 @@ body.gallery-section-active .site-botanical {
     text-shadow:
         0 0 12px rgba(237, 246, 240, 0.58),
         0 0 28px rgba(198, 220, 204, 0.28);
-}
-
-.entrance.is-opening .entrance-enter {
-    opacity: 0;
-    transform: scale(1.22);
-}
-
-.entrance.is-transitioning::before,
-.entrance.is-transitioning::after {
-    transition: opacity 700ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.entrance.is-opening::before,
-.entrance.is-opening::after {
-    opacity: 0;
 }
 
 
@@ -6503,12 +6468,25 @@ html.entrance-open .solar-pivot {
 .entrance h1 {
     color: var(--time-ink-primary);
     text-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.16),
-        0 0 18px rgba(218, 235, 231, 0.12);
+        -1px -1px 0 rgba(255, 255, 243, 0.55),
+        0 1px 0 rgba(173, 195, 179, 0.7),
+        1px 2px 0 rgba(61, 88, 71, 0.55),
+        1px 3px 2px rgba(33, 53, 44, 0.4),
+        2px 9px 12px rgba(33, 53, 44, 0.3),
+        0 16px 24px rgba(33, 53, 44, 0.16);
 }
 
 .entrance-title-line {
     display: block;
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+    .entrance-title-line {
+        background: linear-gradient(165deg, #fffef2 0%, #f6faf2 35%, #cadbcf 72%, #e7f0e5 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
 }
 
 .entrance-title-line-lower {
@@ -6516,9 +6494,14 @@ html.entrance-open .solar-pivot {
 }
 
 #entranceDescription {
-    color: var(--time-ink-secondary);
+    color: #d9e3dd;
     margin-left: 1.35em;
     font-size: clamp(1.06rem, 1.4vw, 1.22rem);
+    text-shadow:
+        0 -1px 0 rgba(250, 255, 244, 0.32),
+        0 1px 0 rgba(61, 88, 71, 0.5),
+        1px 3px 3px rgba(33, 53, 44, 0.3),
+        0 7px 10px rgba(33, 53, 44, 0.25);
 }
 
 .entrance-enter {
@@ -6564,8 +6547,10 @@ html.entrance-open .solar-pivot {
     opacity: calc(0.84 + var(--proximity) * 0.16);
     transform: scale(calc(1 + var(--proximity) * 0.1));
     text-shadow:
-        0 0 10px rgba(217, 237, 232, 0.16),
-        0 1px rgba(255, 255, 255, 0.12);
+        0 -1px 1px rgba(250, 255, 244, 0.3),
+        0 2px 3px rgba(42, 62, 50, 0.22),
+        0 6px 10px rgba(33, 53, 44, 0.24),
+        0 0 12px rgba(217, 237, 232, 0.16);
 }
 
 .entrance-enter:focus-visible .entrance-prompt {
@@ -7215,8 +7200,9 @@ html.entrance-open main {
     box-shadow: 0 0 5px rgba(218, 233, 229, 0.64);
 }
 
-.solar-guide {
-    opacity: 0.82;
+.solar-guide,
+.solar-cycle.is-previewing .solar-guide {
+    opacity: 0.94;
 }
 
 .solar-guide::before {
@@ -7225,14 +7211,14 @@ html.entrance-open main {
     height: 15%;
     background: linear-gradient(
         to bottom,
-        rgba(247, 244, 226, 0.94),
-        color-mix(in srgb, var(--season-accent) 72%, #dce9e9),
-        color-mix(in srgb, var(--season-accent) 36%, transparent),
+        rgba(255, 253, 239, 1),
+        color-mix(in srgb, var(--season-accent) 48%, #f1f7f0),
+        color-mix(in srgb, var(--season-accent) 60%, transparent),
         transparent
     );
     box-shadow:
-        0 0 4px rgba(246, 244, 226, 0.72),
-        0 0 10px color-mix(in srgb, var(--season-accent) 48%, transparent);
+        0 0 4px rgba(250, 249, 233, 0.86),
+        0 0 10px color-mix(in srgb, var(--season-accent) 58%, transparent);
 }
 
 .solar-leaf-marker::before {

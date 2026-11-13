@@ -903,7 +903,12 @@ async function enterExhibition(withMusic = true) {
             const focusY = Math.max(0, Math.min(innerHeight, bounds.top + bounds.height / 2));
             entrance.style.setProperty('--entrance-focus-x', `${focusX}px`);
             entrance.style.setProperty('--entrance-focus-y', `${focusY}px`);
-            entrance.style.setProperty('--entrance-reveal-start-radius', `${Math.hypot(bounds.width, bounds.height) / 2 + 28}px`);
+            const revealRadius = Math.hypot(Math.max(focusX, innerWidth - focusX), Math.max(focusY, innerHeight - focusY)) + 48;
+            const ringBounds = solarCycle.getBoundingClientRect();
+            const ringVisibleRadius = Math.hypot(ringBounds.left + ringBounds.width / 2 - focusX,
+                ringBounds.top + ringBounds.height / 2 - focusY) + ringBounds.width * 0.2;
+            // 保留封面原有底色，根節點交接後也不換成另一張實色幕。
+            const coverBackground = getComputedStyle(document.querySelector('.site-paper-background')).backgroundImage;
             document.documentElement.classList.add('entrance-transitioning');
             entrance.classList.add('is-transitioning');
 
@@ -916,31 +921,37 @@ async function enterExhibition(withMusic = true) {
 
             await new Promise(resolve => {
                 entranceContext = gsap.context(() => {
+                    gsap.set(entrance, { backgroundImage: coverBackground });
+                    gsap.killTweensOf(entranceTrigger, '--proximity');
+                    const prompt = entranceTrigger.querySelector('.entrance-prompt');
+                    const dimmer = entrance.querySelector('.entrance-transition-dimmer');
                     entranceTimeline = gsap.timeline({ onComplete: () => resolve(), onInterrupt: () => resolve() });
-                    entranceTimeline.to(fadingElements, { opacity: 0, y: -8, duration: 0.65, ease: 'power1.inOut' }, 0);
+                    entranceTimeline.to(fadingElements, { opacity: 0, duration: 1.05, ease: 'sine.inOut' }, 0);
                     if (entranceArt) {
-                        entranceTimeline.to(entranceArt, { opacity: 0, duration: 0.7, ease: 'power1.inOut' }, 0);
+                        entranceTimeline.to(entranceArt, { opacity: 0, duration: 1.05, ease: 'sine.inOut' }, 0);
                     }
                     entranceTimeline
-                        .fromTo(entranceTrigger, { opacity: 1, scale: 1.08 }, { opacity: 0, scale: 1.16, duration: 0.21, ease: 'power1.inOut', immediateRender: false }, 0.3)
+                        .to(prompt, { scale: 1.38, duration: 0.9, ease: 'sine.inOut' }, 0)
+                        .to(dimmer, { opacity: 0.65, duration: 0.95, ease: 'sine.inOut' }, 0)
+                        .to(entranceTrigger, { opacity: 0, duration: 0.4, ease: 'sine.inOut' }, 0.75)
                         .call(() => {
                             entrance.classList.add('is-reveal-ready');
-                            getComputedStyle(entrance).getPropertyValue('--entrance-reveal-radius');
-                        }, [], 0.51)
-                        .call(() => {
                             entrance.classList.add('is-opening');
                             document.body.classList.remove('entrance-open');
                             document.documentElement.classList.remove('entrance-open');
-                        }, [], 0.53)
-                        .call(() => {
-                            // 節氣動畫持續於進站後，避免被入口 context 的清理一併復原。
-                            entranceContext.ignore(() => startSolarAutoplay(true));
-                            solarStarted = true;
-                        }, [], 1.18)
-                        .fromTo(entrance, { '--entrance-reveal-radius': `${Math.hypot(bounds.width, bounds.height) / 2 + 28}px` }, {
-                            '--entrance-reveal-radius': `${Math.max(innerWidth, innerHeight) * 1.1}px`,
-                            duration: 1.45, ease: 'sine.inOut', immediateRender: false
-                        }, 0.53);
+                        }, [], 1.15)
+                        .fromTo(entrance, { '--entrance-reveal-radius': '-48px' }, {
+                            '--entrance-reveal-radius': `${revealRadius}px`,
+                            duration: 1.65, ease: 'sine.inOut', immediateRender: false,
+                            onUpdate: () => {
+                                const radius = parseFloat(entrance.style.getPropertyValue('--entrance-reveal-radius'));
+                                if (!solarStarted && radius >= ringVisibleRadius) {
+                                    // 真的露出節氣環後才啟動，且不受入口 context 清理影響。
+                                    solarStarted = true;
+                                    entranceContext.ignore(() => startSolarAutoplay(true));
+                                }
+                            }
+                        }, 1.15);
                 });
             });
         }
@@ -951,7 +962,7 @@ async function enterExhibition(withMusic = true) {
         document.body.classList.remove('entrance-open');
         document.documentElement.classList.remove('entrance-open', 'entrance-transitioning');
         entrance.classList.remove('is-transitioning', 'is-reveal-ready', 'is-opening');
-        ['--entrance-focus-x', '--entrance-focus-y', '--entrance-reveal-start-radius'].forEach(name => entrance.style.removeProperty(name));
+        ['--entrance-focus-x', '--entrance-focus-y'].forEach(name => entrance.style.removeProperty(name));
         entranceContext?.revert();
         if (!solarStarted) startSolarAutoplay(true);
         document.getElementById('chapterHome').focus({ preventScroll: true });
