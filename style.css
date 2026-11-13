@@ -26,6 +26,7 @@
 :root {
     --site-font: "LXGW WenKai TC", "Anniversary Rare Glyphs", serif;
     --artwork-font: "ChenYuluoyan Thin", var(--site-font);
+    --artwork-text-scale: 1.08;
     --paper-base: #d8cfc3;
     --paper-light: #e5ddd2;
     --paper-depth: #c8bcae;
@@ -3356,7 +3357,6 @@ html.has-content-reveal .content-reveal.is-content-visible {
 }
 
 #gallery-page {
-    --gallery-tone: #f7f4ef;
     position: relative;
     padding: clamp(72px, 8vw, 118px) 0 clamp(92px, 10vw, 150px);
     border-top: 0;
@@ -3431,32 +3431,9 @@ html.has-content-reveal .content-reveal.is-content-visible {
     margin: 0 auto;
     border: 0;
     border-radius: clamp(18px, 2vw, 30px);
-    background-color: var(--gallery-tone);
-    background-image:
-        linear-gradient(112deg, rgba(255, 255, 255, 0.62), transparent 38%),
-        radial-gradient(ellipse at 82% 18%, rgba(255, 253, 248, 0.62), transparent 40%),
-        repeating-linear-gradient(90deg, rgba(117, 105, 81, 0.018) 0 1px, transparent 1px 7px);
-    box-shadow:
-        0 28px 72px rgba(141, 183, 221, 0.085),
-        0 14px 44px rgba(243, 164, 176, 0.05),
-        inset 0 0 0 1px rgba(117, 105, 81, 0.2),
-        inset 0 0 0 8px rgba(255, 253, 248, 0.16);
+    background: transparent;
+    box-shadow: none;
     overflow: hidden;
-    transition: background-color 800ms ease;
-}
-
-.gallery-stage::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    left: 7%;
-    right: 7%;
-    bottom: 8%;
-    height: 23%;
-    border-bottom: 1px solid rgba(117, 105, 81, 0.12);
-    border-radius: 0 0 50% 50%;
-    opacity: 0.75;
-    pointer-events: none;
 }
 
 .gallery-stage .carousel-viewport {
@@ -3512,7 +3489,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     padding: 0;
     overflow: hidden;
     border-radius: inherit;
-    background: #101b2a;
+    background: transparent;
 }
 
 .gallery-stage .carousel-viewport .slide-item.has-artwork .slide-image {
@@ -3558,7 +3535,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     margin: 0 0 2.5%;
     color: #1b241f;
     font-family: var(--artwork-font) !important;
-    font-size: clamp(0.65rem, 1.82vw, 1.64rem);
+    font-size: calc(clamp(0.65rem, 1.82vw, 1.64rem) * var(--artwork-text-scale));
     font-weight: 300;
     font-synthesis: none;
     line-height: 1.4;
@@ -3569,7 +3546,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 .gallery-stage .carousel-viewport .slide-item.has-artwork .caption-description {
     color: #1e2823;
     font-family: var(--artwork-font) !important;
-    font-size: clamp(0.58rem, 1.7vw, 1.5rem);
+    font-size: calc(clamp(0.58rem, 1.7vw, 1.5rem) * var(--artwork-text-scale));
     font-weight: 300;
     font-synthesis: none;
     line-height: 1.48;
@@ -3589,7 +3566,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     top: clamp(6px, 0.55vw, 8px);
     left: -1.35%;
     text-align: center;
-    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
+    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3623,7 +3600,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="04"] .caption-description {
     position: relative;
     top: clamp(2px, 0.3vw, 4px);
-    font-size: clamp(0.51rem, 1.57vw, 1.38rem);
+    font-size: calc(clamp(0.51rem, 1.57vw, 1.38rem) * var(--artwork-text-scale));
     line-height: 1.25;
     letter-spacing: 0.006em;
     text-align: left;
@@ -3655,7 +3632,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(6px, 0.55vw, 8px);
     text-align: center;
-    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
+    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3668,7 +3645,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="07"] .caption-description {
     text-align: center;
-    font-size: clamp(0.51rem, 1.54vw, 1.4rem);
+    font-size: calc(clamp(0.51rem, 1.54vw, 1.4rem) * var(--artwork-text-scale));
     letter-spacing: 0.01em;
 }
 
@@ -3680,7 +3657,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="08"] .caption-description {
     text-align: center;
-    font-size: clamp(0.51rem, 1.54vw, 1.4rem);
+    font-size: calc(clamp(0.51rem, 1.54vw, 1.4rem) * var(--artwork-text-scale));
     letter-spacing: 0.01em;
 }
 
@@ -3692,7 +3669,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="10"] .caption-description {
     text-align: center;
-    font-size: clamp(0.5rem, 1.5vw, 1.36rem);
+    font-size: calc(clamp(0.5rem, 1.5vw, 1.36rem) * var(--artwork-text-scale));
     letter-spacing: 0.006em;
 }
 
@@ -3707,7 +3684,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     top: clamp(6px, 0.55vw, 8px);
     left: -3.3%;
     text-align: center;
-    font-size: clamp(0.51rem, 1.55vw, 1.41rem);
+    font-size: calc(clamp(0.51rem, 1.55vw, 1.41rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3723,7 +3700,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     top: clamp(4px, 0.45vw, 6px);
     left: 2.7%;
     text-align: center;
-    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
+    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.008em;
 }
@@ -3736,7 +3713,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="13"] .caption-description {
     text-align: center;
-    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
+    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
     letter-spacing: 0.008em;
 }
 
@@ -3750,7 +3727,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
+    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3765,7 +3742,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
+    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3780,7 +3757,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
+    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3793,7 +3770,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="18"] .caption-description {
     text-align: center;
-    font-size: clamp(0.51rem, 1.53vw, 1.38rem);
+    font-size: calc(clamp(0.51rem, 1.53vw, 1.38rem) * var(--artwork-text-scale));
     letter-spacing: 0.006em;
 }
 
@@ -3807,7 +3784,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
+    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3822,7 +3799,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
+    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3837,7 +3814,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(3px, 0.35vw, 5px);
     text-align: center;
-    font-size: clamp(0.52rem, 1.57vw, 1.42rem);
+    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3852,7 +3829,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     top: clamp(1px, 0.2vw, 3px);
     text-align: center;
-    font-size: clamp(0.52rem, 1.58vw, 1.42rem);
+    font-size: calc(clamp(0.52rem, 1.58vw, 1.42rem) * var(--artwork-text-scale));
     line-height: 1.28;
     letter-spacing: 0.004em;
 }
@@ -3865,7 +3842,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="24"] .caption-description {
     text-align: center;
-    font-size: clamp(0.5rem, 1.5vw, 1.36rem);
+    font-size: calc(clamp(0.5rem, 1.5vw, 1.36rem) * var(--artwork-text-scale));
     letter-spacing: 0.004em;
 }
 
@@ -7174,7 +7151,7 @@ html.entrance-open main {
 
 .gallery-scroll-progress {
     color: var(--time-ink-secondary);
-    background: rgba(17, 31, 47, 0.82);
+    background: linear-gradient(155deg, var(--chapter-glass-top), var(--chapter-glass-bottom));
     border-color: rgba(181, 204, 210, 0.22);
     box-shadow: inset 0 1px rgba(224, 236, 237, 0.1);
 }
@@ -7309,6 +7286,7 @@ html.entrance-open main {
 }
 
 #gallery-page .gallery-section-heading h2 {
+    color: #1e2823;
     font-size: clamp(2.35rem, 4vw, 3.5625rem);
     line-height: 1.35;
     letter-spacing: 0.16em;
@@ -7325,10 +7303,33 @@ html.entrance-open main {
     width: clamp(58px, 4.6vw, 68px);
     height: clamp(58px, 4.6vw, 68px);
     flex-basis: clamp(58px, 4.6vw, 68px);
+    border: 1.5px solid rgba(75, 113, 104, 0.48);
+    background: radial-gradient(ellipse at 30% 24%, rgba(244, 252, 250, 0.2), transparent 68%);
+    box-shadow:
+        inset 0 1px 1px rgba(250, 255, 253, 0.9),
+        inset 0 -1px 2px rgba(126, 170, 190, 0.45),
+        0 0 0 1px rgba(226, 241, 245, 0.55),
+        0 0 7px rgba(190, 220, 235, 0.4);
+    filter: none;
+}
+
+#gallery-page .gallery-progress-orbit::before {
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.86), transparent 34% 68%, rgba(239, 250, 255, 0.62)),
+        conic-gradient(from 25deg, #8db7dd, #e4f1fa 14%, #fcc26f 36%, #f3a4b0 62%, #b4d4e7 83%, #8db7dd);
+}
+
+#gallery-page .gallery-progress-orbit::after {
+    background:
+        linear-gradient(145deg, rgba(252, 255, 254, 0.8), transparent 30% 72%, rgba(141, 183, 221, 0.4)),
+        conic-gradient(from 25deg, #618d9e, #b7d6e6 18%, #c69f64 40%, #be8799 65%, #8db7dd 85%, #618d9e);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2.4px), #000 0);
+    mask: radial-gradient(farthest-side, transparent calc(100% - 2.4px), #000 0);
 }
 
 #gallery-page .gallery-section-heading .gallery-progress-term {
-    font-size: 0.86rem;
+    color: #1e2823;
+    font-size: 1.13rem;
 }
 
 #gallery-page .gallery-stage .arrow-btn {
@@ -7584,6 +7585,8 @@ html.has-content-reveal .content-reveal {
 }
 
 .artist-profile-panel {
+    position: relative;
+    top: clamp(-18px, -1.2vw, -10px);
     grid-column: 1 / -1;
     width: 100%;
     min-width: 0;
@@ -7676,7 +7679,7 @@ main > .page-content:focus { outline: none; }
 html, body { height: 100%; overflow: hidden; }
 body > main {
     position: fixed;
-    inset: 90px 0 0 96px;
+    inset: 90px 0 0;
     width: auto;
     min-height: 0;
     padding: 0;
@@ -7720,6 +7723,8 @@ main > .page-content.active {
 
 #messages-page .messages-carousel {
     padding-inline: clamp(38px, 5vw, 64px);
+    top: clamp(-16px, -1.1vw, -8px);
+    margin-bottom: clamp(-16px, -1.1vw, -8px);
 }
 
 #messages-page .messages-viewport {
@@ -7779,7 +7784,7 @@ main > .page-content.active {
     border: 0;
     border-radius: 0;
     background: transparent;
-    color: rgba(205, 224, 228, 0.76);
+    color: var(--chapter-glass-ink);
     box-shadow: none;
     filter:
         drop-shadow(0 0 4px rgba(255, 255, 255, 0.48))
@@ -7800,7 +7805,7 @@ main > .page-content.active {
 #messages-page .messages-arrow:focus-visible {
     border: 0;
     background: transparent;
-    color: rgba(228, 240, 241, 0.96);
+    color: var(--chapter-glass-ink);
     filter:
         drop-shadow(0 0 5px rgba(255, 255, 255, 0.66))
         drop-shadow(0 0 12px rgba(141, 183, 221, 0.48));
@@ -7814,7 +7819,7 @@ main > .page-content.active {
     right: 0.45rem !important;
 }
 
-/* 桌機觀芳華與寄墨箋沿用籌花事的框高，標題組維持既有間距。 */
+/* 桌機以籌花事框高為基準，寄墨箋另收短底部留白。 */
 @media (min-width: 901px) {
     main {
         --planning-frame-height: calc(
@@ -7835,6 +7840,10 @@ main > .page-content.active {
     }
 
     #gallery-page .gallery-sticky-shell { padding-bottom: 24px; }
+    #messages-page .messages-container {
+        height: calc(var(--planning-frame-height) - 32px);
+        translate: 0 -16px;
+    }
     #gallery-page .gallery-section-heading,
     #messages-page .messages-heading { flex: 0 0 auto; }
 
@@ -7858,6 +7867,7 @@ main > .page-content.active {
         flex: 1;
         min-height: 0;
         container-type: size;
+        margin-bottom: 0;
     }
     #messages-page .messages-viewport,
     #messages-page .messages-track,
@@ -7901,5 +7911,134 @@ main > .page-content.active {
     #messages-page .messages-arrow svg {
         width: 24px;
         height: 40px;
+    }
+}
+
+/* 三組章節底圖：色彩淡化獨立於圖片交替，玻璃位於前景。 */
+:root {
+    --chapter-background-base: #d5dcd7;
+    --chapter-background-art-opacity: 0.42;
+    --chapter-background-veil: rgba(232, 237, 230, 0.26);
+    --chapter-glass-top: rgba(120, 158, 132, 0.72);
+    --chapter-glass-bottom: rgba(88, 131, 105, 0.76);
+    --chapter-glass-ink: #183729;
+}
+
+#text-page,
+#planning-page {
+    --chapter-glass-top: rgba(206, 231, 246, 0.62);
+    --chapter-glass-bottom: rgba(206, 231, 246, 0.66);
+}
+
+#messages-page,
+#thanks-page {
+    --chapter-glass-top: rgba(217, 217, 217, 0.57);
+    --chapter-glass-bottom: rgba(217, 217, 217, 0.61);
+}
+
+html:not(.entrance-open):not(.entrance-pending),
+html:not(.entrance-open):not(.entrance-pending) body {
+    background: var(--chapter-background-base);
+}
+
+html:not(.entrance-open):not(.entrance-pending) .site-paper-background {
+    display: none;
+}
+
+.chapter-background {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: var(--chapter-background-base);
+}
+
+html.entrance-open .chapter-background,
+html.entrance-pending .chapter-background {
+    visibility: hidden;
+}
+
+.chapter-background-art {
+    position: absolute;
+    inset: 0;
+    opacity: var(--chapter-background-art-opacity);
+}
+
+.chapter-background-layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+}
+
+.chapter-background-layer img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.chapter-background::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--chapter-background-veil);
+}
+
+/* 舊左列只保留功能節點，上方 Vue 導覽維持獨立。 */
+.site-header {
+    display: none !important;
+}
+
+.intro-layout::before,
+#gallery-page .gallery-sticky-shell,
+:is(#text-page, #planning-page, #thanks-page) .text-container,
+.messages-container::before {
+    border-color: rgba(232, 244, 243, 0.52);
+    background:
+        linear-gradient(128deg, rgba(235, 248, 243, 0.14), transparent 34% 74%, rgba(181, 213, 222, 0.08)),
+        linear-gradient(155deg, var(--chapter-glass-top), var(--chapter-glass-bottom));
+    box-shadow:
+        0 16px 42px rgba(38, 63, 68, 0.18),
+        0 3px 10px rgba(38, 63, 68, 0.1),
+        inset 0 1px 0 rgba(251, 255, 253, 0.5),
+        inset 1px 0 0 rgba(231, 246, 247, 0.2),
+        inset 0 -1px 0 rgba(182, 211, 218, 0.2);
+    /* 保持透視一致，避免章節透明度動畫結束時重新啟用背景模糊。 */
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+main .intro-copy h1,
+main .intro-copy p,
+main .gallery-section-heading h1,
+#artistTitle,
+#planningTitle,
+#messagesTitle,
+#thanksTitle,
+main .section-label,
+main .section-label > span:not(.section-label-line),
+.solar-cycle .solar-term,
+.solar-cycle .solar-term.is-previewing {
+    color: var(--chapter-glass-ink);
+    text-shadow: none;
+}
+
+main .section-label-line {
+    background: rgba(52, 82, 65, 0.28);
+}
+
+@media (max-width: 768px) {
+    .intro-layout::before,
+    #gallery-page .gallery-sticky-shell,
+    :is(#text-page, #planning-page, #thanks-page) .text-container,
+    .messages-container::before {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        box-shadow:
+            0 8px 22px rgba(38, 63, 68, 0.16),
+            inset 0 1px 0 rgba(251, 255, 253, 0.46),
+            inset 1px 0 0 rgba(231, 246, 247, 0.18);
     }
 }

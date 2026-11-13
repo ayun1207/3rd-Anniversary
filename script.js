@@ -1,16 +1,14 @@
 import { seasonsData } from './src/data/seasons.js';
 import { createApp, shallowRef } from 'vue';
 import ChapterNavigation from './src/components/ChapterNavigation.vue';
+import ChapterBackground from './src/components/ChapterBackground.vue';
 import { gsap } from 'gsap';
 
 // 單次過場依真實經過時間收束，避免低幀率或分頁節流延長入口等待。
 gsap.ticker.lagSmoothing(0);
 document.documentElement.classList.add('gsap-motion');
 
-// 24 張圖片對應的低飽和度背景色列表
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-
-const backgroundColors = seasonsData.map(season => season.tone);
 
 
 /* =========================
@@ -117,11 +115,6 @@ function continueGalleryNavigation() {
     }
 }
 
-function updateBackgroundColor() {
-    if (!galleryPage) return;
-    gsap.to(galleryPage, { '--gallery-tone': backgroundColors[currentIndex], duration: reducedMotion.matches ? 0 : 0.8, ease: 'sine.inOut', overwrite: 'auto' });
-}
-
 function finishPageTurn() {
     turnVersion += 1;
     turnAnimations.forEach(animation => animation.kill());
@@ -205,25 +198,24 @@ async function moveSlide(direction) {
     outgoing.classList.add('is-turning');
     outgoing.style.zIndex = '2';
 
-    // 圖片下載與解碼完成後才開始交接，文字與圖面共用透明度。
+    // 新圖解碼後疊入完整舊圖，文字與圖面共同淡入，避免交接時露底。
     try {
         await new Promise(resolve => {
             const timeline = gsap.timeline({ onComplete: () => resolve(), onInterrupt: () => resolve() });
             turnAnimations = [timeline];
             timeline
-                .to(outgoing, { opacity: 0, duration: 0.26, ease: 'power1.in' })
                 .call(() => {
                     if (version !== turnVersion) return;
                     commitSlideChange();
-                    outgoing.classList.remove('is-current', 'is-turning');
+                    outgoing.classList.remove('is-current');
                     outgoing.setAttribute('aria-hidden', 'true');
                     outgoing.inert = true;
                     incoming.classList.add('is-current', 'is-turning');
                     incoming.setAttribute('aria-hidden', 'false');
                     incoming.inert = false;
-                    incoming.style.zIndex = '2';
+                    incoming.style.zIndex = '3';
                 })
-                .fromTo(incoming, { opacity: 0 }, { opacity: 1, duration: 0.42, ease: 'power1.out', immediateRender: false });
+                .fromTo(incoming, { opacity: 0 }, { opacity: 1, duration: 0.68, ease: 'sine.inOut', immediateRender: false });
         });
     } finally {
         if (version === turnVersion) {
@@ -260,6 +252,7 @@ const galleryProgressTerm = document.getElementById('galleryProgressTerm');
 // 共用章節來源：選章寫入，Vue 導覽讀取；捲動只更新當前頁閱讀進度。
 const currentChapter = shallowRef('intro');
 createApp(ChapterNavigation, { currentChapter, navigate: navigateToSection }).mount('#chapter-navigation');
+createApp(ChapterBackground, { currentChapter }).mount('#chapter-background');
 let currentSection = 'intro';
 let requestedChapter = 'intro';
 let chapterTimeline;
@@ -276,7 +269,6 @@ function updateGalleryMeta(index) {
     const boundedIndex = Math.max(0, Math.min(totalSlides - 1, index));
     const galleryTitle = originalSlides[boundedIndex]?.querySelector('h2')?.textContent.trim() || '';
     galleryProgressTerm.textContent = galleryTitle.split(/[｜|]/, 1)[0].trim();
-    updateBackgroundColor();
 }
 
 function setCurrentSection(pageName) {
@@ -903,7 +895,6 @@ async function enterExhibition(withMusic = true) {
     resetExhibitionToStart();
     if (withMusic) startMusic();
     let entranceContext;
-    let sculptureFaded = false;
     let solarStarted = false;
     try {
         if (!reducedMotion.matches) {
@@ -930,7 +921,6 @@ async function enterExhibition(withMusic = true) {
                     const atmosphere = entrance.querySelector('.entrance-atmosphere');
                     if (atmosphere) entranceTimeline.to(atmosphere, { opacity: 0, duration: 0.78, ease: 'power1.inOut' }, 0);
                     if (temporalSculpture) {
-                        sculptureFaded = true;
                         entranceTimeline.to(temporalSculpture, { opacity: 0, duration: 0.7, ease: 'power1.inOut' }, 0);
                     }
                     entranceTimeline
@@ -965,10 +955,6 @@ async function enterExhibition(withMusic = true) {
         entrance.classList.remove('is-transitioning', 'is-reveal-ready', 'is-opening');
         ['--entrance-focus-x', '--entrance-focus-y', '--entrance-reveal-start-radius'].forEach(name => entrance.style.removeProperty(name));
         entranceContext?.revert();
-        if (sculptureFaded && temporalSculpture && !reducedMotion.matches) {
-            const targetOpacity = Number.parseFloat(getComputedStyle(temporalSculpture).opacity) || 0.44;
-            gsap.fromTo(temporalSculpture, { opacity: 0 }, { opacity: targetOpacity, duration: 0.72, ease: 'power1.out', clearProps: 'opacity' });
-        }
         if (!solarStarted) startSolarAutoplay(true);
         document.getElementById('chapterHome').focus({ preventScroll: true });
     }
