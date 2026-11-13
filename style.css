@@ -23,6 +23,15 @@
     font-display: block;
 }
 
+/* 同時涵蓋原生頁面、Vue 動態圖片與放大檢視，保留既有觸控手勢。 */
+img,
+picture {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
 :root {
     --site-font: "LXGW WenKai TC", "Anniversary Rare Glyphs", serif;
     --artwork-font: "ChenYuluoyan Thin", var(--site-font);

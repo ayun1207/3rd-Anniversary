@@ -890,15 +890,16 @@ const musicToggle = document.getElementById('musicToggle');
 const musicStatus = document.getElementById('musicStatus');
 const entranceTransitionCurtain = entrance.querySelector('.entrance-transition-curtain');
 const entranceArt = entrance.querySelector('.entrance-art');
-const desktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 document.addEventListener('contextmenu', event => {
-    if (!desktopPointer.matches) return;
     const imageRegion = event.target.closest('img, picture, .slide-item, .artist-profile-panel, .planning-concept-panel, .message-sheet');
     // 封面圖停用 pointer-events，右鍵以其實際範圍判斷。
     const coverBounds = entrance.open ? entranceArt?.getBoundingClientRect() : null;
     const overCover = coverBounds && event.clientX >= coverBounds.left && event.clientX <= coverBounds.right
         && event.clientY >= coverBounds.top && event.clientY <= coverBounds.bottom;
     if (imageRegion || overCover) event.preventDefault();
+}, { capture: true });
+document.addEventListener('dragstart', event => {
+    if (event.target.closest('img, picture')) event.preventDefault();
 }, { capture: true });
 const hasBackgroundMusic = Boolean(backgroundMusic.getAttribute('src')?.trim());
 let enteringExhibition = false;
