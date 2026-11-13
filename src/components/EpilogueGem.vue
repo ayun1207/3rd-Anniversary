@@ -17,6 +17,7 @@ const mobilePreference = window.matchMedia('(max-width: 900px)');
 const isMobile = ref(mobilePreference.matches);
 const opened = ref(false);
 const closing = ref(false);
+const pointerFocus = ref(true);
 const gemPosition = ref(null);
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 let openingAnimation;
@@ -179,6 +180,7 @@ onBeforeUnmount(() => {
 <template>
     <Teleport to="#thanks-page .text-container" :disabled="!isMobile">
     <button v-show="currentChapter.value === 'thanks'" ref="trigger" type="button"
+        :class="{ 'has-pointer-focus': pointerFocus }" @pointerdown="pointerFocus = true" @keydown="pointerFocus = false"
         class="epilogue-gem-trigger" :style="isMobile ? null : gemPosition" aria-label="開啟藏在寶石裡的結語" aria-haspopup="dialog" @click="openEpilogue">
         <span ref="gem" class="epilogue-gem season-gem" aria-hidden="true">
             <span class="gem-face gem-face-blue"></span>
@@ -189,6 +191,7 @@ onBeforeUnmount(() => {
     </button>
     </Teleport>
     <dialog ref="dialog" class="epilogue-dialog" aria-labelledby="epilogueTitle" aria-describedby="epilogueDescription"
+        @pointerdown="pointerFocus = true" @keydown="pointerFocus = false"
         @cancel.prevent="closeEpilogue()" @keydown.tab.prevent>
         <div ref="shade" class="epilogue-shade" aria-hidden="true" @click="closeEpilogue()"></div>
         <section ref="panel" class="epilogue-panel" tabindex="-1">
@@ -268,6 +271,7 @@ onBeforeUnmount(() => {
     filter: brightness(1.12) drop-shadow(0 0 8px rgba(211, 231, 234, 0.45));
 }
 .epilogue-gem-trigger:focus-visible { outline: 1px solid #f4e6c9; outline-offset: 2px; border-radius: 16px; }
+.epilogue-gem-trigger.has-pointer-focus:focus { outline: none; }
 .epilogue-dialog {
     position: fixed;
     inset: 0;
