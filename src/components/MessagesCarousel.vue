@@ -13,6 +13,7 @@ const isPageSwitching = ref(false);
 const groups = [];
 const dialog = ref(null);
 const selectedNote = ref(null);
+const pointerFocus = ref(false);
 let timeline;
 let dialogTween;
 let version = 0;
@@ -21,11 +22,15 @@ let returnFocus;
 let touchStart;
 let suppressClickUntil = 0;
 const preparedImages = new Map();
+let preloadTimer;
+let preloadVersion = 0;
 
-function prepareImage(src, srcset) {
+function prepareImage(src, srcset, priority = 'auto') {
     const key = srcset ? `${srcset}:${innerWidth}:${devicePixelRatio}` : src;
     if (!preparedImages.has(key)) {
         const image = new Image();
+        image.fetchPriority = priority;
+        const entry = { image, ready: false, promise: null };
         if (srcset) {
             image.sizes = '(max-width: 768px) calc(100vw - 36px), 76vw';
             image.srcset = srcset;
@@ -35,12 +40,34 @@ function prepareImage(src, srcset) {
         const timeout = new Promise(resolve => { timer = window.setTimeout(() => resolve(false), 10000); });
         const prepared = Promise.race([image.decode().then(() => true, () => false), timeout]).then(ready => {
             window.clearTimeout(timer);
+            entry.ready = ready;
+            entry.image = null;
             if (!ready) preparedImages.delete(key);
             return ready;
         });
-        preparedImages.set(key, prepared);
+        entry.promise = prepared;
+        preparedImages.set(key, entry);
+    } else if (priority === 'high' && preparedImages.get(key).image) {
+        preparedImages.get(key).image.fetchPriority = 'high';
     }
-    return preparedImages.get(key);
+    return preparedImages.get(key).promise;
+}
+
+function scheduleNotePreload() {
+    const request = ++preloadVersion;
+    window.clearTimeout(preloadTimer);
+    if (!mobile.value || props.currentChapter.value !== 'messages' || document.hidden) return;
+    const notes = messagePages[currentPage.value].notes;
+    preloadTimer = window.setTimeout(() => {
+        let next = 0;
+        async function prepareNext() {
+            while (request === preloadVersion && next < notes.length) {
+                const note = notes[next++];
+                await prepareImage(note.src, undefined, 'low');
+            }
+        }
+        void Promise.all([prepareNext(), prepareNext()]);
+    }, 250);
 }
 
 function finishPage(target = currentPage.value) {
@@ -87,16 +114,20 @@ async function openNote(note, event) {
     if (!mobile.value || isPageSwitching.value || performance.now() < suppressClickUntil) return;
     const trigger = event.currentTarget;
     const request = ++noteVersion;
-    const ready = await prepareImage(note.src);
-    if (request !== noteVersion || !mobile.value || props.currentChapter.value !== 'messages') return;
+    pointerFocus.value = event.detail > 0;
     returnFocus = trigger;
-    selectedNote.value = { ...note, displaySrc: ready ? note.src : note.small };
+    selectedNote.value = { ...note, displaySrc: preparedImages.get(note.src)?.ready ? note.src : note.small };
+    const prepared = prepareImage(note.src, undefined, 'high');
     await nextTick();
+    if (request !== noteVersion || !mobile.value || props.currentChapter.value !== 'messages') return;
     dialog.value.showModal();
     dialog.value.focus({ preventScroll: true });
     dialogTween?.kill();
     dialogTween = gsap.fromTo(dialog.value, { opacity: 0, scale: 0.97 }, {
         opacity: 1, scale: 1, duration: motionMedia.matches ? 0 : 0.28, ease: 'sine.out'
+    });
+    void prepared.then(ready => {
+        if (ready && request === noteVersion && selectedNote.value) selectedNote.value.displaySrc = note.src;
     });
 }
 
@@ -142,18 +173,24 @@ watch(() => props.currentChapter.value, chapter => {
         finishPage();
     }
 });
+watch([currentPage, mobile, () => props.currentChapter.value], scheduleNotePreload, { immediate: true });
+document.addEventListener('visibilitychange', scheduleNotePreload);
 mobileMedia.addEventListener('change', changeMedia);
 motionMedia.addEventListener('change', changeMotion);
 onBeforeUnmount(() => {
+    ++preloadVersion;
+    window.clearTimeout(preloadTimer);
     closeNote();
     finishPage();
     mobileMedia.removeEventListener('change', changeMedia);
     motionMedia.removeEventListener('change', changeMotion);
+    document.removeEventListener('visibilitychange', scheduleNotePreload);
 });
 </script>
 
 <template>
-    <div class="messages-carousel">
+    <div class="messages-carousel" :class="{ 'has-pointer-focus': pointerFocus }"
+        @pointerdown.capture="pointerFocus = true" @keydown.capture="pointerFocus = false">
         <button id="messagesPrev" class="messages-arrow messages-prev" type="button" aria-label="上一頁寄語" @click="movePage(-1)">
             <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M19 5l-6 11 6 11" /></svg>
         </button>
@@ -186,7 +223,8 @@ onBeforeUnmount(() => {
         <p id="messagesStatus" class="messages-status" role="status" aria-live="polite">第 {{ currentPage + 1 }} 頁，共 {{ messagePages.length }} 頁</p>
         <dialog ref="dialog" class="message-note-dialog" tabindex="-1" :aria-label="selectedNote ? `第 ${selectedNote.id} 則寄語，點周圍空白處關閉` : '寄語'"
             @click="event => { if (event.target === dialog) closeNote(); }" @cancel.prevent="closeNote" @keydown.tab.prevent @touchmove.prevent>
-            <img v-if="selectedNote" :src="selectedNote.displaySrc" :width="selectedNote.imageWidth" :height="selectedNote.imageHeight" :alt="`第 ${selectedNote.id} 則寄語`" draggable="false">
+            <img v-if="selectedNote" :src="selectedNote.displaySrc" :width="selectedNote.imageWidth" :height="selectedNote.imageHeight"
+                :style="{ aspectRatio: `${selectedNote.imageWidth} / ${selectedNote.imageHeight}` }" :alt="`第 ${selectedNote.id} 則寄語`" draggable="false">
         </dialog>
     </div>
 </template>
@@ -209,6 +247,7 @@ onBeforeUnmount(() => {
 }
 .message-note img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .message-note:focus-visible { outline: 2px solid #506c60; outline-offset: 3px; }
+.messages-carousel.has-pointer-focus .message-note:focus-visible { outline: none; }
 #messages-page .message-note-dialog {
     position: fixed;
     inset: 0;
