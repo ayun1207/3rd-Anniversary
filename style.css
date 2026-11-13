@@ -7841,6 +7841,26 @@ main .section-label-line {
         max-width: none;
         margin-left: -0.7%;
     }
+    #planning-page .text-container {
+        width: calc(100% - 8px);
+        margin-inline: auto;
+        padding: 44px 3px 6px;
+    }
+    #planning-page .text-container h1 {
+        position: static;
+        margin: 0;
+        font-size: clamp(30px, 8.6vw, 38px);
+        line-height: 1.2;
+    }
+    #planning-page .planning-concept-panel {
+        margin-top: 10px;
+        overflow: visible;
+    }
+    #planning-page .planning-concept-panel img {
+        width: 107%;
+        max-width: none;
+        margin-left: -2.6%;
+    }
     #intro-page .intro-layout {
         width: calc(100% - 20px);
         grid-template-columns: minmax(0, 1fr);
