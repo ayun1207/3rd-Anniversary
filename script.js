@@ -2,6 +2,7 @@ import { seasonsData } from './src/data/seasons.js';
 import { createApp, shallowRef } from 'vue';
 import ChapterNavigation from './src/components/ChapterNavigation.vue';
 import ChapterBackground from './src/components/ChapterBackground.vue';
+import EpilogueGem from './src/components/EpilogueGem.vue';
 import { gsap } from 'gsap';
 
 // 單次過場依真實經過時間收束，避免低幀率或分頁節流延長入口等待。
@@ -253,6 +254,7 @@ const galleryProgressTerm = document.getElementById('galleryProgressTerm');
 const currentChapter = shallowRef('intro');
 createApp(ChapterNavigation, { currentChapter, navigate: navigateToSection }).mount('#chapter-navigation');
 createApp(ChapterBackground, { currentChapter }).mount('#chapter-background');
+createApp(EpilogueGem, { currentChapter }).mount('#epilogue-gem');
 let currentSection = 'intro';
 let requestedChapter = 'intro';
 let chapterTimeline;
@@ -822,6 +824,16 @@ const musicToggle = document.getElementById('musicToggle');
 const musicStatus = document.getElementById('musicStatus');
 const entranceTransitionCurtain = entrance.querySelector('.entrance-transition-curtain');
 const entranceArt = entrance.querySelector('.entrance-art');
+const desktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+document.addEventListener('contextmenu', event => {
+    if (!desktopPointer.matches) return;
+    const imageRegion = event.target.closest('img, picture, .slide-item, .artist-profile-panel, .planning-concept-panel, .message-sheet');
+    // 封面圖停用 pointer-events，右鍵以其實際範圍判斷。
+    const coverBounds = entrance.open ? entranceArt?.getBoundingClientRect() : null;
+    const overCover = coverBounds && event.clientX >= coverBounds.left && event.clientX <= coverBounds.right
+        && event.clientY >= coverBounds.top && event.clientY <= coverBounds.bottom;
+    if (imageRegion || overCover) event.preventDefault();
+}, { capture: true });
 const hasBackgroundMusic = Boolean(backgroundMusic.getAttribute('src')?.trim());
 let enteringExhibition = false;
 let musicFadeTween;

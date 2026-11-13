@@ -27,6 +27,8 @@
     --site-font: "LXGW WenKai TC", "Anniversary Rare Glyphs", serif;
     --artwork-font: "ChenYuluoyan Thin", var(--site-font);
     --artwork-text-scale: 1.08;
+    --selection-background: #dce8dd;
+    --selection-text: #263e32;
     --paper-base: #d8cfc3;
     --paper-light: #e5ddd2;
     --paper-depth: #c8bcae;
@@ -58,6 +60,12 @@ html.font-fallback {
     font-family: var(--site-font) !important;
 }
 
+::selection {
+    background-color: var(--selection-background);
+    color: var(--selection-text);
+    text-shadow: none;
+}
+
 .visually-hidden {
     position: absolute !important;
     width: 1px !important;
@@ -71,7 +79,7 @@ html.font-fallback {
 }
 
 html {
-    scrollbar-gutter: stable;
+    scrollbar-gutter: auto;
 }
 
 html.font-pending body {
@@ -96,7 +104,6 @@ html.font-fallback body {
 /* JavaScript 將封面提升為 modal 前，先阻止理時序被繪製一幀。 */
 html.entrance-pending {
     overflow: hidden;
-    scrollbar-gutter: stable;
     background: var(--paper-base);
 }
 
@@ -2327,10 +2334,6 @@ main {
 html.entrance-open,
 body.entrance-open {
     overflow: hidden;
-}
-
-html.entrance-open {
-    scrollbar-gutter: stable;
 }
 
 .entrance {
@@ -7168,7 +7171,8 @@ html.entrance-open main {
 
 /* 小環與二十四節氣環共用同一顆低彩度切面寶石。 */
 .cycle-marker::before,
-.solar-leaf-marker::before {
+.solar-leaf-marker::before,
+.season-gem {
     border: 0;
     border-radius: 0;
     clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);

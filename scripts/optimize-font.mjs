@@ -33,7 +33,9 @@ const artworkCaptions = Array.from(
 const entrancePromptText = html
   .match(/<span class="entrance-prompt">([\s\S]*?)<\/span>/)?.[1]
   ?.replace(/<[^>]+>/g, ' ') ?? ''
-const artworkText = `${artworkCaptions}\n${entrancePromptText}`
+const epilogueSource = await readFile(resolve('src/components/EpilogueGem.vue'), 'utf8')
+const epilogueLines = epilogueSource.match(/const lines = \[([\s\S]*?)\]/)?.[1] ?? ''
+const artworkText = `${artworkCaptions}\n${entrancePromptText}\n${epilogueLines}`
 const artworkCharacters = [...new Set(artworkText)].join('')
 const artworkSourceFont = resolve('fonts/ChenYuluoyan-2.0-Thin.ttf')
 const artworkOutputFont = resolve('fonts/chenyuluoyan-2.0-thin-artwork-subset.woff2')
