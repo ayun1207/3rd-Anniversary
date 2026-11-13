@@ -28,8 +28,8 @@ const slideObserver = new MutationObserver(() => {
 });
 
 function paintZoom() {
-    const limitX = props.stage.offsetWidth * (zoom.value - 1) / 2 + 16;
-    const limitY = props.stage.offsetHeight * (zoom.value - 1) / 2 + 16;
+    const limitX = Math.max(viewport.value.clientWidth / 4, (props.stage.offsetWidth * zoom.value - viewport.value.clientWidth) / 2 + 16);
+    const limitY = Math.max(viewport.value.clientHeight / 4, (props.stage.offsetHeight * zoom.value - viewport.value.clientHeight) / 2 + 16);
     panX = Math.max(-limitX, Math.min(limitX, panX));
     panY = Math.max(-limitY, Math.min(limitY, panY));
     gsap.set(props.stage, { scale: zoom.value, x: panX, y: panY });
@@ -80,6 +80,7 @@ function fitReading() {
         panX = Math.max(bounds.left + 16 - left, Math.min(0, bounds.right - 16 - right));
         panY = Math.max(bounds.top + 16 - top, Math.min(0, bounds.bottom - 16 - bottom));
     }
+    if (focusedSlide?.dataset.artworkId === '22') panX += bounds.width * 0.15;
     paintZoom();
 }
 
@@ -145,7 +146,7 @@ function moveGesture(event) {
     if (event.touches.length > 1 && gesture.distance) {
         zoom.value = Math.max(1, Math.min(3, gesture.scale * touchDistance(event.touches) / gesture.distance));
         paintZoom();
-    } else if (zoom.value > 1 && !gesture.distance) {
+    } else if (!gesture.distance) {
         panX = gesture.panX + event.touches[0].clientX - gesture.x;
         panY = gesture.panY + event.touches[0].clientY - gesture.y;
         paintZoom();
