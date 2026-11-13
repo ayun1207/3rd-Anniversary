@@ -23,7 +23,8 @@ let touchStart;
 let suppressClickUntil = 0;
 const preparedImages = new Map();
 let preloadTimer;
-let preloadVersion = 0;
+let preloadSources = [];
+let preloadWorkers = 0;
 
 function isReadingMessages() {
     return props.currentChapter.value === 'messages' || (mobile.value && props.currentChapter.value === 'thanks');
@@ -57,21 +58,35 @@ function prepareImage(src, srcset, priority = 'auto') {
     return preparedImages.get(key).promise;
 }
 
-function scheduleNotePreload() {
-    const request = ++preloadVersion;
-    window.clearTimeout(preloadTimer);
-    if (!mobile.value || props.currentChapter.value !== 'messages' || document.hidden) return;
-    const notes = messagePages[currentPage.value].notes;
-    preloadTimer = window.setTimeout(() => {
-        let next = 0;
-        async function prepareNext() {
-            while (request === preloadVersion && next < notes.length) {
-                const note = notes[next++];
-                await prepareImage(note.src, undefined, 'low');
-            }
+async function preloadNextNote() {
+    try {
+        while (preloadSources.length) {
+            await prepareImage(preloadSources.shift(), undefined, 'low');
         }
-        void Promise.all([prepareNext(), prepareNext()]);
-    }, 250);
+    } finally {
+        --preloadWorkers;
+    }
+}
+
+function scheduleNotePreload() {
+    window.clearTimeout(preloadTimer);
+    preloadSources = [];
+    if (!mobile.value || props.currentChapter.value !== 'messages' || document.hidden) return;
+    const pageCount = messagePages.length;
+    const nextPage = messagePages[(currentPage.value + 1) % pageCount];
+    const previousPage = messagePages[(currentPage.value - 1 + pageCount) % pageCount];
+    // 先準備切頁需要的縮圖，再處理當頁點擊放大使用的清晰圖。
+    preloadSources = [
+        ...nextPage.notes.map(note => note.small),
+        ...previousPage.notes.map(note => note.small),
+        ...messagePages[currentPage.value].notes.map(note => note.src)
+    ];
+    preloadTimer = window.setTimeout(() => {
+        while (preloadWorkers < 2 && preloadSources.length) {
+            ++preloadWorkers;
+            void preloadNextNote();
+        }
+    }, 0);
 }
 
 function finishPage(target = currentPage.value) {
@@ -92,7 +107,7 @@ async function movePage(direction) {
     const page = messagePages[target];
     let ready;
     if (mobile.value) {
-        ready = (await Promise.all(page.notes.map(note => prepareImage(note.small)))).every(Boolean);
+        ready = (await Promise.all(page.notes.map(note => prepareImage(note.small, undefined, 'high')))).every(Boolean);
     } else {
         ready = await prepareImage(page.src, `${page.small} 1200w, ${page.src} 2400w`);
     }
@@ -182,7 +197,7 @@ document.addEventListener('visibilitychange', scheduleNotePreload);
 mobileMedia.addEventListener('change', changeMedia);
 motionMedia.addEventListener('change', changeMotion);
 onBeforeUnmount(() => {
-    ++preloadVersion;
+    preloadSources = [];
     window.clearTimeout(preloadTimer);
     closeNote();
     finishPage();
