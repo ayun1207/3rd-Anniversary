@@ -251,7 +251,7 @@ pageSections.forEach(section => {
     section.append(content);
 });
 const galleryProgressTerm = document.getElementById('galleryProgressTerm');
-// 共用章節來源：選章寫入，Vue 導覽讀取；捲動只更新當前頁閱讀進度。
+// 共用章節來源：選章與手機閱讀位置寫入，Vue 導覽與背景讀取。
 const currentChapter = shallowRef('intro');
 createApp(ChapterNavigation, { currentChapter, navigate: navigateToSection }).mount('#chapter-navigation');
 createApp(ChapterBackground, { currentChapter }).mount('#chapter-background');
@@ -279,6 +279,20 @@ carouselViewport.addEventListener('keydown', event => {
 let currentSection = 'intro';
 let requestedChapter = 'intro';
 let chapterTimeline;
+const chapterScroller = document.querySelector('main');
+const readingMedia = window.matchMedia('(max-width: 900px)');
+const readingSections = pageSections.filter(section => section.id === 'text-page' || section.id === 'planning-page');
+let readingScrollTween;
+let readingProgressFrame = 0;
+
+function isReadingChapter(pageName) {
+    return readingMedia.matches && (pageName === 'text' || pageName === 'planning');
+}
+
+function readingScrollTop(section) {
+    const content = section.querySelector('.chapter-page-fit');
+    return Math.max(0, section.offsetTop - Math.max(24, (chapterScroller.clientHeight - content.offsetHeight) / 2));
+}
 
 function updateGalleryProgress(index) {
     const boundedIndex = Math.max(0, Math.min(totalSlides - 1, index));
@@ -294,13 +308,15 @@ function updateGalleryMeta(index) {
     galleryProgressTerm.textContent = galleryTitle.split(/[｜|]/, 1)[0].trim();
 }
 
-function setCurrentSection(pageName) {
+function setCurrentSection(pageName, force = false) {
     if (!pageName) return;
-    if (pageName === currentSection && document.body.dataset.section === pageName) return;
+    if (!force && pageName === currentSection && document.body.dataset.section === pageName) return;
+    const reading = isReadingChapter(pageName);
+    chapterScroller.classList.toggle('is-reading-flow', reading);
     currentSection = pageName;
     currentChapter.value = pageName;
     pageSections.forEach(section => {
-        const active = section.id === `${pageName}-page`;
+        const active = section.id === `${pageName}-page` || (reading && readingSections.includes(section));
         section.classList.toggle('active', active);
         section.hidden = !active;
         section.inert = !active;
@@ -326,14 +342,38 @@ function navigateToSection(pageName) {
     const wasSwitching = Boolean(chapterTimeline);
     chapterTimeline?.kill();
     chapterTimeline = null;
-    const outgoing = document.getElementById(`${currentSection}-page`);
+    readingScrollTween?.kill();
+    readingScrollTween = null;
+    const focusTarget = () => {
+        targetPage.setAttribute('tabindex', '-1');
+        targetPage.focus({ preventScroll: true });
+    };
+    if (isReadingChapter(currentSection) && isReadingChapter(pageName)) {
+        gsap.set(pageSections, { clearProps: 'opacity' });
+        const finishScroll = () => {
+            readingScrollTween = null;
+            setCurrentSection(pageName);
+            focusTarget();
+        };
+        if (reducedMotion.matches) {
+            chapterScroller.scrollTop = readingScrollTop(targetPage);
+            finishScroll();
+        } else {
+            readingScrollTween = gsap.to(chapterScroller, {
+                scrollTop: readingScrollTop(targetPage), duration: 0.6, ease: 'power2.inOut', onComplete: finishScroll
+            });
+        }
+        return;
+    }
+    const outgoing = isReadingChapter(currentSection) ? readingSections : document.getElementById(`${currentSection}-page`);
+    const incoming = isReadingChapter(pageName) ? readingSections : targetPage;
     const commit = () => {
         setCurrentSection(pageName);
         fitCurrentChapter();
+        chapterScroller.scrollTop = isReadingChapter(pageName) ? readingScrollTop(targetPage) : 0;
         if (pageName === 'intro') startSolarAutoplay();
         else stopSolarAutoplay();
-        targetPage.setAttribute('tabindex', '-1');
-        targetPage.focus({ preventScroll: true });
+        focusTarget();
     };
 
     if (reducedMotion.matches || document.hidden) {
@@ -347,16 +387,25 @@ function navigateToSection(pageName) {
         onComplete: () => {
             gsap.set(pageSections, { clearProps: 'opacity' });
             chapterTimeline = null;
+            queueReadingProgress();
         }
     });
     chapterTimeline
         .to(outgoing, { opacity: 0, duration: 0.22, ease: 'power1.inOut' })
         .call(commit)
-        .fromTo(targetPage, { opacity: 0 }, { opacity: 1, duration: 0.48, ease: 'power2.out', immediateRender: false });
+        .fromTo(incoming, { opacity: 0 }, { opacity: 1, duration: 0.48, ease: 'power2.out', immediateRender: false });
 }
 
 function fitCurrentChapter() {
     chapterFitFrame = 0;
+    if (isReadingChapter(currentSection)) {
+        readingSections.forEach(section => section.querySelector('.chapter-page-fit').style.removeProperty('--chapter-fit-scale'));
+        const [first, last] = readingSections.map(section => section.querySelector('.chapter-page-fit').offsetHeight);
+        chapterScroller.style.setProperty('--reading-start-space', `${Math.max(24, (chapterScroller.clientHeight - first) / 2)}px`);
+        chapterScroller.style.setProperty('--reading-end-space', `${Math.max(24, (chapterScroller.clientHeight - last) / 2)}px`);
+        queueReadingProgress();
+        return;
+    }
     const section = document.getElementById(`${currentSection}-page`);
     const content = section.querySelector('.chapter-page-fit');
     const availableHeight = Math.max(1, section.clientHeight - 40);
@@ -374,10 +423,45 @@ const chapterResizeObserver = new ResizeObserver(queueChapterFit);
 pageSections.forEach(section => chapterResizeObserver.observe(section.querySelector('.chapter-page-fit')));
 window.addEventListener('resize', queueChapterFit);
 window.visualViewport?.addEventListener('resize', queueChapterFit);
+
+function queueReadingProgress() {
+    if (readingProgressFrame || !isReadingChapter(currentSection)) return;
+    readingProgressFrame = requestAnimationFrame(() => {
+        readingProgressFrame = 0;
+        if (!isReadingChapter(currentSection) || chapterTimeline) return;
+        const planning = document.getElementById('planning-page');
+        const pageName = chapterScroller.scrollTop + chapterScroller.clientHeight / 2 >= planning.offsetTop ? 'planning' : 'text';
+        setCurrentSection(pageName);
+        if (!readingScrollTween) requestedChapter = pageName;
+    });
+}
+
+chapterScroller.addEventListener('scroll', queueReadingProgress, { passive: true });
+function cancelReadingScroll() {
+    readingScrollTween?.kill();
+    readingScrollTween = null;
+    requestedChapter = currentSection;
+}
+chapterScroller.addEventListener('touchstart', cancelReadingScroll, { passive: true });
+chapterScroller.addEventListener('wheel', cancelReadingScroll, { passive: true });
+chapterScroller.addEventListener('keydown', event => {
+    if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key)) cancelReadingScroll();
+});
+readingMedia.addEventListener('change', () => {
+    cancelReadingScroll();
+    chapterTimeline?.kill();
+    chapterTimeline = null;
+    gsap.set(pageSections, { clearProps: 'opacity' });
+    setCurrentSection(currentSection, true);
+    fitCurrentChapter();
+    chapterScroller.scrollTop = isReadingChapter(currentSection) ? readingScrollTop(document.getElementById(`${currentSection}-page`)) : 0;
+    queueChapterFit();
+});
 document.fonts?.ready.then(queueChapterFit);
 reducedMotion.addEventListener('change', () => {
     updateGalleryProgress(currentIndex);
     if (reducedMotion.matches && chapterTimeline) navigateToSection(requestedChapter);
+    if (reducedMotion.matches && readingScrollTween) navigateToSection(requestedChapter);
     queueChapterFit();
 });
 

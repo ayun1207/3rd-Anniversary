@@ -7441,6 +7441,21 @@ main > .page-content.active {
 .site-header::after { display: none !important; }
 @media (max-width: 900px) {
     body > main { inset: 82px 0 0; }
+    body > main.is-reading-flow {
+        overflow-y: auto;
+        overscroll-behavior-y: contain;
+        scrollbar-width: none;
+        padding-block: var(--reading-start-space, 24px) var(--reading-end-space, 24px);
+    }
+    main.is-reading-flow > :is(#text-page, #planning-page).active {
+        height: auto;
+        min-height: 0 !important;
+        padding: 0 !important;
+    }
+    main.is-reading-flow > #planning-page { margin-top: 48px; }
+    main.is-reading-flow > :is(#text-page, #planning-page) > .chapter-page-fit {
+        transform: none;
+    }
 }
 
 /* 寄語：改為一張排版圖對應一個輪播頁面。 */
