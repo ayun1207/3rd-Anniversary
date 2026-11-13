@@ -251,8 +251,8 @@
                 <button class="nav-btn" type="button" data-page="gallery" onclick="navigateToSection('gallery')">觀芳華<span class="menu-arrow" aria-hidden="true"></span></button>
                 <button class="nav-btn" type="button" data-page="text" onclick="navigateToSection('text')">繪春信<span class="menu-arrow" aria-hidden="true"></span></button>
                 <button class="nav-btn" type="button" data-page="planning" onclick="navigateToSection('planning')">籌花事<span class="menu-arrow" aria-hidden="true"></span></button>
-                <button class="nav-btn" type="button" data-page="messages" onclick="navigateToSection('messages')">寄語<span class="menu-arrow" aria-hidden="true"></span></button>
-                <button class="nav-btn" type="button" data-page="thanks" onclick="navigateToSection('thanks')">謝花人<span class="menu-arrow" aria-hidden="true"></span></button>
+                <button class="nav-btn" type="button" data-page="messages" onclick="navigateToSection('messages')">寄墨箋<span class="menu-arrow" aria-hidden="true"></span></button>
+                <button class="nav-btn" type="button" data-page="thanks" onclick="navigateToSection('thanks')">銘同錄<span class="menu-arrow" aria-hidden="true"></span></button>
             </nav>
             
         </div>
@@ -556,7 +556,7 @@
                     <img
                         src="/images/artist/25.webp"
                         width="2400"
-                        height="848"
+                        height="881"
                         loading="lazy"
                         decoding="async"
                         alt="繪師酥米 sumi 的作品介紹與三周年賀詞"
@@ -570,129 +570,129 @@
                 <p id="planningLabel" class="section-label">
                     <span>04</span><span>籌花事</span><span class="section-label-line" aria-hidden="true"></span>
                 </p>
-                <h1 id="planningTitle">設計理念</h1>
-                <!-- 可在這裡加入企劃緣起、製作過程與參與名單。 -->
+                <h1 id="planningTitle">題記</h1>
+                <figure class="planning-concept-panel">
+                    <img
+                        src="/images/planning/26.webp"
+                        srcset="/images/planning/26-1200.webp 1200w, /images/planning/26.webp 2400w"
+                        sizes="(max-width: 768px) calc(100vw - 36px), 82vw"
+                        width="2400"
+                        height="1347"
+                        loading="lazy"
+                        decoding="async"
+                        alt="四季服裝、配色與二十四節氣作品的設計理念"
+                    >
+                </figure>
             </div>
         </section>
 
-        <!-- 寄語：依實際參與人數增減 .message-card，不需要另外調整排版。 -->
+        <!-- 寄語：每張 .message-sheet 圖片為一頁，切換功能會依頁數自動啟用。 -->
         <section id="messages-page" class="page-content messages-page" aria-labelledby="messagesLabel messagesTitle">
             <div class="messages-container">
                 <header class="messages-heading">
                     <p id="messagesLabel" class="section-label">
-                        <span>05</span><span>寄語</span><span class="section-label-line" aria-hidden="true"></span>
+                        <span>05</span><span>寄墨箋</span><span class="section-label-line" aria-hidden="true"></span>
                     </p>
                     <h1 id="messagesTitle">寄語</h1>
                 </header>
                 <div class="messages-carousel">
-<button id="messagesPrev" class="messages-arrow messages-prev" type="button" aria-label="上一組寄語" hidden>
+                    <button id="messagesPrev" class="messages-arrow messages-prev" type="button" aria-label="上一頁寄語" hidden>
                         <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-                            <path d="M25 16H7M14 9l-7 7 7 7" />
+                            <path d="M19 5l-6 11 6 11" />
                         </svg>
                     </button>
-<div id="messagesViewport" class="messages-viewport" role="region" aria-label="寄語輪播">
+                    <div id="messagesViewport" class="messages-viewport" role="region" aria-label="寄語輪播">
                         <div id="messagesTrack" class="messages-track">
-                    <article class="message-card">
-                        <p>恭喜Neon三周年拉!希望未來的你們繼續發光發熱，帶給粉絲們更多精彩的演出</p>
-                        <footer>默默喜歡午嗎</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>霓們三周年快樂啦！希望妳們的夢想都能順利實現！</p>
-                        <footer>奇諾比</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>謝謝霓們帶給我們歡笑，祝福霓們身體健康每天都開心</p>
-                        <footer>遊芯</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>不知不覺已經3年了 感謝你們的陪伴 接下來的日子請你們繼續多多指教了</p>
-                        <footer>拿單</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>眨眼之間就看霓NEO(n)三年了！未來也會繼續支持三個人，愛霓們。</p>
-                        <footer>樂以忘憂</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>聽我說謝謝霓，因為有霓溫暖了四季。霓釀三週年快樂！</p>
-                        <footer>小絨貼</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>祝福霓釀三週年快樂！未來的每一天都會持續支持霓們，一起走過每一個春夏秋冬吧！</p>
-                        <footer>哈褲</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>跟霓們創造的回憶真的很珍貴！希望霓NEO(n)99！</p>
-                        <footer>莉波</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>祝霓們直播順利，身體健康~</p>
-                        <footer>千里饅頭</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>恭喜霓NEO(n)三週年啦～今後還是會持續默默的支持三位，祝三位三周年快樂！！</p>
-                        <footer>MELARU</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>祝福霓ㄤ能未來活動一切順利，也希望能陪伴大家一起度過好幾個三週年&lt;3</p>
-                        <footer>芋圓</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>恭喜霓NEO(n)三週年達成!! 讓我們一起繼續向著四週年前進吧 ᕕ( ᐛ )ᕗ</p>
-                        <footer>多雲</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>走過春天的花、夏天的雨、秋天的葉、冬天的雪，感謝霓一路相伴，三周年快樂！</p>
-                        <footer>鳳梨</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>祝福霓釀三個人能夠年年保持感情好，一年四季都能夠開心享受生活</p>
-                        <footer>律動</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>謝謝NEO(n)總能帶給我們歡樂，期望霓們可以走的更遠！</p>
-                        <footer>雞肉河粉</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>恭喜三週年啦~很開心能陪著霓們一路走過，未來也請多多指教!!!</p>
-                        <footer>Fumei</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>謝謝你們這三年的陪伴🩵祝霓們繼續追逐自己的夢想 閃閃發亮</p>
-                        <footer>唯禰</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>經驚蟄春分之破繭，歷霜降大雪之淬鍊，三載風華，願星途永綻芳菲。</p>
-                        <footer>taxidrvr_tw</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>祝霓們三週年快樂，你們就像農夫、粉絲就像作物，雖有歉收，也一定有大豐收</p>
-                        <footer>風夜空</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>三週年快樂希望未來的日子裡妳們也能繼續做自己喜歡的事，繼續發光發熱，妳們超級棒的！</p>
-                        <footer>FangFang </footer>
-                    </article>
-                    <article class="message-card">
-                        <p>我愛阿雷、阿基、租咪、妳們是最棒的</p>
-                        <footer>猧咎</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>霓三週年快樂，這三年有你們的陪伴真的很開心，你們是最棒的</p>
-                        <footer>快斗</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>轉眼間三周年就要到了，祝霓NEO(n)三周年快樂，未來也會陪著你們一起度過的</p>
-                        <footer>三叉</footer>
-                    </article>
-                    <article class="message-card">
-                        <p>你知道的 我一直是霓的粉絲，阿雷澪魂歌聲，租咪強烈反差萌，以及小煌非常的婆，至於阿基，我祝她馬戲團玩的開心</p>
-                        <footer>クマ吉</footer>
-                    </article>
+                            <figure class="message-sheet">
+                                <picture>
+                                    <source
+                                        srcset="/images/messages/27-1200.webp 1200w, /images/messages/27.webp 2400w"
+                                        sizes="(max-width: 768px) calc(100vw - 36px), 76vw"
+                                        type="image/webp"
+                                    >
+                                    <img
+                                        src="/images/messages/27.webp"
+                                        width="2400"
+                                        height="1621"
+                                        loading="lazy"
+                                        decoding="async"
+                                        alt="三周年寄語留言卡第一頁"
+                                    >
+                                </picture>
+                            </figure>
+                            <figure class="message-sheet">
+                                <picture>
+                                    <source
+                                        srcset="/images/messages/28-1200.webp 1200w, /images/messages/28.webp 2400w"
+                                        sizes="(max-width: 768px) calc(100vw - 36px), 76vw"
+                                        type="image/webp"
+                                    >
+                                    <img
+                                        src="/images/messages/28.webp"
+                                        width="2400"
+                                        height="1457"
+                                        loading="lazy"
+                                        decoding="async"
+                                        alt="三周年寄語留言卡第二頁"
+                                    >
+                                </picture>
+                            </figure>
+                            <figure class="message-sheet">
+                                <picture>
+                                    <source
+                                        srcset="/images/messages/29-1200.webp 1200w, /images/messages/29.webp 2400w"
+                                        sizes="(max-width: 768px) calc(100vw - 36px), 76vw"
+                                        type="image/webp"
+                                    >
+                                    <img
+                                        src="/images/messages/29.webp"
+                                        width="2400"
+                                        height="1370"
+                                        loading="lazy"
+                                        decoding="async"
+                                        alt="三周年寄語留言卡第三頁"
+                                    >
+                                </picture>
+                            </figure>
+                            <figure class="message-sheet">
+                                <picture>
+                                    <source
+                                        srcset="/images/messages/30-1200.webp 1200w, /images/messages/30.webp 2400w"
+                                        sizes="(max-width: 768px) calc(100vw - 36px), 76vw"
+                                        type="image/webp"
+                                    >
+                                    <img
+                                        src="/images/messages/30.webp"
+                                        width="2400"
+                                        height="1518"
+                                        loading="lazy"
+                                        decoding="async"
+                                        alt="三周年寄語留言卡第四頁"
+                                    >
+                                </picture>
+                            </figure>
+                            <figure class="message-sheet">
+                                <picture>
+                                    <source
+                                        srcset="/images/messages/31-1200.webp 1200w, /images/messages/31.webp 2400w"
+                                        sizes="(max-width: 768px) calc(100vw - 36px), 76vw"
+                                        type="image/webp"
+                                    >
+                                    <img
+                                        src="/images/messages/31.webp"
+                                        width="2400"
+                                        height="1431"
+                                        loading="lazy"
+                                        decoding="async"
+                                        alt="三周年寄語留言卡第五頁"
+                                    >
+                                </picture>
+                            </figure>
                         </div>
                     </div>
-<button id="messagesNext" class="messages-arrow messages-next" type="button" aria-label="下一組寄語" hidden>
+                    <button id="messagesNext" class="messages-arrow messages-next" type="button" aria-label="下一頁寄語" hidden>
                         <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-                            <path d="M7 16h18M18 9l7 7-7 7" />
+                            <path d="M13 5l6 11-6 11" />
                         </svg>
                     </button>
                     <p id="messagesStatus" class="messages-status" role="status" aria-live="polite"></p>
@@ -703,7 +703,7 @@
         <section id="thanks-page" class="page-content info-page" aria-labelledby="thanksLabel thanksTitle">
             <div class="text-container">
                 <p id="thanksLabel" class="section-label">
-                    <span>06</span><span>謝花人</span><span class="section-label-line" aria-hidden="true"></span>
+                    <span>06</span><span>銘同錄</span><span class="section-label-line" aria-hidden="true"></span>
                 </p>
                 <h1 id="thanksTitle">委託名單</h1>
                 <div class="commission-roster-carousel">

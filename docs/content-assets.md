@@ -60,7 +60,7 @@
 ## 字體
 
 - LXGW WenKai TC：`lxgw-wenkai-tc-300.woff2` 保留為完整原始字型；網站實際使用由 `npm.cmd run optimize:font` 依 `index.html`、`script.js` 與 `src/` 現有文字產生的 `lxgw-wenkai-tc-300-subset.woff2`。子集來源是300字重，CSS將同一字形提供給目前使用的300–400字重範圍。除已完成作品圖上的標題與敘述外，全站以此字體作為主字體，並在首屏以高優先度 preload 取得；字體判定程式放在文件底部，確保正式建置重排後的 CSS 已註冊，並不等待整頁 `load` 就以入口中文實際驗證。字體確實載入完成前只顯示暖紙底色，不先繪製回退文字，因此不會發生可見的換字或版面跳動，也不會因固定逾時而放棄尚在下載的字體。只有字體請求明確失敗或瀏覽器不支援字體載入判定時，才會在內容首次顯示前固定選用中文襯線回退，該次瀏覽不再切換。新增會使用此字體顯示的文字後需重新執行子集指令。
-- 2026-11-09 已依目前頁面文案（含新增與更新的 01、06、11、12、14、16、17、19–21 作品文字）重新產生 980 字元、約 287 KB 的子集。主要中文與一般拉丁字使用 LXGW WenKai TC；原始字型未收錄的「猧」（U+7327）由 Chiron Sung HK 的單字補充子集提供。彩色 emoji 與兩套字型都未收錄的特殊符號仍由作業系統對應字型補足，內容不因此刪改。
+- 2026-11-13 已依目前頁面文案（包含新增章名「寄墨箋」「銘同錄」）重新產生 893 字元、約 261 KB 的子集。主要中文與一般拉丁字使用 LXGW WenKai TC；原始字型未收錄的「猧」（U+7327）由 Chiron Sung HK 的單字補充子集提供。彩色 emoji 與兩套字型都未收錄的特殊符號仍由作業系統對應字型補足，內容不因此刪改。
 - 作品圖上的標題與敘述使用 `ChenYuluoyan-2.0-Thin.ttf`；原始字型與 OFL 授權文件保留於 `fonts/`，網站實際載入由 `npm.cmd run optimize:font` 依全部 `.slide-caption` 文字產生的 `chenyuluoyan-2.0-thin-artwork-subset.woff2`。新增或修改作品文字後需重新執行同一指令，避免缺字並維持載入效能。
 - Chiron Sung HK 不以完整分片樣式於執行期載入，避免大量額外請求；專案僅保留由官方 `bf_2.woff2` 製作、約 2 KB 的「猧」單字補充檔。
 - 一般回退包含 Noto Serif TC、Noto Serif CJK TC、Source Han Serif TC、Songti TC、PMingLiU、MingLiU、serif。

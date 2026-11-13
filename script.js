@@ -221,51 +221,84 @@ async function moveSlide(direction) {
     if (galleryLoadStatus) galleryLoadStatus.textContent = imageReady ? '' : '這幅作品的圖像尚未提供。';
     if (version !== turnVersion) return;
 
-    currentIndex = nextIndex;
-    const incoming = originalSlides[currentIndex];
+    const incoming = originalSlides[nextIndex];
+    const galleryProgress = galleryProgressTerm?.closest('.gallery-scroll-progress');
+    const progressOpacity = galleryProgress
+        ? Number.parseFloat(getComputedStyle(galleryProgress).opacity) || 1
+        : 1;
+    const commitSlideChange = () => {
+        currentIndex = nextIndex;
+        cycleRotation += direction * 15;
+        document.documentElement.style.setProperty('--cycle-angle', `${cycleRotation}deg`);
+        updateGalleryMeta(currentIndex);
 
-    cycleRotation += direction * 15;
-    document.documentElement.style.setProperty('--cycle-angle', `${cycleRotation}deg`);
-    updateGalleryMeta(currentIndex);
-
-    if (!reducedMotion.matches && direction === 1 && previousIndex === totalSlides - 1) {
-        clearTimeout(cycleCompleteTimer);
-        document.body.classList.remove('cycle-complete');
-        void document.body.offsetWidth;
-        document.body.classList.add('cycle-complete');
-        cycleCompleteTimer = setTimeout(() => {
+        if (!reducedMotion.matches && direction === 1 && previousIndex === totalSlides - 1) {
+            clearTimeout(cycleCompleteTimer);
             document.body.classList.remove('cycle-complete');
-        }, 900);
-    }
-
-    updateBackgroundColor();
+            void document.body.offsetWidth;
+            document.body.classList.add('cycle-complete');
+            cycleCompleteTimer = setTimeout(() => {
+                document.body.classList.remove('cycle-complete');
+            }, 900);
+        }
+    };
 
     if (reducedMotion.matches || typeof outgoing.animate !== 'function') {
+        commitSlideChange();
         finishPageTurn();
         continueGalleryNavigation();
         continueQueuedSlideMove();
         return;
     }
 
-    outgoing.classList.remove('is-current', 'is-turning');
-    outgoing.setAttribute('aria-hidden', 'true');
-    outgoing.inert = true;
-    incoming.classList.add('is-current');
-    incoming.setAttribute('aria-hidden', 'false');
-    incoming.inert = false;
-    incoming.style.zIndex = '2';
+    outgoing.classList.add('is-turning');
+    outgoing.style.zIndex = '2';
 
-    // 目標圖片完成載入與解碼後才切換；舊圖立即退出，避免半透明殘像覆蓋新圖。
-    // 圖片本體不做 scale／translate，避免動畫結束移除合成層時產生亞像素晃動。
-    // 僅讓隨圖切換的文字柔和淡入，作品從出現到落定都維持相同座標。
-    turnAnimations = [
-        incoming.querySelector('.slide-caption').animate([
-            { opacity: 0 },
-            { opacity: 1 }
-        ], { duration: 420, easing: 'ease-out', fill: 'both' })
+    const fadeOutAnimations = [
+        outgoing.animate([
+            { opacity: 1 },
+            { opacity: 0 }
+        ], { duration: 260, easing: 'ease-in', fill: 'forwards' })
     ];
+    if (galleryProgress) {
+        fadeOutAnimations.push(galleryProgress.animate([
+            { opacity: progressOpacity },
+            { opacity: 0 }
+        ], { duration: 220, easing: 'ease-in', fill: 'forwards' }));
+    }
+    turnAnimations = fadeOutAnimations;
+
+    // 目標圖片完成載入與解碼後，整張作品與文字共同淡出、交接、淡入。
+    // 圖片本體不做 scale／translate，避免殘影與動畫結束時的亞像素晃動。
     try {
-        await Promise.all(turnAnimations.map(animation => animation.finished));
+        await Promise.all(fadeOutAnimations.map(animation => animation.finished));
+        if (version !== turnVersion) return;
+
+        commitSlideChange();
+        outgoing.classList.remove('is-current', 'is-turning');
+        outgoing.setAttribute('aria-hidden', 'true');
+        outgoing.inert = true;
+        incoming.classList.add('is-current', 'is-turning');
+        incoming.setAttribute('aria-hidden', 'false');
+        incoming.inert = false;
+        incoming.style.zIndex = '2';
+
+        const fadeInAnimations = [
+            incoming.animate([
+                { opacity: 0 },
+                { opacity: 1 }
+            ], { duration: 420, easing: 'ease-out', fill: 'both' })
+        ];
+        if (galleryProgress) {
+            fadeInAnimations.push(galleryProgress.animate([
+                { opacity: 0 },
+                { opacity: progressOpacity }
+            ], { duration: 360, easing: 'ease-out', fill: 'both' }));
+        }
+
+        fadeOutAnimations.forEach(animation => animation.cancel());
+        turnAnimations = fadeInAnimations;
+        await Promise.all(fadeInAnimations.map(animation => animation.finished));
     } catch {
         // 換到其他分頁時取消動畫，由 finishPageTurn 完成定位。
     } finally {
@@ -341,8 +374,8 @@ function setCurrentSection(pageName) {
         gallery: '觀芳華',
         text: '繪春信',
         planning: '籌花事',
-        messages: '寄語',
-        thanks: '謝花人'
+        messages: '寄墨箋',
+        thanks: '銘同錄'
     }[pageName];
     if (pageName === 'gallery') updateGalleryMeta(currentIndex);
 }
@@ -672,7 +705,7 @@ const messagesViewport = document.getElementById('messagesViewport');
 const messagesPrev = document.getElementById('messagesPrev');
 const messagesNext = document.getElementById('messagesNext');
 const messagesStatus = document.getElementById('messagesStatus');
-const messageCards = messagesTrack ? Array.from(messagesTrack.querySelectorAll('.message-card')) : [];
+const messageSheets = messagesTrack ? Array.from(messagesTrack.querySelectorAll('.message-sheet')) : [];
 const messageGroups = [];
 let currentMessageGroup = 0;
     let isMessagesAnimating = false;
@@ -682,16 +715,15 @@ let messagesTouchStartX = 0;
 let messagesTouchStartY = 0;
 
 if (messagesTrack) {
-    for (let index = 0; index < messageCards.length; index += 4) {
+    messageSheets.forEach(sheet => {
         const group = document.createElement('div');
-        const cards = messageCards.slice(index, index + 4);
         group.className = 'message-group';
-        group.dataset.count = String(cards.length);
+        group.dataset.count = '1';
         group.setAttribute('role', 'group');
-        cards.forEach(card => group.append(card));
+        group.append(sheet);
         messagesTrack.append(group);
         messageGroups.push(group);
-    }
+    });
 }
 
     function finishMessageGroup(targetIndex = currentMessageGroup) {
@@ -706,7 +738,7 @@ if (messagesTrack) {
         group.inert = !active;
     });
     if (messagesStatus) {
-        messagesStatus.textContent = `第 ${targetIndex + 1} 組，共 ${messageGroups.length} 組`;
+        messagesStatus.textContent = `第 ${targetIndex + 1} 頁，共 ${messageGroups.length} 頁`;
     }
     isMessagesAnimating = false;
 }
@@ -1009,7 +1041,7 @@ async function enterExhibition(withMusic = true) {
                 { opacity: 1, transform: 'translate3d(0, 0, 0)' },
                 { opacity: 0, transform: 'translate3d(0, -8px, 0)' }
             ], {
-                duration: 560,
+                duration: 650,
                 easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
                 fill: 'forwards'
             }));
@@ -1020,7 +1052,7 @@ async function enterExhibition(withMusic = true) {
                     { opacity: 1 },
                     { opacity: 0 }
                 ], {
-                    duration: 680,
+                    duration: 780,
                     easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
                     fill: 'forwards'
                 }));
@@ -1031,7 +1063,7 @@ async function enterExhibition(withMusic = true) {
                     { opacity: Number.parseFloat(getComputedStyle(temporalSculpture).opacity) || 1 },
                     { opacity: 0 }
                 ], {
-                    duration: 600,
+                    duration: 700,
                     easing: 'ease-in-out',
                     fill: 'forwards'
                 });
@@ -1040,21 +1072,21 @@ async function enterExhibition(withMusic = true) {
 
             transitionAnimations.push(...focusAnimations);
             // 不等待封面所有元素完全消失；讓退場與圓形開口重疊，避免空白底色停頓。
-            await new Promise(resolve => window.setTimeout(resolve, 250));
+            await new Promise(resolve => window.setTimeout(resolve, 300));
 
             // 入口與光暈先完整退場，避免圓形遮罩邊緣穿過文字。
             const entranceExitAnimation = entranceTrigger.animate([
                 { opacity: 1, transform: 'scale(1.08)' },
                 { opacity: 0, transform: 'scale(1.16)' }
             ], {
-                duration: 180,
+                duration: 210,
                 easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
                 fill: 'forwards'
             });
             transitionAnimations.push(entranceExitAnimation);
             await Promise.race([
                 entranceExitAnimation.finished,
-                new Promise(resolve => window.setTimeout(resolve, 220))
+                new Promise(resolve => window.setTimeout(resolve, 250))
             ]);
 
             const revealStartRadius = Math.hypot(triggerBounds.width, triggerBounds.height) / 2 + 28;
@@ -1067,10 +1099,10 @@ async function enterExhibition(withMusic = true) {
             // 直接在真實封面上打開圓形缺口；內頁本身不再參與裁切動畫。
             document.body.classList.remove('entrance-open');
             document.documentElement.classList.remove('entrance-open');
-            await new Promise(resolve => window.setTimeout(resolve, 900));
+            await new Promise(resolve => window.setTimeout(resolve, 650));
             startSolarAutoplay(true);
             solarAutoplayStartedDuringEntrance = true;
-            await new Promise(resolve => window.setTimeout(resolve, 350));
+            await new Promise(resolve => window.setTimeout(resolve, 800));
         }
     } finally {
         resetExhibitionToStart();
