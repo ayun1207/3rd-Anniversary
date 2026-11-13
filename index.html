@@ -6,6 +6,7 @@
     <title>展示網站</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='24' fill='none' stroke='%238f7959' stroke-width='3'/%3E%3Cpath d='M32 12c7 8 7 32 0 40M12 32h40' fill='none' stroke='%238f7959' stroke-width='2' opacity='.65'/%3E%3C/svg%3E">
     <link rel="preload" as="font" type="font/woff2" href="fonts/lxgw-wenkai-tc-300-subset.woff2" crossorigin fetchpriority="high">
+    <link rel="preload" as="font" type="font/woff2" href="fonts/chenyuluoyan-2.0-thin-artwork-subset.woff2" crossorigin fetchpriority="high">
     <link rel="preload" as="font" type="font/woff2" href="fonts/chiron-sung-hk-u7327-subset.woff2" crossorigin>
     <link rel="stylesheet" href="style.css">
     <noscript>
@@ -127,7 +128,7 @@
         </section>
 
         <!-- 作品展示：嵌在長頁中的橫向循環展廳。 -->
-        <section id="gallery-page" class="page-content" aria-labelledby="galleryLabel galleryTitle">
+        <section id="gallery-page" class="page-content" aria-labelledby="galleryLabel galleryTitle" hidden inert>
             <div class="gallery-sticky-shell">
                 <div class="gallery-section-heading">
                     <p id="galleryLabel" class="section-label">
@@ -349,7 +350,7 @@
         </section>
 
         <!-- 繪春信：可在這裡補上繪師介紹與連結。 -->
-        <section id="text-page" class="page-content info-page" aria-labelledby="artistLabel artistTitle">
+        <section id="text-page" class="page-content info-page" aria-labelledby="artistLabel artistTitle" hidden inert>
             <div class="text-container">
                 <p id="artistLabel" class="section-label">
                     <span>03</span><span>繪春信</span><span class="section-label-line" aria-hidden="true"></span>
@@ -368,7 +369,7 @@
             </div>
         </section>
         <!-- 籌花事：可在這裡補上企劃緣起與製作過程。 -->
-        <section id="planning-page" class="page-content info-page" aria-labelledby="planningLabel planningTitle" tabindex="-1">
+        <section id="planning-page" class="page-content info-page" aria-labelledby="planningLabel planningTitle" tabindex="-1" hidden inert>
             <div class="text-container">
                 <p id="planningLabel" class="section-label">
                     <span>04</span><span>籌花事</span><span class="section-label-line" aria-hidden="true"></span>
@@ -390,7 +391,7 @@
         </section>
 
         <!-- 寄語：每張 .message-sheet 圖片為一頁，切換功能會依頁數自動啟用。 -->
-        <section id="messages-page" class="page-content messages-page" aria-labelledby="messagesLabel messagesTitle">
+        <section id="messages-page" class="page-content messages-page" aria-labelledby="messagesLabel messagesTitle" hidden inert>
             <div class="messages-container">
                 <header class="messages-heading">
                     <p id="messagesLabel" class="section-label">
@@ -503,7 +504,7 @@
             </div>
         </section>
 
-        <section id="thanks-page" class="page-content info-page" aria-labelledby="thanksLabel thanksTitle">
+        <section id="thanks-page" class="page-content info-page" aria-labelledby="thanksLabel thanksTitle" hidden inert>
             <div class="text-container">
                 <p id="thanksLabel" class="section-label">
                     <span>06</span><span>銘同錄</span><span class="section-label-line" aria-hidden="true"></span>

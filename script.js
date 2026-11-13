@@ -3,6 +3,7 @@ import { createApp, shallowRef } from 'vue';
 import ChapterNavigation from './src/components/ChapterNavigation.vue';
 import ChapterBackground from './src/components/ChapterBackground.vue';
 import EpilogueGem from './src/components/EpilogueGem.vue';
+import ArtworkViewer from './src/components/ArtworkViewer.vue';
 import { gsap } from 'gsap';
 
 // 單次過場依真實經過時間收束，避免低幀率或分頁節流延長入口等待。
@@ -255,6 +256,25 @@ const currentChapter = shallowRef('intro');
 createApp(ChapterNavigation, { currentChapter, navigate: navigateToSection }).mount('#chapter-navigation');
 createApp(ChapterBackground, { currentChapter }).mount('#chapter-background');
 createApp(EpilogueGem, { currentChapter }).mount('#epilogue-gem');
+const artworkViewerHost = document.createElement('div');
+galleryPage.append(artworkViewerHost);
+const artworkViewer = createApp(ArtworkViewer, {
+    stage: document.querySelector('.gallery-stage'), move: moveSlide, currentChapter,
+    onRestore: () => queueChapterFit()
+}).mount(artworkViewerHost);
+const carouselViewport = document.querySelector('.carousel-viewport');
+let galleryClickSuppressedUntil = 0;
+carouselViewport.setAttribute('aria-label', '作品展示，可用左右方向鍵切換，手機可點擊或按 Enter 放大');
+carouselViewport.addEventListener('click', event => {
+    if (performance.now() < galleryClickSuppressedUntil) return;
+    if (!event.target.closest('button')) artworkViewer.openViewer();
+});
+carouselViewport.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        artworkViewer.openViewer();
+    }
+});
 let currentSection = 'intro';
 let requestedChapter = 'intro';
 let chapterTimeline;
@@ -778,7 +798,6 @@ document.addEventListener('pointerover', event => animateButtonHover(event, true
 document.addEventListener('pointerout', event => animateButtonHover(event, false));
 
 /* 手機左右滑動 */
-const carouselViewport = document.querySelector('.carousel-viewport');
 
 let touchStartX = 0;
 let touchStartY = 0;
@@ -800,6 +819,7 @@ carouselViewport.addEventListener('touchend', (event) => {
 
     const deltaX = touchEndX - touchStartX;
     const deltaY = touchEndY - touchStartY;
+    if (Math.hypot(deltaX, deltaY) > 10) galleryClickSuppressedUntil = performance.now() + 400;
 
     /* 至少滑動 50px 才判定為有效手勢 */
     const swipeThreshold = 50;
