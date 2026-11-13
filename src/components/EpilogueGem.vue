@@ -34,16 +34,8 @@ function positionGem() {
     if (!frame || props.currentChapter.value !== 'thanks') return;
     const bounds = frame.getBoundingClientRect();
     if (!bounds.width || !bounds.height) return;
-    let left = bounds.right - 60;
-    let top = bounds.bottom + 12;
-    if (top + 68 > innerHeight - 12) {
-        left = bounds.right + 12;
-        top = bounds.bottom - 68;
-        if (left + 60 > innerWidth - 12) {
-            left = bounds.right - 80;
-            top = bounds.bottom - 88;
-        }
-    }
+    const left = bounds.right - 68;
+    const top = bounds.bottom - 68;
     gemPosition.value = {
         left: `${Math.max(12, Math.min(left, innerWidth - 72))}px`,
         top: `${Math.max(12, Math.min(top, innerHeight - 80))}px`
@@ -359,7 +351,7 @@ onBeforeUnmount(() => {
     white-space: nowrap;
 }
 @media (max-width: 900px) {
-    .epilogue-gem-trigger { position: absolute; right: 8px; bottom: 8px; }
+    .epilogue-gem-trigger { position: absolute; right: 0; bottom: 0; }
 }
 @media (max-width: 768px) {
     .epilogue-dialog { padding: 22px; }
