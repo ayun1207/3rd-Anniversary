@@ -280,6 +280,8 @@ carouselViewport.addEventListener('keydown', event => {
 let currentSection = 'intro';
 let requestedChapter = 'intro';
 let chapterTimeline;
+let chapterRequest = 0;
+const chapterImagePreparations = new WeakMap();
 const chapterScroller = document.querySelector('main');
 const readingMedia = window.matchMedia('(max-width: 900px)');
 const readingGroups = [['text', 'planning'], ['messages', 'thanks']].map(names => names.map(name => document.getElementById(`${name}-page`)));
@@ -342,10 +344,36 @@ function setCurrentSection(pageName, force = false) {
     if (pageName === 'gallery') updateGalleryMeta(currentIndex);
 }
 
-function navigateToSection(pageName) {
+function prepareChapterImage(image) {
+    if (chapterImagePreparations.has(image)) return chapterImagePreparations.get(image);
+    image.loading = 'eager';
+    image.fetchPriority = 'high';
+    if (image.complete && !image.naturalWidth) {
+        const source = image.getAttribute('src');
+        const sourceSet = image.getAttribute('srcset');
+        image.removeAttribute('srcset');
+        image.removeAttribute('src');
+        if (sourceSet) image.setAttribute('srcset', sourceSet);
+        if (source) image.setAttribute('src', source);
+    }
+    let timer;
+    const preparation = Promise.race([
+        image.decode().then(() => true, () => false),
+        new Promise(resolve => { timer = window.setTimeout(() => resolve(false), 8000); })
+    ]).then(ready => {
+        window.clearTimeout(timer);
+        chapterImagePreparations.delete(image);
+        return ready;
+    });
+    chapterImagePreparations.set(image, preparation);
+    return preparation;
+}
+
+async function navigateToSection(pageName) {
     const targetPage = document.getElementById(`${pageName}-page`);
     if (!targetPage) return;
     requestedChapter = pageName;
+    const request = ++chapterRequest;
     const wasSwitching = Boolean(chapterTimeline);
     chapterTimeline?.kill();
     chapterTimeline = null;
@@ -357,6 +385,14 @@ function navigateToSection(pageName) {
     };
     const outgoingGroup = readingSectionsFor(currentSection);
     const incomingGroup = readingSectionsFor(pageName);
+    const imageSections = incomingGroup.length ? incomingGroup : [targetPage];
+    const images = imageSections.flatMap(section => [...section.querySelectorAll('.artist-profile-panel img, .planning-concept-panel img')]);
+    if (images.length) {
+        // 隱藏章節中的 lazy 圖片需先啟動下載、完成解碼，再與標題一起入場。
+        gsap.set(pageSections, { clearProps: 'opacity' });
+        const ready = (await Promise.all(images.map(prepareChapterImage))).every(Boolean);
+        if (request !== chapterRequest || !ready) return;
+    }
     if (outgoingGroup.length && outgoingGroup === incomingGroup) {
         gsap.set(pageSections, { clearProps: 'opacity' });
         const finishScroll = () => {
@@ -460,6 +496,7 @@ chapterScroller.addEventListener('keydown', event => {
     if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key)) cancelReadingScroll();
 });
 readingMedia.addEventListener('change', () => {
+    ++chapterRequest;
     cancelReadingScroll();
     chapterTimeline?.kill();
     chapterTimeline = null;
