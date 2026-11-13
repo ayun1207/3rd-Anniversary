@@ -387,6 +387,90 @@ body {
    寄語：可依人數增減的交錯紙箋
 ========================= */
 
+/* 常駐選章列；沿用書背的冷暖寶石色，保留自然長頁閱讀。 */
+.chapter-navigation {
+    position: fixed;
+    z-index: 110;
+    top: 14px;
+    right: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 4px 18px 4px 6px;
+    border: 1px solid rgba(193, 214, 209, 0.28);
+    border-radius: 24px;
+    background: linear-gradient(110deg, rgba(10, 19, 30, 0.94), rgba(20, 34, 49, 0.88));
+    box-shadow: inset 0 1px rgba(214, 230, 223, 0.12);
+    font-family: "LXGW WenKai TC", serif;
+}
+/* 啟用 GSAP 後停用原生時間控制，CSS 只保留靜態樣式與狀態。 */
+html.gsap-motion *,
+html.gsap-motion *::before,
+html.gsap-motion *::after {
+    animation: none !important;
+    transition: none !important;
+}
+html.gsap-motion .chapter-home:hover .menu-emblem { transform: none; }
+button:not(#enterExhibition) { scale: var(--press-scale, 1); }
+.chapter-navigation-links { position: relative; display: flex; gap: clamp(8px, 1.4vw, 24px); }
+.chapter-navigation-link,
+.chapter-navigation-trigger {
+    position: relative;
+    min-height: 44px;
+    padding: 8px 10px;
+    border: 0;
+    background: transparent;
+    color: var(--time-ink-secondary);
+    font: inherit;
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+}
+.chapter-navigation-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    opacity: 0;
+    background: linear-gradient(90deg, #8db7dd, #fcc26f, #f3a4b0);
+    pointer-events: none;
+}
+.chapter-navigation-link:hover,
+.chapter-navigation-link[aria-current] { color: var(--time-ink-primary); }
+.chapter-navigation .chapter-home {
+    position: relative;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    border: 1px solid rgba(181, 204, 210, 0.3);
+    background: transparent;
+    box-shadow: none;
+}
+.chapter-navigation .chapter-home:hover { transform: none; }
+.chapter-navigation .chapter-home:hover .menu-emblem { transform: rotate(10deg); }
+@media (min-width: 901px) {
+    body > .site-header { padding-top: 86px; }
+}
+.chapter-navigation :focus-visible { outline: 1px solid #c7d8ce; outline-offset: 2px; border-radius: 8px; }
+.chapter-navigation-trigger { display: none; }
+.page-content { scroll-margin-top: 78px; }
+html.entrance-open #chapter-navigation,
+html.entrance-pending #chapter-navigation { visibility: hidden; }
+@media (max-width: 900px) {
+    .chapter-navigation { top: 10px; right: 16px; width: 224px; padding: 2px 10px 2px 4px; gap: 8px; border-radius: 24px; flex-wrap: wrap; }
+    .chapter-navigation-trigger { flex: 1; }
+    .chapter-navigation-trigger { display: flex; width: 100%; align-items: center; justify-content: space-between; min-height: 48px; color: #f0eee3; }
+    .chapter-navigation-chevron { width: 7px; height: 7px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(45deg); }
+    .is-expanded .chapter-navigation-chevron { transform: rotate(225deg); }
+    .chapter-navigation-links { display: none; flex-basis: 100%; flex-direction: column; gap: 0; padding: 4px 0 10px; }
+    .is-expanded .chapter-navigation-links { display: flex; }
+    .chapter-navigation-link { text-align: left; }
+    .site-header .current-page-label { visibility: hidden; }
+    .page-content { scroll-margin-top: 72px; }
+}
+
 .messages-page,
 .page-content.messages-page,
 .page-content.messages-page.active {
@@ -7575,6 +7659,54 @@ html.has-content-reveal .content-reveal {
     }
 }
 
+/* 選章分頁：保留各主體框與內部版型，只有當前章節參與排版。 */
+main > .page-content[hidden],
+main > .site-epilogue[hidden] { display: none !important; }
+main > .page-content { padding-top: 28px !important; padding-bottom: 28px !important; }
+main { min-height: 100svh; padding-top: 90px; }
+main > .page-content:focus { outline: none; }
+@media (max-width: 900px) {
+    main { padding-top: 82px; }
+    main > .page-content { padding-top: 22px !important; padding-bottom: 22px !important; }
+}
+
+.gallery-stage-fit { display: contents; }
+
+/* 固定章節視窗，內容完整縮放並置中。 */
+html, body { height: 100%; overflow: hidden; }
+body > main {
+    position: fixed;
+    inset: 90px 0 0 96px;
+    width: auto;
+    min-height: 0;
+    padding: 0;
+    overflow: hidden;
+}
+main > .page-content.active {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-height: 0 !important;
+    padding: 0 !important;
+    overflow: visible;
+    transition: none;
+}
+.chapter-page-fit {
+    display: flow-root;
+    align-self: center;
+    flex: 0 0 100%;
+    width: 100%;
+    transform: scale(var(--chapter-fit-scale, 1));
+    transform-origin: center;
+}
+.chapter-page-fit > .intro-layout { margin-inline: auto; }
+.site-header::after { display: none !important; }
+@media (max-width: 900px) {
+    body > main { inset: 82px 0 0; }
+}
+
 /* 寄語：改為一張排版圖對應一個輪播頁面。 */
 #messages-page .messages-container {
     height: auto;
@@ -7680,6 +7812,60 @@ html.has-content-reveal .content-reveal {
 
 #messages-page #messagesNext {
     right: 0.45rem !important;
+}
+
+/* 桌機觀芳華與寄墨箋沿用籌花事的框高，標題組維持既有間距。 */
+@media (min-width: 901px) {
+    main {
+        --planning-frame-height: calc(
+            clamp(38px, 4.2vw, 56px) + clamp(16px, 1.8vw, 24px)
+            + clamp(2rem, 4vw, 3.6rem) * 1.35
+            + clamp(14px, 1.6vw, 22px) + 1px
+            + (var(--glass-frame) - 2px - 2 * clamp(38px, 4.2vw, 56px)) * 1347 / 2400
+        );
+    }
+
+    #gallery-page .gallery-sticky-shell,
+    #messages-page .messages-container {
+        height: var(--planning-frame-height);
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    #gallery-page .gallery-sticky-shell { padding-bottom: 24px; }
+    #gallery-page .gallery-section-heading,
+    #messages-page .messages-heading { flex: 0 0 auto; }
+
+    #gallery-page .gallery-stage-fit {
+        display: grid;
+        place-items: center;
+        flex: 1;
+        min-height: 0;
+        margin-inline: 24px;
+        container-type: size;
+    }
+
+    #gallery-page .gallery-stage {
+        width: min(100cqw, calc(100cqh * 2000 / 1126));
+        height: auto;
+        min-height: 0;
+        flex: none;
+    }
+
+    #messages-page .messages-carousel {
+        flex: 1;
+        min-height: 0;
+        container-type: size;
+    }
+    #messages-page .messages-viewport,
+    #messages-page .messages-track,
+    #messages-page .message-group,
+    #messages-page .message-sheet,
+    #messages-page .message-sheet picture { height: 100%; min-height: 0; }
+    #messages-page .message-sheet { width: 100%; }
+    #messages-page .message-sheet img { height: 100%; object-fit: contain; }
 }
 
 @media (max-width: 768px) {

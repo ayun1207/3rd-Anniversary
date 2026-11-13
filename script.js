@@ -1,57 +1,17 @@
 import { seasonsData } from './src/data/seasons.js';
+import { createApp, shallowRef } from 'vue';
+import ChapterNavigation from './src/components/ChapterNavigation.vue';
+import { gsap } from 'gsap';
+
+// 單次過場依真實經過時間收束，避免低幀率或分頁節流延長入口等待。
+gsap.ticker.lagSmoothing(0);
+document.documentElement.classList.add('gsap-motion');
 
 // 24 張圖片對應的低飽和度背景色列表
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 const backgroundColors = seasonsData.map(season => season.tone);
 
-const siteMenu = document.getElementById('siteMenu');
-const menuToggle = document.getElementById('menuToggle');
-let menuCloseTimer;
-function openMenu() {
-    clearTimeout(menuCloseTimer);
-    updateScrollState();
-    if (!siteMenu.open) siteMenu.show();
-    document.body.classList.add('menu-open');
-    menuToggle.setAttribute('aria-expanded', 'true');
-    void siteMenu.offsetWidth;
-    siteMenu.classList.add('is-open');
-}
-
-function closeMenu() {
-    if (!siteMenu.open) return;
-    clearTimeout(menuCloseTimer);
-    siteMenu.classList.remove('is-open');
-    const delay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 650;
-    menuCloseTimer = setTimeout(() => siteMenu.close(), delay);
-}
-
-siteMenu.addEventListener('click', (event) => {
-    if (event.target === siteMenu) closeMenu();
-});
-document.addEventListener('pointerdown', (event) => {
-    if (!siteMenu.open || !siteMenu.classList.contains('is-open')) return;
-    if (event.target.closest('.menu-panel') || event.target === menuToggle) return;
-    closeMenu();
-});
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && siteMenu.open) {
-        event.preventDefault();
-        closeMenu();
-    }
-});
-siteMenu.addEventListener('cancel', (event) => {
-    event.preventDefault();
-    closeMenu();
-});
-siteMenu.addEventListener('close', () => {
-    if (siteMenu.open) return;
-    clearTimeout(menuCloseTimer);
-    siteMenu.classList.remove('is-open');
-    document.body.classList.remove('menu-open');
-    menuToggle.setAttribute('aria-expanded', 'false');
-    menuToggle.focus({ preventScroll: true });
-});
 
 /* =========================
    作品手動切換初始化
@@ -87,7 +47,6 @@ let queuedSlideDirection = 0;
 let turnAnimations = [];
 let turnVersion = 0;
 let cycleRotation = 0;
-let cycleCompleteTimer;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const slideImageLoads = new WeakMap();
 const galleryImageWaitLimit = 8000;
@@ -159,12 +118,13 @@ function continueGalleryNavigation() {
 }
 
 function updateBackgroundColor() {
-    galleryPage?.style.setProperty('--gallery-tone', backgroundColors[currentIndex]);
+    if (!galleryPage) return;
+    gsap.to(galleryPage, { '--gallery-tone': backgroundColors[currentIndex], duration: reducedMotion.matches ? 0 : 0.8, ease: 'sine.inOut', overwrite: 'auto' });
 }
 
 function finishPageTurn() {
     turnVersion += 1;
-    turnAnimations.forEach(animation => animation.cancel());
+    turnAnimations.forEach(animation => animation.kill());
     turnAnimations = [];
     originalSlides.forEach((slide, index) => {
         const active = index === currentIndex;
@@ -174,6 +134,7 @@ function finishPageTurn() {
         slide.inert = !active;
         slide.style.removeProperty('z-index');
         slide.style.removeProperty('position');
+        slide.style.removeProperty('opacity');
     });
     isAnimating = false;
 }
@@ -222,28 +183,18 @@ async function moveSlide(direction) {
     if (version !== turnVersion) return;
 
     const incoming = originalSlides[nextIndex];
-    const galleryProgress = galleryProgressTerm?.closest('.gallery-scroll-progress');
-    const progressOpacity = galleryProgress
-        ? Number.parseFloat(getComputedStyle(galleryProgress).opacity) || 1
-        : 1;
     const commitSlideChange = () => {
         currentIndex = nextIndex;
         cycleRotation += direction * 15;
-        document.documentElement.style.setProperty('--cycle-angle', `${cycleRotation}deg`);
+        gsap.to(document.documentElement, { '--cycle-angle': `${cycleRotation}deg`, duration: reducedMotion.matches ? 0 : 0.98, ease: 'power2.out', overwrite: 'auto' });
         updateGalleryMeta(currentIndex);
 
         if (!reducedMotion.matches && direction === 1 && previousIndex === totalSlides - 1) {
-            clearTimeout(cycleCompleteTimer);
-            document.body.classList.remove('cycle-complete');
-            void document.body.offsetWidth;
-            document.body.classList.add('cycle-complete');
-            cycleCompleteTimer = setTimeout(() => {
-                document.body.classList.remove('cycle-complete');
-            }, 900);
+            gsap.fromTo('.gallery-progress-orbit', { opacity: 0.65 }, { opacity: 1, duration: 0.9, ease: 'sine.out', clearProps: 'opacity', overwrite: 'auto' });
         }
     };
 
-    if (reducedMotion.matches || typeof outgoing.animate !== 'function') {
+    if (reducedMotion.matches) {
         commitSlideChange();
         finishPageTurn();
         continueGalleryNavigation();
@@ -254,53 +205,26 @@ async function moveSlide(direction) {
     outgoing.classList.add('is-turning');
     outgoing.style.zIndex = '2';
 
-    const fadeOutAnimations = [
-        outgoing.animate([
-            { opacity: 1 },
-            { opacity: 0 }
-        ], { duration: 260, easing: 'ease-in', fill: 'forwards' })
-    ];
-    if (galleryProgress) {
-        fadeOutAnimations.push(galleryProgress.animate([
-            { opacity: progressOpacity },
-            { opacity: 0 }
-        ], { duration: 220, easing: 'ease-in', fill: 'forwards' }));
-    }
-    turnAnimations = fadeOutAnimations;
-
-    // 目標圖片完成載入與解碼後，整張作品與文字共同淡出、交接、淡入。
-    // 圖片本體不做 scale／translate，避免殘影與動畫結束時的亞像素晃動。
+    // 圖片下載與解碼完成後才開始交接，文字與圖面共用透明度。
     try {
-        await Promise.all(fadeOutAnimations.map(animation => animation.finished));
-        if (version !== turnVersion) return;
-
-        commitSlideChange();
-        outgoing.classList.remove('is-current', 'is-turning');
-        outgoing.setAttribute('aria-hidden', 'true');
-        outgoing.inert = true;
-        incoming.classList.add('is-current', 'is-turning');
-        incoming.setAttribute('aria-hidden', 'false');
-        incoming.inert = false;
-        incoming.style.zIndex = '2';
-
-        const fadeInAnimations = [
-            incoming.animate([
-                { opacity: 0 },
-                { opacity: 1 }
-            ], { duration: 420, easing: 'ease-out', fill: 'both' })
-        ];
-        if (galleryProgress) {
-            fadeInAnimations.push(galleryProgress.animate([
-                { opacity: 0 },
-                { opacity: progressOpacity }
-            ], { duration: 360, easing: 'ease-out', fill: 'both' }));
-        }
-
-        fadeOutAnimations.forEach(animation => animation.cancel());
-        turnAnimations = fadeInAnimations;
-        await Promise.all(fadeInAnimations.map(animation => animation.finished));
-    } catch {
-        // 換到其他分頁時取消動畫，由 finishPageTurn 完成定位。
+        await new Promise(resolve => {
+            const timeline = gsap.timeline({ onComplete: () => resolve(), onInterrupt: () => resolve() });
+            turnAnimations = [timeline];
+            timeline
+                .to(outgoing, { opacity: 0, duration: 0.26, ease: 'power1.in' })
+                .call(() => {
+                    if (version !== turnVersion) return;
+                    commitSlideChange();
+                    outgoing.classList.remove('is-current', 'is-turning');
+                    outgoing.setAttribute('aria-hidden', 'true');
+                    outgoing.inert = true;
+                    incoming.classList.add('is-current', 'is-turning');
+                    incoming.setAttribute('aria-hidden', 'false');
+                    incoming.inert = false;
+                    incoming.style.zIndex = '2';
+                })
+                .fromTo(incoming, { opacity: 0 }, { opacity: 1, duration: 0.42, ease: 'power1.out', immediateRender: false });
+        });
     } finally {
         if (version === turnVersion) {
             finishPageTurn();
@@ -321,22 +245,24 @@ void prepareSlideImage(0, { highPriority: true }).then(() => {
 });
 
 /* =========================
-   垂直章節與作品閱讀進度
+   獨立章節與作品閱讀進度
 ========================= */
 
 const pageSections = Array.from(document.querySelectorAll('.page-content'));
+// 各章內容作為完整構圖等比例置中。
+pageSections.forEach(section => {
+    const content = document.createElement('div');
+    content.className = 'chapter-page-fit';
+    content.append(...section.childNodes);
+    section.append(content);
+});
 const galleryProgressTerm = document.getElementById('galleryProgressTerm');
+// 共用章節來源：選章寫入，Vue 導覽讀取；捲動只更新當前頁閱讀進度。
+const currentChapter = shallowRef('intro');
+createApp(ChapterNavigation, { currentChapter, navigate: navigateToSection }).mount('#chapter-navigation');
 let currentSection = 'intro';
-let scrollFrame = 0;
-let scrollSettleTimer;
-
-function closeMenuImmediately() {
-    clearTimeout(menuCloseTimer);
-    if (siteMenu.open) siteMenu.close();
-    siteMenu.classList.remove('is-open');
-    document.body.classList.remove('menu-open');
-    menuToggle.setAttribute('aria-expanded', 'false');
-}
+let requestedChapter = 'intro';
+let chapterTimeline;
 
 function updateGalleryProgress(index) {
     const boundedIndex = Math.max(0, Math.min(totalSlides - 1, index));
@@ -357,14 +283,12 @@ function setCurrentSection(pageName) {
     if (!pageName) return;
     if (pageName === currentSection && document.body.dataset.section === pageName) return;
     currentSection = pageName;
+    currentChapter.value = pageName;
     pageSections.forEach(section => {
-        section.classList.toggle('active', section.id === `${pageName}-page`);
-    });
-    document.querySelectorAll('.nav-btn').forEach(button => {
-        const active = button.dataset.page === pageName;
-        button.classList.toggle('active', active);
-        if (active) button.setAttribute('aria-current', 'page');
-        else button.removeAttribute('aria-current');
+        const active = section.id === `${pageName}-page`;
+        section.classList.toggle('active', active);
+        section.hidden = !active;
+        section.inert = !active;
     });
 
     document.body.classList.toggle('gallery-section-active', pageName === 'gallery');
@@ -383,99 +307,68 @@ function setCurrentSection(pageName) {
 function navigateToSection(pageName) {
     const targetPage = document.getElementById(`${pageName}-page`);
     if (!targetPage) return;
-    closeMenuImmediately();
-    setCurrentSection(pageName);
-    targetPage.scrollIntoView({
-        behavior: reducedMotion.matches ? 'auto' : 'smooth',
-        block: 'start'
+    requestedChapter = pageName;
+    const wasSwitching = Boolean(chapterTimeline);
+    chapterTimeline?.kill();
+    chapterTimeline = null;
+    const outgoing = document.getElementById(`${currentSection}-page`);
+    const commit = () => {
+        setCurrentSection(pageName);
+        fitCurrentChapter();
+        if (pageName === 'intro') startSolarAutoplay();
+        else stopSolarAutoplay();
+        targetPage.setAttribute('tabindex', '-1');
+        targetPage.focus({ preventScroll: true });
+    };
+
+    if (reducedMotion.matches || document.hidden) {
+        gsap.set(pageSections, { clearProps: 'opacity' });
+        commit();
+        return;
+    }
+    if (outgoing === targetPage && !wasSwitching) return;
+
+    chapterTimeline = gsap.timeline({
+        onComplete: () => {
+            gsap.set(pageSections, { clearProps: 'opacity' });
+            chapterTimeline = null;
+        }
     });
+    chapterTimeline
+        .to(outgoing, { opacity: 0, duration: 0.22, ease: 'power1.inOut' })
+        .call(commit)
+        .fromTo(targetPage, { opacity: 0 }, { opacity: 1, duration: 0.48, ease: 'power2.out', immediateRender: false });
 }
 
-function updateScrollState() {
-    scrollFrame = 0;
-    const scrollRoot = document.scrollingElement || document.documentElement;
-    const maximumScroll = Math.max(0, scrollRoot.scrollHeight - scrollRoot.clientHeight);
-    const pageProgress = maximumScroll > 0 ? scrollRoot.scrollTop / maximumScroll : 0;
-    const markerHeight = 44;
-    const markerTravel = Math.max(0, window.innerHeight - markerHeight);
-    document.documentElement.style.setProperty(
-        '--section-marker-top',
-        `${Math.min(1, Math.max(0, pageProgress)) * markerTravel}px`
-    );
-    const sectionLine = Math.min(window.innerHeight * 0.34, 300);
-    let visibleSection = pageSections[0];
-    pageSections.forEach(section => {
-        if (section.getBoundingClientRect().top <= sectionLine) visibleSection = section;
-    });
-    const remainingScroll = scrollRoot.scrollHeight - scrollRoot.scrollTop - scrollRoot.clientHeight;
-    const finalSection = pageSections[pageSections.length - 1];
-    const finalSectionLine = Math.min(window.innerHeight * 0.55, 460);
-    const finalSectionReached = finalSection.getBoundingClientRect().top <= finalSectionLine;
-    const atPageEnd = remainingScroll <= Math.max(8, window.innerHeight * 0.01);
-    if (finalSectionReached || atPageEnd) visibleSection = finalSection;
-    setCurrentSection(visibleSection.id.replace('-page', ''));
+function fitCurrentChapter() {
+    chapterFitFrame = 0;
+    const section = document.getElementById(`${currentSection}-page`);
+    const content = section.querySelector('.chapter-page-fit');
+    const availableHeight = Math.max(1, section.clientHeight - 40);
+    const scale = Math.min(1, availableHeight / Math.max(1, content.offsetHeight));
+    content.style.setProperty('--chapter-fit-scale', String(scale));
 }
 
-function queueScrollState() {
-    clearTimeout(scrollSettleTimer);
-    scrollSettleTimer = setTimeout(updateScrollState, 120);
-    if (scrollFrame) return;
-    scrollFrame = requestAnimationFrame(updateScrollState);
+let chapterFitFrame = 0;
+function queueChapterFit() {
+    if (chapterFitFrame) return;
+    chapterFitFrame = requestAnimationFrame(fitCurrentChapter);
 }
 
-window.addEventListener('scroll', queueScrollState, { passive: true });
-window.addEventListener('scrollend', updateScrollState);
-window.addEventListener('resize', queueScrollState);
-window.addEventListener('pageshow', queueScrollState);
+const chapterResizeObserver = new ResizeObserver(queueChapterFit);
+pageSections.forEach(section => chapterResizeObserver.observe(section.querySelector('.chapter-page-fit')));
+window.addEventListener('resize', queueChapterFit);
+window.visualViewport?.addEventListener('resize', queueChapterFit);
+document.fonts?.ready.then(queueChapterFit);
 reducedMotion.addEventListener('change', () => {
     updateGalleryProgress(currentIndex);
-    queueScrollState();
+    if (reducedMotion.matches && chapterTimeline) navigateToSection(requestedChapter);
+    queueChapterFit();
 });
 
 updateGalleryProgress(0);
-queueScrollState();
-
-/* =========================
-   主要內容重複進入視窗
-========================= */
-
-const contentRevealTargets = Array.from(document.querySelectorAll([
-    '.gallery-section-heading',
-    '.gallery-stage',
-    '#text-page .text-container',
-    '#planning-page .text-container',
-    '#messages-page .messages-container',
-    '#thanks-page .text-container',
-    '.site-epilogue-final'
-].join(', ')));
-
-if (contentRevealTargets.length && 'IntersectionObserver' in window) {
-    document.documentElement.classList.add('has-content-reveal');
-
-    const contentRevealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            const target = entry.target;
-            if (entry.isIntersecting) {
-                target.classList.add('is-content-visible');
-                return;
-            }
-
-            const exitedAboveViewport = entry.boundingClientRect.bottom <= 0;
-            target.style.setProperty('--content-reveal-y', exitedAboveViewport ? '-20px' : '24px');
-            target.classList.remove('is-content-visible');
-        });
-    }, {
-        threshold: 0.14,
-        rootMargin: '0px 0px -7% 0px'
-    });
-
-    contentRevealTargets.forEach((target) => {
-        const startsAboveViewport = target.getBoundingClientRect().bottom <= 0;
-        target.style.setProperty('--content-reveal-y', startsAboveViewport ? '-20px' : '24px');
-        target.classList.add('content-reveal');
-        contentRevealObserver.observe(target);
-    });
-}
+setCurrentSection('intro');
+queueChapterFit();
 
 /* =========================
    序章節氣環預覽
@@ -505,54 +398,30 @@ const solarSeasonTrailColors = [
     'rgba(171, 193, 208, 0.62)'
 ];
 
-function typeSolarText(target, text, delay, version, onComplete) {
-    const characters = Array.from(text);
-    let position = 0;
-    target.textContent = '';
-
-    const writeNextCharacter = () => {
-        if (version !== solarPreviewVersion) return;
-        target.textContent += characters[position];
-        position += 1;
-
-        if (position < characters.length) {
-            solarTypingTimer = setTimeout(writeNextCharacter, delay);
-        } else if (onComplete) {
-            solarTypingTimer = setTimeout(() => {
-                if (version === solarPreviewVersion) onComplete();
-            }, 130);
-        }
-    };
-
-    writeNextCharacter();
-}
-
 function writeSolarPreview(termText, noteText) {
-    clearTimeout(solarTypingTimer);
+    solarTypingTimer?.kill();
     const version = ++solarPreviewVersion;
-    solarCenterTerm.getAnimations().forEach(animation => animation.cancel());
+    gsap.killTweensOf(solarCenterTerm);
     solarCenterTerm.textContent = termText;
     solarCenterNote.textContent = '';
-
     if (reducedMotion.matches) {
         solarCenterNote.textContent = noteText;
+        gsap.set(solarCenterTerm, { clearProps: 'opacity' });
         return;
     }
-
-    solarCenterTerm.animate([
-        { opacity: 0.18 },
-        { opacity: 1 }
-    ], {
-        duration: 760,
-        easing: 'ease-out',
-        fill: 'both'
-    });
-
-    solarTypingTimer = setTimeout(() => {
-        if (version === solarPreviewVersion) {
-            typeSolarText(solarCenterNote, noteText, 96, version);
-        }
-    }, 420);
+    const characters = Array.from(noteText);
+    const typing = { count: 1 };
+    solarTypingTimer = gsap.timeline()
+        .fromTo(solarCenterTerm, { opacity: 0.18 }, { opacity: 1, duration: 0.76, ease: 'power1.out', clearProps: 'opacity' }, 0)
+        .call(() => { solarCenterNote.textContent = characters[0] || ''; }, [], 0.42)
+        .to(typing, {
+            count: characters.length,
+            duration: Math.max(0.096, (characters.length - 1) * 0.096),
+            ease: 'none',
+            onUpdate: () => {
+                if (version === solarPreviewVersion) solarCenterNote.textContent = characters.slice(0, Math.floor(typing.count)).join('');
+            }
+        }, 0.42);
 }
 
 function followSolarTerm(term, index) {
@@ -561,9 +430,17 @@ function followSolarTerm(term, index) {
     const currentAngle = ((solarLeafAngle % 360) + 360) % 360;
     const shortestTurn = ((targetAngle - currentAngle + 540) % 360) - 180;
     solarLeafAngle += shortestTurn;
-    solarCycle.style.setProperty('--solar-leaf-angle', `${solarLeafAngle}deg`);
+    gsap.to(solarCycle, { '--solar-leaf-angle': `${solarLeafAngle}deg`, duration: reducedMotion.matches ? 0 : 0.52, ease: 'power2.out', overwrite: 'auto' });
     const seasonIndex = Math.floor(index / 6);
+    const previousAccent = getComputedStyle(solarCycle).getPropertyValue('--season-accent').trim();
     solarCycle.dataset.season = solarSeasons[seasonIndex];
+    if (!reducedMotion.matches && previousAccent) {
+        const nextAccent = getComputedStyle(solarCycle).getPropertyValue('--season-accent').trim();
+        gsap.fromTo(solarCycle, { '--season-accent': previousAccent }, {
+            '--season-accent': nextAccent, duration: 0.65, ease: 'sine.inOut',
+            clearProps: '--season-accent', overwrite: 'auto'
+        });
+    }
 
     // Keep the background clock advancing while avoiding off-screen trail and
     // label work that cannot be seen, especially on mobile devices.
@@ -578,7 +455,7 @@ function followSolarTerm(term, index) {
         trailPoint.style.setProperty('--trail-angle', `${targetAngle}deg`);
         trailPoint.style.setProperty('--trail-color', solarSeasonTrailColors[seasonIndex]);
         solarTrailLayer.append(trailPoint);
-        setTimeout(() => trailPoint.remove(), 1150);
+        gsap.fromTo(trailPoint, { opacity: 0.62 }, { opacity: 0, duration: 1.1, ease: 'power1.out', onComplete: () => trailPoint.remove() });
 
     }
 }
@@ -590,42 +467,47 @@ function previewSolarTerm(term, index) {
 }
 
 function clearSolarTermPreview() {
-    clearTimeout(solarHoverTimer);
-    clearTimeout(solarTypingTimer);
+    solarHoverTimer?.kill();
+    solarTypingTimer?.kill();
     solarPreviewVersion += 1;
     solarTerms.forEach(item => item.classList.remove('is-previewing'));
     solarCycle.classList.remove('is-previewing');
     solarCycle.classList.remove('has-preview');
     delete solarCycle.dataset.season;
-    solarCenterTerm.getAnimations().forEach(animation => animation.cancel());
+    gsap.killTweensOf(solarCenterTerm);
     solarCenterTerm.textContent = '';
     solarCenterNote.textContent = '';
 }
 
 function stopSolarAutoplay() {
-    clearTimeout(solarAutoplayTimer);
-    clearTimeout(solarHoverTimer);
-    clearTimeout(solarTypingTimer);
+    solarAutoplayTimer?.kill();
+    solarHoverTimer?.kill();
+    solarTypingTimer?.kill();
     solarAutoplayTimer = undefined;
     solarPreviewVersion += 1;
+    gsap.killTweensOf(solarCycle);
+    solarTrailLayer.querySelectorAll('.solar-trail-point').forEach(point => {
+        gsap.killTweensOf(point);
+        point.remove();
+    });
 }
 
 function runSolarAutoplayStep() {
     const entranceStillBlocking = entrance.open && !entrance.classList.contains('is-opening');
-    if (document.hidden || entranceStillBlocking) return;
+    if (document.hidden || entranceStillBlocking || currentSection !== 'intro') return;
     const index = solarAutoplayIndex;
     const term = solarTerms[index];
 
-    clearTimeout(solarHoverTimer);
+    solarHoverTimer?.kill();
     followSolarTerm(term, index);
-    solarHoverTimer = setTimeout(() => {
+    solarHoverTimer = gsap.delayedCall(reducedMotion.matches ? 0 : solarAutoplayPreviewDelay / 1000, () => {
         previewSolarTerm(term, index);
-    }, reducedMotion.matches ? 0 : solarAutoplayPreviewDelay);
+    });
 
-    solarAutoplayTimer = setTimeout(() => {
+    solarAutoplayTimer = gsap.delayedCall(solarAutoplayInterval / 1000, () => {
         solarAutoplayIndex = (index + 1) % solarTerms.length;
         runSolarAutoplayStep();
-    }, solarAutoplayInterval);
+    });
 }
 
 function startSolarAutoplay(reset = false) {
@@ -635,7 +517,7 @@ function startSolarAutoplay(reset = false) {
         solarLeafAngle = 0;
     }
     const entranceStillBlocking = entrance.open && !entrance.classList.contains('is-opening');
-    if (!document.hidden && !entranceStillBlocking) runSolarAutoplayStep();
+    if (!document.hidden && !entranceStillBlocking && currentSection === 'intro') runSolarAutoplayStep();
 }
 
 if (solarCycle && 'IntersectionObserver' in window) {
@@ -651,10 +533,10 @@ if (solarCycle && 'IntersectionObserver' in window) {
         solarCycleVisible = entry.isIntersecting;
 
         if (!solarCycleVisible) {
-            clearTimeout(solarHoverTimer);
-            clearTimeout(solarTypingTimer);
+            solarHoverTimer?.kill();
+            solarTypingTimer?.kill();
             solarPreviewVersion += 1;
-            solarCenterTerm.getAnimations().forEach(animation => animation.cancel());
+            gsap.killTweensOf(solarCenterTerm);
             return;
         }
 
@@ -728,7 +610,7 @@ if (messagesTrack) {
 
     function finishMessageGroup(targetIndex = currentMessageGroup) {
         messageGroupVersion += 1;
-    messageGroupAnimations.forEach(animation => animation.cancel());
+    messageGroupAnimations.forEach(animation => animation.kill());
     messageGroupAnimations = [];
     currentMessageGroup = targetIndex;
     messageGroups.forEach((group, index) => {
@@ -736,6 +618,7 @@ if (messagesTrack) {
         group.classList.toggle('is-current', active);
         group.setAttribute('aria-hidden', String(!active));
         group.inert = !active;
+        gsap.set(group, { clearProps: 'transform' });
     });
     if (messagesStatus) {
         messagesStatus.textContent = `第 ${targetIndex + 1} 頁，共 ${messageGroups.length} 頁`;
@@ -750,7 +633,7 @@ async function moveMessageGroup(direction) {
     const outgoing = messageGroups[outgoingIndex];
     const incoming = messageGroups[incomingIndex];
 
-    if (reducedMotion.matches || typeof incoming.animate !== 'function') {
+    if (reducedMotion.matches) {
         finishMessageGroup(incomingIndex);
         return;
     }
@@ -761,29 +644,16 @@ async function moveMessageGroup(direction) {
     incoming.classList.add('is-current');
     incoming.removeAttribute('aria-hidden');
     incoming.inert = false;
-    const transitionOptions = {
-        duration: 680,
-        easing: 'cubic-bezier(0.65, 0, 0.35, 1)',
-        fill: 'forwards'
-    };
-    const outgoingAnimation = outgoing.animate([
-        { transform: 'translate3d(0, 0, 0)' },
-        { transform: `translate3d(${-travel}%, 0, 0)` }
-    ], transitionOptions);
-    const incomingAnimation = incoming.animate([
-        { transform: `translate3d(${travel}%, 0, 0)` },
-        { transform: 'translate3d(0, 0, 0)' }
-    ], transitionOptions);
-    messageGroupAnimations = [outgoingAnimation, incomingAnimation];
-
     try {
-        await Promise.all(messageGroupAnimations.map(animation => animation.finished));
-    } catch {
-        // 快速切換或 reduced-motion 變更時，由 finishMessageGroup 統一復原。
+        await new Promise(resolve => {
+            const timeline = gsap.timeline({ onComplete: () => resolve(), onInterrupt: () => resolve() });
+            messageGroupAnimations = [timeline];
+            timeline
+                .fromTo(outgoing, { xPercent: 0 }, { xPercent: -travel, duration: 0.68, ease: 'power2.inOut' }, 0)
+                .fromTo(incoming, { xPercent: travel }, { xPercent: 0, duration: 0.68, ease: 'power2.inOut' }, 0);
+        });
     } finally {
-        if (transitionVersion === messageGroupVersion) {
-            finishMessageGroup(incomingIndex);
-        }
+        if (transitionVersion === messageGroupVersion) finishMessageGroup(incomingIndex);
     }
 }
 
@@ -825,7 +695,11 @@ function updateRosterCarousel(targetIndex = currentRosterCard, announce = true) 
     currentRosterCard = (targetIndex + rosterCards.length) % rosterCards.length;
     const mobile = rosterMobile.matches;
 
-    rosterTrack.style.setProperty('--roster-offset', `${currentRosterCard * -100}%`);
+    gsap.to(rosterTrack, {
+        '--roster-offset': `${currentRosterCard * -100}%`,
+        duration: mobile && announce && !reducedMotion.matches ? 0.56 : 0,
+        ease: 'power2.inOut', overwrite: 'auto'
+    });
     rosterCards.forEach((card, index) => {
         const active = index === currentRosterCard;
         if (mobile) {
@@ -877,19 +751,37 @@ if (rosterTrack && rosterViewport && rosterPrev && rosterNext) {
 
 reducedMotion.addEventListener('change', () => {
     if (isMessagesAnimating) finishMessageGroup(currentMessageGroup);
+    if (reducedMotion.matches) {
+        gsap.getTweensOf([document.documentElement, rosterTrack, galleryPage]).forEach(tween => tween.progress(1));
+        document.querySelectorAll('button').forEach(button => {
+            gsap.killTweensOf(button, '--press-scale');
+            button.style.removeProperty('--press-scale');
+        });
+    }
 });
 
-// 使用獨立的 scale 動畫，避免覆蓋箭頭本身的垂直定位。
-const buttonAnimations = new WeakMap();
+// 動畫寫入獨立 scale 屬性，保留箭頭的 transform 定位。
 document.addEventListener('click', event => {
     const button = event.target.closest('button');
-    if (!button || button.id === 'enterExhibition' || button.disabled || reducedMotion.matches || typeof button.animate !== 'function') return;
-    buttonAnimations.get(button)?.cancel();
-    buttonAnimations.set(button, button.animate([
-        { scale: '0.97' },
-        { scale: '1' }
-    ], { duration: 220, easing: 'ease-out' }));
+    if (!button || button.id === 'enterExhibition' || button.disabled || reducedMotion.matches) return;
+    gsap.fromTo(button, { '--press-scale': 0.96 }, {
+        '--press-scale': 1, duration: 0.26, ease: 'power2.out', overwrite: 'auto',
+        onComplete: () => button.style.removeProperty('--press-scale')
+    });
 }, true);
+
+// 圖案微互動由 GSAP 控制，事件委派涵蓋 Vue 導覽及輪播按鈕。
+function animateButtonHover(event, entering) {
+    if (reducedMotion.matches || event.pointerType === 'touch') return;
+    const button = event.target.closest('button');
+    if (!button || button.contains(event.relatedTarget)) return;
+    const gem = button.querySelector('.menu-emblem');
+    if (gem) gsap.to(gem, { rotation: entering ? 10 : 0, duration: 0.42, ease: 'power2.out', overwrite: 'auto' });
+    const arrow = button.querySelector('svg:not(.menu-emblem)');
+    if (arrow) gsap.to(arrow, { opacity: entering ? 1 : 0.78, duration: 0.26, ease: 'power1.out', overwrite: 'auto' });
+}
+document.addEventListener('pointerover', event => animateButtonHover(event, true));
+document.addEventListener('pointerout', event => animateButtonHover(event, false));
 
 /* 手機左右滑動 */
 const carouselViewport = document.querySelector('.carousel-viewport');
@@ -940,7 +832,7 @@ const entranceTransitionCurtain = entrance.querySelector('.entrance-transition-c
 const temporalSculpture = document.querySelector('.temporal-sculpture');
 const hasBackgroundMusic = Boolean(backgroundMusic.getAttribute('src')?.trim());
 let enteringExhibition = false;
-let musicFadeFrame;
+let musicFadeTween;
 let musicRequest = 0;
 let wantsMusic = false;
 
@@ -967,20 +859,14 @@ function startMusic() {
     if (!hasBackgroundMusic) return;
     wantsMusic = true;
     const request = ++musicRequest;
-    cancelAnimationFrame(musicFadeFrame);
+    musicFadeTween?.kill();
     musicStatus.textContent = '';
     backgroundMusic.volume = 0;
     // 直接在使用者點擊時開始播放，保留瀏覽器的互動授權。
     backgroundMusic.play().then(() => {
         if (request !== musicRequest) return;
         updateMusicControl();
-        const start = performance.now();
-        const fadeIn = now => {
-            const progress = Math.min((now - start) / 1800, 1);
-            backgroundMusic.volume = 0.22 * progress;
-            if (progress < 1) musicFadeFrame = requestAnimationFrame(fadeIn);
-        };
-        musicFadeFrame = requestAnimationFrame(fadeIn);
+        musicFadeTween = gsap.to(backgroundMusic, { volume: 0.22, duration: 1.8, ease: 'none' });
     }).catch(() => {
         if (request !== musicRequest) return;
         wantsMusic = false;
@@ -992,7 +878,7 @@ function startMusic() {
 function pauseMusic() {
     wantsMusic = false;
     musicRequest += 1;
-    cancelAnimationFrame(musicFadeFrame);
+    musicFadeTween?.kill();
     backgroundMusic.pause();
     musicStatus.textContent = '';
     updateMusicControl();
@@ -1010,23 +896,23 @@ backgroundMusic.addEventListener('error', () => {
     musicStatus.textContent = '音樂暫時無法播放，仍可繼續欣賞作品。';
 });
 
+let entranceTimeline;
 async function enterExhibition(withMusic = true) {
     if (enteringExhibition) return;
     enteringExhibition = true;
     resetExhibitionToStart();
     if (withMusic) startMusic();
-    const transitionAnimations = [];
-    let sculptureFocusAnimation;
-    let solarAutoplayStartedDuringEntrance = false;
+    let entranceContext;
+    let sculptureFaded = false;
+    let solarStarted = false;
     try {
-        if (!reducedMotion.matches && typeof entrance.animate === 'function') {
-            const triggerBounds = entranceTrigger.getBoundingClientRect();
-            const focusX = Math.max(0, Math.min(window.innerWidth, triggerBounds.left + triggerBounds.width / 2));
-            const focusY = Math.max(0, Math.min(window.innerHeight, triggerBounds.top + triggerBounds.height / 2));
-            entranceTransitionCurtain.style.setProperty('--entrance-focus-x', `${focusX}px`);
-            entranceTransitionCurtain.style.setProperty('--entrance-focus-y', `${focusY}px`);
+        if (!reducedMotion.matches) {
+            const bounds = entranceTrigger.getBoundingClientRect();
+            const focusX = Math.max(0, Math.min(innerWidth, bounds.left + bounds.width / 2));
+            const focusY = Math.max(0, Math.min(innerHeight, bounds.top + bounds.height / 2));
             entrance.style.setProperty('--entrance-focus-x', `${focusX}px`);
             entrance.style.setProperty('--entrance-focus-y', `${focusY}px`);
+            entrance.style.setProperty('--entrance-reveal-start-radius', `${Math.hypot(bounds.width, bounds.height) / 2 + 28}px`);
             document.documentElement.classList.add('entrance-transitioning');
             entrance.classList.add('is-transitioning');
 
@@ -1037,103 +923,59 @@ async function enterExhibition(withMusic = true) {
                 document.getElementById('enterQuietly')
             ].filter(element => element && !element.hidden);
 
-            const focusAnimations = fadingElements.map(element => element.animate([
-                { opacity: 1, transform: 'translate3d(0, 0, 0)' },
-                { opacity: 0, transform: 'translate3d(0, -8px, 0)' }
-            ], {
-                duration: 650,
-                easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-                fill: 'forwards'
-            }));
-
-            const entranceAtmosphere = entrance.querySelector('.entrance-atmosphere');
-            if (entranceAtmosphere) {
-                focusAnimations.push(entranceAtmosphere.animate([
-                    { opacity: 1 },
-                    { opacity: 0 }
-                ], {
-                    duration: 780,
-                    easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-                    fill: 'forwards'
-                }));
-            }
-
-            if (temporalSculpture) {
-                sculptureFocusAnimation = temporalSculpture.animate([
-                    { opacity: Number.parseFloat(getComputedStyle(temporalSculpture).opacity) || 1 },
-                    { opacity: 0 }
-                ], {
-                    duration: 700,
-                    easing: 'ease-in-out',
-                    fill: 'forwards'
+            await new Promise(resolve => {
+                entranceContext = gsap.context(() => {
+                    entranceTimeline = gsap.timeline({ onComplete: () => resolve(), onInterrupt: () => resolve() });
+                    entranceTimeline.to(fadingElements, { opacity: 0, y: -8, duration: 0.65, ease: 'power1.inOut' }, 0);
+                    const atmosphere = entrance.querySelector('.entrance-atmosphere');
+                    if (atmosphere) entranceTimeline.to(atmosphere, { opacity: 0, duration: 0.78, ease: 'power1.inOut' }, 0);
+                    if (temporalSculpture) {
+                        sculptureFaded = true;
+                        entranceTimeline.to(temporalSculpture, { opacity: 0, duration: 0.7, ease: 'power1.inOut' }, 0);
+                    }
+                    entranceTimeline
+                        .fromTo(entranceTrigger, { opacity: 1, scale: 1.08 }, { opacity: 0, scale: 1.16, duration: 0.21, ease: 'power1.inOut', immediateRender: false }, 0.3)
+                        .call(() => {
+                            entrance.classList.add('is-reveal-ready');
+                            getComputedStyle(entrance).getPropertyValue('--entrance-reveal-radius');
+                        }, [], 0.51)
+                        .call(() => {
+                            entrance.classList.add('is-opening');
+                            document.body.classList.remove('entrance-open');
+                            document.documentElement.classList.remove('entrance-open');
+                        }, [], 0.53)
+                        .call(() => {
+                            // 節氣動畫持續於進站後，避免被入口 context 的清理一併復原。
+                            entranceContext.ignore(() => startSolarAutoplay(true));
+                            solarStarted = true;
+                        }, [], 1.18)
+                        .fromTo(entrance, { '--entrance-reveal-radius': `${Math.hypot(bounds.width, bounds.height) / 2 + 28}px` }, {
+                            '--entrance-reveal-radius': `${Math.max(innerWidth, innerHeight) * 1.1}px`,
+                            duration: 1.45, ease: 'sine.inOut', immediateRender: false
+                        }, 0.53);
                 });
-                focusAnimations.push(sculptureFocusAnimation);
-            }
-
-            transitionAnimations.push(...focusAnimations);
-            // 不等待封面所有元素完全消失；讓退場與圓形開口重疊，避免空白底色停頓。
-            await new Promise(resolve => window.setTimeout(resolve, 300));
-
-            // 入口與光暈先完整退場，避免圓形遮罩邊緣穿過文字。
-            const entranceExitAnimation = entranceTrigger.animate([
-                { opacity: 1, transform: 'scale(1.08)' },
-                { opacity: 0, transform: 'scale(1.16)' }
-            ], {
-                duration: 210,
-                easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-                fill: 'forwards'
             });
-            transitionAnimations.push(entranceExitAnimation);
-            await Promise.race([
-                entranceExitAnimation.finished,
-                new Promise(resolve => window.setTimeout(resolve, 250))
-            ]);
-
-            const revealStartRadius = Math.hypot(triggerBounds.width, triggerBounds.height) / 2 + 28;
-            entrance.style.setProperty('--entrance-reveal-start-radius', `${revealStartRadius}px`);
-            entrance.classList.add('is-reveal-ready');
-            getComputedStyle(entrance).getPropertyValue('--entrance-reveal-radius');
-            await new Promise(resolve => requestAnimationFrame(resolve));
-            entrance.classList.add('is-opening');
-
-            // 直接在真實封面上打開圓形缺口；內頁本身不再參與裁切動畫。
-            document.body.classList.remove('entrance-open');
-            document.documentElement.classList.remove('entrance-open');
-            await new Promise(resolve => window.setTimeout(resolve, 650));
-            startSolarAutoplay(true);
-            solarAutoplayStartedDuringEntrance = true;
-            await new Promise(resolve => window.setTimeout(resolve, 800));
         }
     } finally {
+        entranceTimeline = null;
         resetExhibitionToStart();
         entrance.close();
         document.body.classList.remove('entrance-open');
-        document.documentElement.classList.remove('entrance-open');
-        document.documentElement.classList.remove('entrance-transitioning');
+        document.documentElement.classList.remove('entrance-open', 'entrance-transitioning');
         entrance.classList.remove('is-transitioning', 'is-reveal-ready', 'is-opening');
-        entranceTransitionCurtain.style.removeProperty('--entrance-focus-x');
-        entranceTransitionCurtain.style.removeProperty('--entrance-focus-y');
-        entrance.style.removeProperty('--entrance-focus-x');
-        entrance.style.removeProperty('--entrance-focus-y');
-        entrance.style.removeProperty('--entrance-reveal-start-radius');
-        transitionAnimations.forEach(animation => animation.cancel());
-
-        if (sculptureFocusAnimation && temporalSculpture) {
-            sculptureFocusAnimation.cancel();
+        ['--entrance-focus-x', '--entrance-focus-y', '--entrance-reveal-start-radius'].forEach(name => entrance.style.removeProperty(name));
+        entranceContext?.revert();
+        if (sculptureFaded && temporalSculpture && !reducedMotion.matches) {
             const targetOpacity = Number.parseFloat(getComputedStyle(temporalSculpture).opacity) || 0.44;
-            temporalSculpture.animate([
-                { opacity: 0 },
-                { opacity: targetOpacity }
-            ], {
-                duration: 720,
-                easing: 'ease-out'
-            });
+            gsap.fromTo(temporalSculpture, { opacity: 0 }, { opacity: targetOpacity, duration: 0.72, ease: 'power1.out', clearProps: 'opacity' });
         }
-
-        if (!solarAutoplayStartedDuringEntrance) startSolarAutoplay(true);
-        menuToggle.focus({ preventScroll: true });
+        if (!solarStarted) startSolarAutoplay(true);
+        document.getElementById('chapterHome').focus({ preventScroll: true });
     }
 }
+reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) entranceTimeline?.progress(1);
+});
 
 document.getElementById('enterExhibition').addEventListener('click', () => enterExhibition());
 document.getElementById('enterQuietly').addEventListener('click', () => enterExhibition(false));
@@ -1145,8 +987,11 @@ let entranceStrength = 0;
 
 function setEntranceProximity(strength) {
     // 縮回比放大慢；只改文字，不改實際感應區域的尺寸。
-    entranceTrigger.style.setProperty('--response-duration', strength < entranceStrength ? '850ms' : '450ms');
-    entranceTrigger.style.setProperty('--proximity', strength.toFixed(4));
+    gsap.to(entranceTrigger, {
+        '--proximity': strength,
+        duration: reducedMotion.matches ? 0 : strength < entranceStrength ? 0.85 : 0.45,
+        ease: 'power2.out', overwrite: 'auto'
+    });
     entranceStrength = strength;
 }
 
@@ -1220,8 +1065,6 @@ window.addEventListener('pageshow', () => {
 
 /* 漸進式 Vite 遷移期間，保留現有 HTML inline handler 的公開介面。 */
 Object.assign(window, {
-    openMenu,
-    closeMenu,
     navigateToSection,
     moveSlide
 });
