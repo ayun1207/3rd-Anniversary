@@ -13,7 +13,8 @@ const gem = ref(null);
 const dialog = ref(null);
 const shade = ref(null);
 const panel = ref(null);
-const chapterScroller = document.querySelector('main');
+const mobilePreference = window.matchMedia('(max-width: 900px)');
+const isMobile = ref(mobilePreference.matches);
 const opened = ref(false);
 const closing = ref(false);
 const gemPosition = ref(null);
@@ -26,6 +27,9 @@ let positionFrame;
 let frameObserver;
 
 function positionGem() {
+    if (isMobile.value) {
+        return;
+    }
     const frame = document.querySelector('#thanks-page .text-container');
     if (!frame || props.currentChapter.value !== 'thanks') return;
     const bounds = frame.getBoundingClientRect();
@@ -52,6 +56,12 @@ function queueGemPosition() {
     positionFrame = requestAnimationFrame(() => {
         positionFrame = requestAnimationFrame(positionGem);
     });
+}
+
+async function updateMobileLayout() {
+    isMobile.value = mobilePreference.matches;
+    await nextTick();
+    positionGem();
 }
 
 function updateGemMotion() {
@@ -155,7 +165,7 @@ onMounted(() => {
     frameObserver = new ResizeObserver(queueGemPosition);
     if (frame) frameObserver.observe(frame);
     window.addEventListener('resize', queueGemPosition);
-    chapterScroller.addEventListener('scroll', queueGemPosition, { passive: true });
+    mobilePreference.addEventListener('change', updateMobileLayout);
     document.addEventListener('visibilitychange', updateGemMotion);
 });
 motionPreference.addEventListener('change', updateMotionPreference);
@@ -163,7 +173,7 @@ onBeforeUnmount(() => {
     cancelAnimationFrame(positionFrame);
     frameObserver?.disconnect();
     window.removeEventListener('resize', queueGemPosition);
-    chapterScroller.removeEventListener('scroll', queueGemPosition);
+    mobilePreference.removeEventListener('change', updateMobileLayout);
     gemAnimation?.kill();
     openingAnimation?.kill();
     writingAnimation?.kill();
@@ -175,8 +185,9 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+    <Teleport to="#thanks-page .text-container" :disabled="!isMobile">
     <button v-show="currentChapter.value === 'thanks'" ref="trigger" type="button"
-        class="epilogue-gem-trigger" :style="gemPosition" aria-label="開啟藏在寶石裡的結語" aria-haspopup="dialog" @click="openEpilogue">
+        class="epilogue-gem-trigger" :style="isMobile ? null : gemPosition" aria-label="開啟藏在寶石裡的結語" aria-haspopup="dialog" @click="openEpilogue">
         <span ref="gem" class="epilogue-gem season-gem" aria-hidden="true">
             <span class="gem-face gem-face-blue"></span>
             <span class="gem-face gem-face-gold"></span>
@@ -184,6 +195,7 @@ onBeforeUnmount(() => {
             <span class="gem-face gem-face-pink-depth"></span>
         </span>
     </button>
+    </Teleport>
     <dialog ref="dialog" class="epilogue-dialog" aria-labelledby="epilogueTitle" aria-describedby="epilogueDescription"
         @cancel.prevent="closeEpilogue()" @keydown.tab.prevent>
         <div ref="shade" class="epilogue-shade" aria-hidden="true" @click="closeEpilogue()"></div>
@@ -345,6 +357,9 @@ onBeforeUnmount(() => {
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
+}
+@media (max-width: 900px) {
+    .epilogue-gem-trigger { position: absolute; right: 8px; bottom: 8px; }
 }
 @media (max-width: 768px) {
     .epilogue-dialog { padding: 22px; }
