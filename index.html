@@ -19,178 +19,32 @@
 </head>
 <body>
     <dialog id="entrance" class="entrance" tabindex="-1" autofocus aria-labelledby="entranceTitle" aria-describedby="entranceDescription">
-        <div class="entrance-atmosphere" aria-hidden="true">
-            <span class="entrance-light"></span>
-            <span class="entrance-iridescence"></span>
-            <span class="entrance-paint entrance-paint-upper"></span>
-            <span class="entrance-paint entrance-paint-lower"></span>
-            <span class="entrance-mist entrance-mist-left"></span>
-            <span class="entrance-mist entrance-mist-right"></span>
-            <span class="entrance-cloud-bridge"></span>
-            <span class="entrance-water"></span>
-            <span class="entrance-season entrance-season-spring">
-                <i class="season-branch"></i>
-                <i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i>
-                <i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i>
-                <i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i>
-                <i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i>
-                <i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i>
-                <i class="season-petal"></i>
-                <i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i>
-                <i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i>
-                <i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i>
-                <i class="season-petal"></i><i class="season-petal"></i><i class="season-petal"></i>
-            </span>
-            <span class="entrance-season entrance-season-summer">
-                <i class="summer-breeze"></i><i class="summer-breeze"></i><i class="summer-breeze"></i>
-                <i class="summer-breeze"></i><i class="summer-breeze"></i>
-                <i class="summer-leaf"></i><i class="summer-leaf"></i><i class="summer-leaf"></i>
-                <i class="summer-leaf"></i><i class="summer-leaf"></i><i class="summer-leaf"></i>
-                <i class="summer-leaf"></i><i class="summer-leaf"></i>
-                <i class="summer-breeze"></i><i class="summer-breeze"></i>
-                <i class="summer-leaf"></i><i class="summer-leaf"></i><i class="summer-leaf"></i><i class="summer-leaf"></i>
-                <i class="summer-leaf"></i><i class="summer-leaf"></i><i class="summer-leaf"></i><i class="summer-leaf"></i>
-                <i class="summer-leaf"></i><i class="summer-leaf"></i><i class="summer-leaf"></i><i class="summer-leaf"></i><i class="summer-leaf"></i>
-                <i class="summer-leaf"></i><i class="summer-leaf"></i><i class="summer-leaf"></i><i class="summer-leaf"></i><i class="summer-leaf"></i>
-            </span>
-            <span class="entrance-bamboo">
-                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-                <i></i><i></i><i></i><i></i><i></i>
-            </span>
-            <span class="entrance-season entrance-season-autumn">
-                <i class="season-moon"></i>
-                <i class="season-moon-cloud"></i><i class="season-moon-cloud"></i><i class="season-moon-cloud"></i>
-                <i class="season-moon-cloud"></i><i class="season-moon-cloud"></i><i class="season-moon-cloud"></i>
-                <i class="season-moon-cloud"></i><i class="season-moon-cloud"></i>
-            </span>
-            <span class="entrance-season entrance-season-winter">
-                <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-                <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-            </span>
-        </div>
-        <div class="entrance-content">
-            <h1 id="entranceTitle">
-                <span class="entrance-title-line">霓影流轉</span>
-                <span class="entrance-title-line entrance-title-line-lower">四時成章</span>
-            </h1>
-            <p id="entranceDescription">踏歲偕行續年華 來春共赴啟新篇</p>
-            <button id="enterExhibition" class="entrance-enter" type="button">
-                <span class="entrance-prompt">入新章</span>
-            </button>
-            <p id="entranceMusicHint" class="entrance-hint" hidden>進入後將播放背景音樂，可隨時暫停。</p>
-            <button id="enterQuietly" class="entrance-quiet" type="button" hidden>靜音進入</button>
+        <div class="entrance-layout">
+            <div class="entrance-content">
+                <h1 id="entranceTitle">
+                    <span class="entrance-title-line">霓影流轉</span>
+                    <span class="entrance-title-line entrance-title-line-lower">四時成章</span>
+                </h1>
+                <p id="entranceDescription">踏歲偕行續年華 來春共赴啟新篇</p>
+                <button id="enterExhibition" class="entrance-enter" type="button">
+                    <span class="entrance-prompt">入新章</span>
+                </button>
+                <p id="entranceMusicHint" class="entrance-hint" hidden>進入後將播放背景音樂，可隨時暫停。</p>
+                <button id="enterQuietly" class="entrance-quiet" type="button" hidden>靜音進入</button>
+            </div>
+            <picture class="entrance-art" aria-hidden="true">
+                <img src="/images/backgrounds/35-1800.webp"
+                    srcset="/images/backgrounds/35-900.webp 900w, /images/backgrounds/35-1800.webp 1800w"
+                    sizes="(max-width: 900px) 78vw, 52vw"
+                    width="1800" height="1858" alt="" loading="eager"
+                    decoding="async" fetchpriority="high" draggable="false">
+            </picture>
         </div>
         <div class="entrance-transition-curtain" aria-hidden="true">
             <span class="entrance-transition-dimmer"></span>
         </div>
     </dialog>
     <div class="site-paper-background" aria-hidden="true">
-        <svg class="temporal-sculpture" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" focusable="false" aria-hidden="true">
-            <defs>
-                <linearGradient id="temporalMetal" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stop-color="#4D6868"></stop>
-                    <stop offset="0.2" stop-color="#78908A"></stop>
-                    <stop offset="0.43" stop-color="#506B6B"></stop>
-                    <stop offset="0.66" stop-color="#38535A"></stop>
-                    <stop offset="0.84" stop-color="#667C78"></stop>
-                    <stop offset="1" stop-color="#425F63"></stop>
-                </linearGradient>
-                <linearGradient id="temporalSeasonFlow" x1="0" y1="1" x2="0.86" y2="0">
-                    <stop offset="0" stop-color="#83a89e" stop-opacity="0.2"></stop>
-                    <stop offset="0.2" stop-color="#adc0b3" stop-opacity="0.34"></stop>
-                    <stop offset="0.39" stop-color="#d2ba8d" stop-opacity="0.25"></stop>
-                    <stop offset="0.56" stop-color="#a97755" stop-opacity="0.3"></stop>
-                    <stop offset="0.77" stop-color="#7e91ad" stop-opacity="0.22"></stop>
-                    <stop offset="1" stop-color="#9a90aa" stop-opacity="0.16"></stop>
-                </linearGradient>
-                <linearGradient id="temporalAmbient" x1="0" y1="0.12" x2="0.94" y2="0.9">
-                    <stop offset="0" stop-color="#8DB7DD"></stop>
-                    <stop offset="0.34" stop-color="#A9C0B1"></stop>
-                    <stop offset="0.62" stop-color="#FCC26F"></stop>
-                    <stop offset="1" stop-color="#F3A4B0"></stop>
-                </linearGradient>
-                <linearGradient id="temporalCoverPointer" gradientUnits="userSpaceOnUse" x1="1290" y1="510" x2="714" y2="842">
-                    <stop offset="0" stop-color="#DCE9E9" stop-opacity="0.34"></stop>
-                    <stop offset="0.48" stop-color="#8DB7DD" stop-opacity="0.7"></stop>
-                    <stop offset="0.8" stop-color="#F7F4E2" stop-opacity="0.94"></stop>
-                    <stop offset="1" stop-color="#FCC26F"></stop>
-                </linearGradient>
-                <linearGradient id="temporalTickLight" gradientUnits="userSpaceOnUse" x1="1290" y1="-164" x2="1290" y2="-183">
-                    <stop offset="0" stop-color="#8DB7DD" stop-opacity="0.3"></stop>
-                    <stop offset="0.58" stop-color="#DCE9E9" stop-opacity="0.72"></stop>
-                    <stop offset="1" stop-color="#F7F4E2" stop-opacity="0.96"></stop>
-                </linearGradient>
-                <linearGradient id="temporalCoverGem" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stop-color="#F7FCFF"></stop>
-                    <stop offset="0.26" stop-color="#8DB7DD"></stop>
-                    <stop offset="0.64" stop-color="#FCC26F"></stop>
-                    <stop offset="1" stop-color="#F3A4B0"></stop>
-                </linearGradient>
-                <radialGradient id="temporalCoverPivot" cx="32%" cy="27%" r="76%">
-                    <stop offset="0" stop-color="#FFFFFF"></stop>
-                    <stop offset="0.55" stop-color="#F7FAF7"></stop>
-                    <stop offset="0.82" stop-color="#E4ECE9"></stop>
-                    <stop offset="1" stop-color="#B7C8C6"></stop>
-                </radialGradient>
-                <radialGradient id="temporalShade" cx="42%" cy="46%" r="68%">
-                    <stop offset="0" stop-color="#ffffff" stop-opacity="0.96"></stop>
-                    <stop offset="0.48" stop-color="#ffffff" stop-opacity="0.76"></stop>
-                    <stop offset="0.78" stop-color="#ffffff" stop-opacity="0.22"></stop>
-                    <stop offset="1" stop-color="#000000" stop-opacity="0"></stop>
-                </radialGradient>
-                <mask id="temporalReveal">
-                    <rect width="1600" height="1000" fill="url(#temporalShade)"></rect>
-                </mask>
-                <filter id="temporalBloom" x="-45%" y="-45%" width="190%" height="190%">
-                    <feGaussianBlur stdDeviation="22"></feGaussianBlur>
-                </filter>
-            </defs>
-            <g class="temporal-sculpture-body" mask="url(#temporalReveal)">
-                <ellipse class="temporal-ring-shadow" cx="1290" cy="510" rx="688" ry="688"></ellipse>
-                <ellipse class="temporal-ring-metal" cx="1290" cy="510" rx="688" ry="688"></ellipse>
-                <ellipse class="temporal-ring-season-sheen" cx="1290" cy="510" rx="688" ry="688"></ellipse>
-                <ellipse class="temporal-ring-outer-edge" cx="1290" cy="510" rx="723" ry="723"></ellipse>
-                <ellipse class="temporal-ring-inner-edge" cx="1290" cy="510" rx="653" ry="653"></ellipse>
-                <ellipse class="temporal-ring-dial-edge-glow" cx="1290" cy="510" rx="669" ry="669"></ellipse>
-                <ellipse class="temporal-ring-dial-edge-core" cx="1290" cy="510" rx="669" ry="669"></ellipse>
-                <ellipse class="temporal-ring-material-line" cx="1290" cy="510" rx="678" ry="678" pathLength="1"></ellipse>
-                <g class="temporal-ring-tick-set">
-                    <line class="temporal-ring-tick temporal-ring-cardinal-tick is-spring" x1="1290" y1="-157" x2="1290" y2="-191"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(15 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(30 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(45 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(60 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(75 1290 510)"></line>
-                    <line class="temporal-ring-tick temporal-ring-cardinal-tick is-summer" x1="1290" y1="-157" x2="1290" y2="-191" transform="rotate(90 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(105 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(120 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(135 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(150 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(165 1290 510)"></line>
-                    <line class="temporal-ring-tick temporal-ring-cardinal-tick is-autumn" x1="1290" y1="-157" x2="1290" y2="-191" transform="rotate(180 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(195 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(210 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(225 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(240 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(255 1290 510)"></line>
-                    <line class="temporal-ring-tick temporal-ring-cardinal-tick is-winter" x1="1290" y1="-157" x2="1290" y2="-191" transform="rotate(270 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(285 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(300 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(315 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(330 1290 510)"></line>
-                    <line class="temporal-ring-tick" x1="1290" y1="-164" x2="1290" y2="-183" transform="rotate(345 1290 510)"></line>
-                </g>
-                <g class="temporal-cover-pointer" aria-hidden="true">
-                    <line class="temporal-cover-pointer-line" x1="1290" y1="510" x2="724.4" y2="836"></line>
-                    <circle class="temporal-cover-pointer-pivot" cx="1290" cy="510" r="8"></circle>
-                    <path class="temporal-cover-pointer-gem" d="M 714 830 L 723 842 L 714 854 L 705 842 Z" transform="rotate(60 714 842)"></path>
-                    <path class="temporal-cover-pointer-gem-facet" d="M 714 830 L 723 842 L 714 844 L 709 840 Z" transform="rotate(60 714 842)"></path>
-                </g>
-                <ellipse class="temporal-ring-memory-line" cx="1290" cy="510" rx="752" ry="752" pathLength="1"></ellipse>
-            </g>
-        </svg>
     </div>
     <!-- 選定授權音樂後，在 audio 加上 src="audio/background.mp3"。 -->
     <audio id="backgroundMusic" loop preload="none"></audio>

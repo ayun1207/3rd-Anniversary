@@ -6087,9 +6087,6 @@ body.gallery-section-active .site-botanical {
     opacity: 0;
 }
 
-html.entrance-transitioning .temporal-sculpture {
-    pointer-events: none;
-}
 
 @media (prefers-reduced-motion: reduce) {
     .entrance-transition-curtain {
@@ -6375,298 +6372,25 @@ html.entrance-open .site-paper-background {
     display: none !important;
 }
 
-.temporal-sculpture {
-    position: absolute;
-    z-index: 1;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    opacity: 0.84;
-    transform: translate3d(0, 0, 0) scale(1.015);
-    transform-origin: 67% 50%;
-    transition: opacity 1200ms ease, filter 1200ms ease;
-}
-
-.temporal-ring-shadow,
-.temporal-ring-metal,
-.temporal-ring-season-sheen,
-.temporal-ring-outer-edge,
-.temporal-ring-inner-edge,
-.temporal-ring-dial-edge-glow,
-.temporal-ring-dial-edge-core,
-.temporal-ring-material-line,
-.temporal-ring-memory-line {
-    fill: none;
-}
-
-.temporal-ring-shadow {
-    stroke: url(#temporalAmbient);
-    stroke-width: 104;
-    opacity: 0.2;
-    filter: url(#temporalBloom);
-}
-
-.temporal-ring-metal {
-    stroke: url(#temporalMetal);
-    stroke-width: 70;
-    opacity: 0.88;
-}
-
-.temporal-ring-season-sheen {
-    stroke: url(#temporalSeasonFlow);
-    stroke-width: 40;
-    opacity: 0.52;
-}
-
-.temporal-ring-outer-edge {
-    stroke: url(#temporalAmbient);
-    stroke-width: 1.5;
-    opacity: 0.42;
-}
-
-.temporal-ring-inner-edge {
-    stroke: url(#temporalAmbient);
-    stroke-width: 1.5;
-    opacity: 0.28;
-}
-
-/* 首頁局部測試：將節氣環的細亮邊界與固定指針語言移植到背景大環。 */
-.temporal-cover-pointer {
-    opacity: 0;
-    pointer-events: none;
-}
-
-html.entrance-open .temporal-cover-pointer {
-    opacity: 1;
-}
-
-html.entrance-open .temporal-sculpture-body {
-    transform: scale(0.92);
-    transform-box: view-box;
-    transform-origin: 1290px 510px;
-}
-
-html.entrance-open .temporal-ring-outer-edge,
-html.entrance-open .temporal-ring-inner-edge {
-    stroke: url(#temporalAmbient);
-    stroke-linecap: round;
-    filter:
-        drop-shadow(0 0 2px rgba(231, 241, 244, 0.7))
-        drop-shadow(0 0 7px rgba(141, 183, 221, 0.24));
-}
-
-html.entrance-open .temporal-ring-outer-edge {
-    stroke-width: 2.4;
-    opacity: 0.82;
-}
-
-html.entrance-open .temporal-ring-inner-edge {
-    stroke-width: 1.4;
-    opacity: 0.16;
-}
-
-.temporal-ring-dial-edge-glow,
-.temporal-ring-dial-edge-core {
-    opacity: 0;
-    pointer-events: none;
-}
-
-html.entrance-open .temporal-ring-dial-edge-glow {
-    stroke: url(#temporalAmbient);
-    stroke-width: 5;
-    opacity: 0.2;
-    filter: drop-shadow(0 0 6px rgba(141, 183, 221, 0.24));
-}
-
-html.entrance-open .temporal-ring-dial-edge-core {
-    stroke: rgba(238, 246, 241, 0.82);
-    stroke-width: 1.25;
-    opacity: 0.76;
-    filter: drop-shadow(0 0 2px rgba(247, 252, 255, 0.58));
-}
-
-.temporal-cover-pointer-line {
-    stroke: url(#temporalCoverPointer);
-    stroke-width: 2.2;
-    stroke-linecap: round;
-    filter:
-        drop-shadow(0 0 3px rgba(247, 244, 226, 0.68))
-        drop-shadow(0 0 9px rgba(141, 183, 221, 0.32));
-}
-
-.temporal-cover-pointer-pivot {
-    fill: url(#temporalCoverPivot);
-    stroke: rgba(244, 249, 247, 0.9);
-    stroke-width: 1.35;
-    filter:
-        drop-shadow(0 0 3px rgba(247, 252, 255, 0.82))
-        drop-shadow(0 0 8px rgba(190, 214, 211, 0.34));
-}
-
-.temporal-cover-pointer-gem {
-    fill: url(#temporalCoverGem);
-    stroke: rgba(236, 246, 246, 0.78);
-    stroke-width: 1;
-    filter:
-        drop-shadow(0 0 2px rgba(231, 241, 244, 0.92))
-        drop-shadow(0 0 7px rgba(141, 183, 221, 0.36));
-}
-
-.temporal-cover-pointer-gem-facet {
-    fill: rgba(255, 255, 255, 0.72);
-    pointer-events: none;
-}
-
-.temporal-ring-material-line {
-    stroke: rgba(204, 220, 222, 0.16);
-    stroke-width: 1.2;
-    stroke-dasharray: 0.16 0.045 0.05 0.745;
-    stroke-linecap: round;
-}
-
 /* 首頁遮罩開啟時，暫停後方尚未顯示的節氣環圓心動畫。 */
 html.entrance-open .solar-pivot {
     animation-play-state: paused;
 }
 
-.temporal-ring-tick {
-    stroke: rgba(190, 207, 209, 0.34);
-    stroke-width: 2.2;
-    stroke-linecap: round;
-}
-
-.temporal-ring-cardinal-tick {
-    stroke-width: 3.8;
-    opacity: 0.72;
-}
-
-.temporal-ring-cardinal-tick.is-spring {
-    stroke: var(--time-season-spring);
-}
-
-.temporal-ring-cardinal-tick.is-summer {
-    stroke: var(--time-season-summer);
-}
-
-.temporal-ring-cardinal-tick.is-autumn {
-    stroke: var(--time-season-autumn);
-}
-
-.temporal-ring-cardinal-tick.is-winter {
-    stroke: var(--time-season-winter);
-}
-
-/* 首頁刻度改用指針的細亮線條；刻度留在環面內，不切斷內外邊界。 */
-html.entrance-open .temporal-ring-tick {
-    stroke: url(#temporalTickLight);
-    stroke-width: 1.7;
-    opacity: 0.72;
-    filter:
-        drop-shadow(0 0 2px rgba(247, 244, 226, 0.54))
-        drop-shadow(0 0 5px rgba(141, 183, 221, 0.22));
-}
-
-html.entrance-open .temporal-ring-cardinal-tick {
-    stroke: url(#temporalTickLight);
-    stroke-width: 2.4;
-    opacity: 0.92;
-}
-
-.temporal-ring-memory-line {
-    stroke: rgba(155, 180, 187, 0.16);
-    stroke-width: 1.2;
-    stroke-dasharray: 0.22 0.035 0.06 0.685;
-    stroke-linecap: round;
-}
-
-/*
- * 桌機內頁測試：沿用首頁的靜態時鐘造型，但退到低對比背景層。
- * 手機版暫時維持既有配置，待桌機方向確認後再統一。
- */
-@media (min-width: 769px) {
-    html:not(.entrance-open) .temporal-sculpture {
-        opacity: 0.44;
-        filter: none;
-        transition: none;
-    }
-
-    html:not(.entrance-open) .temporal-sculpture-body {
-        transform: scale(0.92);
-        transform-box: view-box;
-        transform-origin: 1290px 510px;
-    }
-
-    html:not(.entrance-open) .temporal-ring-shadow,
-    html:not(.entrance-open) .temporal-ring-outer-edge,
-    html:not(.entrance-open) .temporal-ring-inner-edge,
-    html:not(.entrance-open) .temporal-ring-dial-edge-glow,
-    html:not(.entrance-open) .temporal-ring-dial-edge-core,
-    html:not(.entrance-open) .temporal-ring-tick,
-    html:not(.entrance-open) .temporal-cover-pointer-line,
-    html:not(.entrance-open) .temporal-cover-pointer-pivot,
-    html:not(.entrance-open) .temporal-cover-pointer-gem {
-        filter: none;
-    }
-
-    html:not(.entrance-open) .temporal-ring-shadow {
-        opacity: 0.08;
-    }
-
-    html:not(.entrance-open) .temporal-cover-pointer {
-        opacity: 0.55;
-    }
-
-    html:not(.entrance-open) .temporal-ring-outer-edge {
-        stroke: url(#temporalAmbient);
-        stroke-width: 2;
-        opacity: 0.6;
-    }
-
-    html:not(.entrance-open) .temporal-ring-inner-edge {
-        stroke-width: 1.2;
-        opacity: 0.1;
-    }
-
-    html:not(.entrance-open) .temporal-ring-dial-edge-glow {
-        stroke: url(#temporalAmbient);
-        stroke-width: 4;
-        opacity: 0.08;
-    }
-
-    html:not(.entrance-open) .temporal-ring-dial-edge-core {
-        stroke: rgba(238, 246, 241, 0.7);
-        stroke-width: 1;
-        opacity: 0.52;
-    }
-
-    html:not(.entrance-open) .temporal-ring-tick {
-        stroke: url(#temporalTickLight);
-        stroke-width: 1.5;
-        opacity: 0.46;
-    }
-
-    html:not(.entrance-open) .temporal-ring-cardinal-tick {
-        stroke: url(#temporalTickLight);
-        stroke-width: 2;
-        opacity: 0.62;
-    }
-}
-
-/* The temporal sculpture replaces every legacy entrance illustration layer. */
-.entrance-atmosphere {
-    display: none;
-}
+/* 首頁透明拼圖與圖文分欄。 */
 
 .entrance {
     color: var(--time-ink-primary);
     background: transparent;
+    padding: clamp(24px, 4vw, 64px);
+    overflow-x: hidden;
 }
 
 .entrance::before {
     opacity: 1;
     mix-blend-mode: normal;
     background:
+        linear-gradient(rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.12)),
         linear-gradient(90deg, rgba(7, 14, 24, 0.86) 0%, rgba(11, 21, 33, 0.68) 37%, rgba(14, 25, 39, 0.16) 68%, transparent 100%),
         linear-gradient(180deg, rgba(5, 12, 21, 0.18), transparent 42% 76%, rgba(4, 10, 18, 0.18));
 }
@@ -6676,38 +6400,104 @@ html.entrance-open .temporal-ring-cardinal-tick {
     box-shadow: inset 0 0 0 12px rgba(184, 207, 210, 0.012);
 }
 
+.entrance-layout {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(24px, 3vw, 64px);
+    width: min(1440px, 100%);
+    margin: auto;
+}
+
+.entrance-art {
+    display: block;
+    justify-self: center;
+    width: min(100%, 78svh, 780px);
+    aspect-ratio: 1800 / 1858;
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+.entrance-art img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+@media (min-width: 901px) {
+    .entrance {
+        padding-block: 3svh;
+    }
+
+    .entrance-art {
+        width: min(91svh, 62vw);
+        justify-self: end;
+    }
+}
+
+@media (max-width: 900px) {
+    .entrance {
+        padding: clamp(20px, 4svh, 36px) 22px;
+    }
+
+    .entrance-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: clamp(12px, 2.5svh, 24px);
+        width: min(540px, 100%);
+    }
+
+    .entrance-layout .entrance-content {
+        width: max-content;
+        max-width: 100%;
+        margin-inline: auto;
+        padding: 0 0 0 12px;
+    }
+
+    .entrance-layout h1 {
+        font-size: clamp(2.1rem, 7.5vw, 3.4rem);
+    }
+
+    .entrance-layout #entranceDescription {
+        margin-top: 18px;
+        margin-bottom: 8px;
+        font-size: clamp(0.8rem, 2.8vw, 1rem);
+        line-height: 1.8;
+    }
+
+    .entrance-layout .entrance-enter {
+        min-height: 64px;
+        padding-block: 16px;
+    }
+
+    .entrance-art {
+        width: min(78vw, 42svh, 420px);
+    }
+}
+
+@media (max-width: 900px) and (max-height: 500px) {
+    .entrance-layout h1 { font-size: 1.65rem; }
+    .entrance-layout #entranceDescription { margin-top: 10px; font-size: 0.76rem; }
+    .entrance-layout .entrance-enter { min-height: 48px; padding-block: 10px; }
+}
+
 .entrance-content {
     z-index: 4;
-    width: min(620px, 48vw);
+    width: 100%;
     max-width: none;
-    margin: auto auto auto clamp(9vw, 12vw, 180px);
+    margin: 0;
     padding: clamp(28px, 4vw, 56px) 0 clamp(24px, 3vw, 44px)
-        clamp(24px, 3vw, 50px);
+        clamp(12px, 2.5vw, 36px);
     text-align: left;
     transform: none;
     isolation: isolate;
 }
 
-.entrance-content::after {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    inset: -18% 0 -20% -12%;
-    background: radial-gradient(
-        ellipse 62% 68% at 34% 48%,
-        rgba(5, 15, 23, 0.32) 0%,
-        rgba(8, 21, 29, 0.19) 43%,
-        rgba(10, 25, 31, 0.06) 64%,
-        transparent 78%
-    );
-    pointer-events: none;
-}
-
+.entrance-content::after,
 .entrance-content::before {
-    background: linear-gradient(180deg, transparent, rgba(151, 184, 189, 0.46) 18% 82%, transparent);
-    top: 10%;
-    bottom: auto;
-    height: 46%;
+    content: none;
 }
 
 .entrance h1 {
@@ -7033,38 +6823,9 @@ html.entrance-open .temporal-ring-cardinal-tick {
 }
 
 @media (max-width: 768px) {
-    .temporal-sculpture {
-        left: -46%;
-        width: 165%;
-        height: 100%;
-        transform-origin: 68% 50%;
-        transition: opacity 700ms ease;
-    }
 
-    .temporal-sculpture {
-        transform: translate3d(0, 0, 0) scale(1.035);
-        filter: none;
-    }
 
-    body[data-section="gallery"] .temporal-sculpture {
-        opacity: 0.36;
-    }
 
-    .temporal-ring-shadow {
-        filter: none;
-    }
-
-    .entrance {
-        padding: 28px 20px;
-    }
-
-    .entrance-content {
-        width: min(88vw, 520px);
-        margin: auto;
-        padding: 32px 0 28px 32px;
-        text-align: left;
-        transform: none;
-    }
 
     .entrance-title-line-lower {
         margin-left: 0.42em;
@@ -7103,12 +6864,6 @@ html.entrance-open .temporal-ring-cardinal-tick {
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .temporal-sculpture {
-        transition: none;
-    }
-
-}
 
 /* 結語只保留外框；移除舊版殘留的側邊短線。 */
 .site-epilogue-final::before,
@@ -7546,12 +7301,6 @@ html.has-content-reveal .content-reveal {
     will-change: auto;
 }
 
-/* 手機仍使用既有的低成本固定環體；桌機內頁的新靜態時鐘先獨立測試。 */
-.temporal-sculpture {
-    overflow: hidden;
-    contain: paint;
-}
-
 @media (max-width: 768px) {
     html.has-content-reveal .content-reveal,
     html.has-content-reveal .content-reveal.is-content-visible {
@@ -7561,14 +7310,7 @@ html.has-content-reveal .content-reveal {
         will-change: auto;
     }
 
-    html:not(.entrance-open) .temporal-sculpture-body {
-        -webkit-mask: none;
-        mask: none;
-    }
 
-    html:not(.entrance-open) .temporal-ring-tick-set {
-        display: none;
-    }
 }
 
 /* 繪春信：橫幅依原稿比例完整置入，主體框由內容自然撐開。 */
@@ -8027,6 +7769,11 @@ main .section-label > span:not(.section-label-line),
 
 main .section-label-line {
     background: rgba(52, 82, 65, 0.28);
+}
+
+#thanks-page .commission-roster-card li {
+    color: #243d32;
+    text-shadow: none;
 }
 
 @media (max-width: 768px) {

@@ -821,7 +821,7 @@ const backgroundMusic = document.getElementById('backgroundMusic');
 const musicToggle = document.getElementById('musicToggle');
 const musicStatus = document.getElementById('musicStatus');
 const entranceTransitionCurtain = entrance.querySelector('.entrance-transition-curtain');
-const temporalSculpture = document.querySelector('.temporal-sculpture');
+const entranceArt = entrance.querySelector('.entrance-art');
 const hasBackgroundMusic = Boolean(backgroundMusic.getAttribute('src')?.trim());
 let enteringExhibition = false;
 let musicFadeTween;
@@ -918,10 +918,8 @@ async function enterExhibition(withMusic = true) {
                 entranceContext = gsap.context(() => {
                     entranceTimeline = gsap.timeline({ onComplete: () => resolve(), onInterrupt: () => resolve() });
                     entranceTimeline.to(fadingElements, { opacity: 0, y: -8, duration: 0.65, ease: 'power1.inOut' }, 0);
-                    const atmosphere = entrance.querySelector('.entrance-atmosphere');
-                    if (atmosphere) entranceTimeline.to(atmosphere, { opacity: 0, duration: 0.78, ease: 'power1.inOut' }, 0);
-                    if (temporalSculpture) {
-                        entranceTimeline.to(temporalSculpture, { opacity: 0, duration: 0.7, ease: 'power1.inOut' }, 0);
+                    if (entranceArt) {
+                        entranceTimeline.to(entranceArt, { opacity: 0, duration: 0.7, ease: 'power1.inOut' }, 0);
                     }
                     entranceTimeline
                         .fromTo(entranceTrigger, { opacity: 1, scale: 1.08 }, { opacity: 0, scale: 1.16, duration: 0.21, ease: 'power1.inOut', immediateRender: false }, 0.3)
