@@ -3449,7 +3449,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     margin: 0 auto;
     overflow: hidden;
     border-radius: inherit;
-    touch-action: pan-y;
+    touch-action: pan-y pinch-zoom;
 }
 
 .gallery-stage .carousel-slide {

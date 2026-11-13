@@ -22,8 +22,6 @@ let panX = 0;
 let panY = 0;
 let gesture;
 let lastTap = 0;
-let readingZoom = 1;
-let manualZoom = false;
 let focusedSlide;
 const slideObserver = new MutationObserver(() => {
     if (opened.value && props.stage.querySelector('.slide-item.is-current') !== focusedSlide) fitReading();
@@ -43,17 +41,35 @@ function resetZoom() {
     paintZoom();
 }
 
+function captionBounds(slide) {
+    const caption = slide?.querySelector('.slide-caption:not([hidden])');
+    if (!caption) return null;
+    const rects = [...caption.querySelectorAll('h2, .caption-description')].flatMap(element => {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        return [...range.getClientRects()].filter(rect => rect.width > 0 && rect.height > 0);
+    });
+    if (!rects.length) return null;
+    const left = Math.min(...rects.map(rect => rect.left));
+    const right = Math.max(...rects.map(rect => rect.right));
+    const top = Math.min(...rects.map(rect => rect.top));
+    const bottom = Math.max(...rects.map(rect => rect.bottom));
+    return { left, right, top, bottom, width: right - left, height: bottom - top };
+}
+
 function fitReading() {
     resetZoom();
-    manualZoom = false;
     focusedSlide = props.stage.querySelector('.slide-item.is-current');
-    const caption = focusedSlide?.querySelector('.slide-caption:not([hidden])');
     const stageRect = props.stage.getBoundingClientRect();
     const bounds = viewport.value.getBoundingClientRect();
-    if (caption) {
-        const text = caption.getBoundingClientRect();
-        readingZoom = Math.max(1, Math.min(2.4, (bounds.width - 32) / text.width, (bounds.height - 32) / text.height));
-        zoom.value = readingZoom;
+    // 共用倍率依所有作品的實際文字邊界計算，包含超出 caption 容器的長行。
+    const captions = [...props.stage.querySelectorAll('.slide-item')].map(captionBounds).filter(Boolean);
+    const widest = Math.max(1, ...captions.map(text => text.width));
+    const tallest = Math.max(1, ...captions.map(text => text.height));
+    const readingZoom = Math.max(1, Math.min(2, (bounds.width - 32) / widest, (bounds.height - 32) / tallest));
+    zoom.value = readingZoom;
+    const text = captionBounds(focusedSlide);
+    if (text) {
         // 在保留構圖的前提下平移，讓整段文字留在閱讀視窗安全範圍。
         const centerX = stageRect.left + stageRect.width / 2;
         const centerY = stageRect.top + stageRect.height / 2;
@@ -63,8 +79,6 @@ function fitReading() {
         const bottom = centerY + (text.bottom - centerY) * readingZoom;
         panX = Math.max(bounds.left + 16 - left, Math.min(0, bounds.right - 16 - right));
         panY = Math.max(bounds.top + 16 - top, Math.min(0, bounds.bottom - 16 - bottom));
-    } else {
-        readingZoom = 1;
     }
     paintZoom();
 }
@@ -117,6 +131,7 @@ function touchDistance(touches) {
 
 function startGesture(event) {
     event.stopPropagation();
+    if (event.touches.length > 1) lastTap = 0;
     gesture = {
         x: event.touches[0].clientX, y: event.touches[0].clientY,
         panX, panY, scale: zoom.value,
@@ -128,11 +143,9 @@ function moveGesture(event) {
     event.stopPropagation();
     if (!gesture) return;
     if (event.touches.length > 1 && gesture.distance) {
-        manualZoom = true;
         zoom.value = Math.max(1, Math.min(3, gesture.scale * touchDistance(event.touches) / gesture.distance));
-        if (zoom.value === 1) manualZoom = false;
         paintZoom();
-    } else if (zoom.value > 1 && manualZoom && !gesture.distance) {
+    } else if (zoom.value > 1 && !gesture.distance) {
         panX = gesture.panX + event.touches[0].clientX - gesture.x;
         panY = gesture.panY + event.touches[0].clientY - gesture.y;
         paintZoom();
@@ -141,22 +154,25 @@ function moveGesture(event) {
 
 function endGesture(event) {
     event.stopPropagation();
-    if (!gesture || event.touches.length) return;
+    if (!gesture) return;
+    if (event.touches.length) {
+        startGesture(event);
+        return;
+    }
     const dx = event.changedTouches[0].clientX - gesture.x;
     const dy = event.changedTouches[0].clientY - gesture.y;
-    if (!gesture.distance && !manualZoom && Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) {
-        changeArtwork(dx < 0 ? 1 : -1);
-    } else if (!gesture.distance && Math.hypot(dx, dy) < 10) {
+    if (!gesture.distance && Math.hypot(dx, dy) < 10) {
         const now = performance.now();
         if (now - lastTap < 300) {
             if (zoom.value > 1) {
                 resetZoom();
-                manualZoom = false;
             } else {
                 fitReading();
             }
         }
         lastTap = now;
+    } else {
+        lastTap = 0;
     }
     gesture = null;
 }
@@ -210,6 +226,8 @@ defineExpose({ openViewer });
 
 <style>
 #gallery-page .artwork-viewer {
+    --viewer-top: max(138px, calc(env(safe-area-inset-top) + 138px));
+    --viewer-bottom: max(76px, calc(env(safe-area-inset-bottom) + 76px));
     position: fixed;
     inset: 0;
     width: 100%;
@@ -228,16 +246,17 @@ defineExpose({ openViewer });
 .artwork-viewer::backdrop { background: transparent; }
 .artwork-viewer-shade { position: absolute; inset: 0; background: rgba(24, 39, 33, 0.62); }
 .artwork-viewer-viewport {
-    position: relative;
+    position: absolute;
+    inset: var(--viewer-top) 0 var(--viewer-bottom);
     display: grid;
     place-items: center;
     width: 100%;
-    height: calc(100% - 140px);
+    height: auto;
     overflow: hidden;
     touch-action: none;
 }
 #gallery-page .artwork-viewer .gallery-stage {
-    width: min(calc(100vw - 16px), calc((100dvh - 140px) * 2000 / 1126));
+    width: min(calc(100vw - 16px), calc((100dvh - var(--viewer-top) - var(--viewer-bottom)) * 2000 / 1126));
     height: auto;
     min-height: 0;
     aspect-ratio: 2000 / 1126;

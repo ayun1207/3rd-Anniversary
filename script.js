@@ -267,6 +267,7 @@ let galleryClickSuppressedUntil = 0;
 carouselViewport.setAttribute('aria-label', '作品展示，可用左右方向鍵切換，手機可點擊或按 Enter 放大');
 carouselViewport.addEventListener('click', event => {
     if (performance.now() < galleryClickSuppressedUntil) return;
+    if (window.visualViewport?.scale > 1.01) return;
     if (!event.target.closest('button')) artworkViewer.openViewer();
 });
 carouselViewport.addEventListener('keydown', event => {
@@ -801,6 +802,7 @@ document.addEventListener('pointerout', event => animateButtonHover(event, false
 
 let touchStartX = 0;
 let touchStartY = 0;
+let galleryMultiTouch = false;
 
 carouselViewport.addEventListener('keydown', event => {
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
@@ -809,11 +811,20 @@ carouselViewport.addEventListener('keydown', event => {
 });
 
 carouselViewport.addEventListener('touchstart', (event) => {
+    galleryMultiTouch = event.touches.length > 1;
+    if (galleryMultiTouch) {
+        galleryClickSuppressedUntil = performance.now() + 400;
+        return;
+    }
     touchStartX = event.changedTouches[0].clientX;
     touchStartY = event.changedTouches[0].clientY;
 }, { passive: true });
 
 carouselViewport.addEventListener('touchend', (event) => {
+    if (galleryMultiTouch || event.touches.length || window.visualViewport?.scale > 1.01) {
+        galleryClickSuppressedUntil = performance.now() + 400;
+        return;
+    }
     const touchEndX = event.changedTouches[0].clientX;
     const touchEndY = event.changedTouches[0].clientY;
 
@@ -835,6 +846,11 @@ carouselViewport.addEventListener('touchend', (event) => {
             moveSlide(-1);
         }
     }
+}, { passive: true });
+
+carouselViewport.addEventListener('touchcancel', () => {
+    galleryMultiTouch = true;
+    galleryClickSuppressedUntil = performance.now() + 400;
 }, { passive: true });
 
 /* 開場與背景音樂：play 必須在點擊事件內立即呼叫，不等待淡出結束。 */
