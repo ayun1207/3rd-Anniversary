@@ -7406,6 +7406,7 @@ main > .page-content:focus { outline: none; }
 }
 
 .gallery-stage-fit { display: contents; }
+.gallery-zoom-hint { display: none; }
 
 /* 固定章節視窗，內容完整縮放並置中。 */
 html, body { height: 100%; overflow: hidden; }
@@ -7798,6 +7799,16 @@ main .section-label-line {
         width: calc(100% - 16px);
         margin-inline: auto;
         height: auto;
+        padding-bottom: 12px;
+    }
+    #gallery-page .gallery-zoom-hint {
+        display: block;
+        margin: 7px 10px 0;
+        color: #314638;
+        font-size: 11px;
+        line-height: 1.5;
+        letter-spacing: 0.1em;
+        text-align: right;
     }
     #gallery-page .carousel-viewport { cursor: zoom-in; }
     #gallery-page .gallery-section-heading h2 {
