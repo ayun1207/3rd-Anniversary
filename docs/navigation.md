@@ -25,7 +25,7 @@
 
 - 新增常駐上方章節列，由 `src/components/ChapterNavigation.vue` 管理；桌機直接顯示六章，900px 以下以目前章節按鈕展開。選章後收合，支援 Esc、外側點擊與鍵盤焦點離開收合。
 - 章節狀態由 `script.js` 的 `setCurrentSection()` 寫入共用 `currentChapter` ref；Vue 導覽只讀取該狀態，並呼叫 `navigateToSection()`。非作用中章節使用 `hidden` 與 `inert`，保留 DOM 與作品、寄語切頁狀態，但不參與排版與鍵盤導覽。
-- 手機進入繪春信或籌花事時，兩章同時參與排版與鍵盤閱讀，`main.is-reading-flow` 提供捲動。以閱讀區中央位置判定目前章節，沿用 `setCurrentSection()` 更新導覽及 `aria-current`，背景元件依既有同組對應維持同一張固定底圖。
+- 手機進入繪春信或籌花事時，兩章同時參與排版與鍵盤閱讀，`main.is-reading-flow` 提供捲動。依捲動位置較接近的主體框定位點判定目前章節，沿用 `setCurrentSection()` 更新導覽及 `aria-current`，背景元件依既有同組對應維持同一張固定底圖。
 - 手機從導覽選擇這兩章時定位到對應主體框。同一閱讀頁內使用 GSAP 捲動定位，觸控、滾輪與閱讀按鍵可中斷定位動畫，reduced-motion 立即定位。跨章仍沿用淡出淡入，切換至桌機時恢復單章固定視窗。
 - 封面期間章節列隱藏。原左側寶石按鈕移至章節列最左端，僅提供返回理時序功能；手機章名由章節展開按鈕顯示。
 

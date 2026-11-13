@@ -401,7 +401,7 @@ function fitCurrentChapter() {
     if (isReadingChapter(currentSection)) {
         readingSections.forEach(section => section.querySelector('.chapter-page-fit').style.removeProperty('--chapter-fit-scale'));
         const [first, last] = readingSections.map(section => section.querySelector('.chapter-page-fit').offsetHeight);
-        chapterScroller.style.setProperty('--reading-start-space', `${Math.max(24, (chapterScroller.clientHeight - first) / 3)}px`);
+        chapterScroller.style.setProperty('--reading-start-space', `${Math.max(24, Math.min(64, (chapterScroller.clientHeight - first) / 6))}px`);
         chapterScroller.style.setProperty('--reading-end-space', `${Math.max(24, (chapterScroller.clientHeight - last) / 2)}px`);
         queueReadingProgress();
         return;
@@ -429,8 +429,10 @@ function queueReadingProgress() {
     readingProgressFrame = requestAnimationFrame(() => {
         readingProgressFrame = 0;
         if (!isReadingChapter(currentSection) || chapterTimeline) return;
+        const text = document.getElementById('text-page');
         const planning = document.getElementById('planning-page');
-        const pageName = chapterScroller.scrollTop + chapterScroller.clientHeight / 2 >= planning.offsetTop ? 'planning' : 'text';
+        const switchPosition = (readingScrollTop(text) + readingScrollTop(planning)) / 2;
+        const pageName = chapterScroller.scrollTop >= switchPosition ? 'planning' : 'text';
         setCurrentSection(pageName);
         if (!readingScrollTween) requestedChapter = pageName;
     });

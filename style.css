@@ -7843,7 +7843,7 @@ main .section-label-line {
     }
     #text-page .text-container h1 {
         position: static;
-        font-size: clamp(30px, 8.6vw, 38px);
+        font-size: clamp(25.5px, 7.31vw, 32.3px);
         line-height: 1.2;
     }
     #text-page .artist-profile-panel {
@@ -7864,7 +7864,7 @@ main .section-label-line {
     #planning-page .text-container h1 {
         position: static;
         margin: 0;
-        font-size: clamp(30px, 8.6vw, 38px);
+        font-size: clamp(25.5px, 7.31vw, 32.3px);
         line-height: 1.2;
     }
     #planning-page .planning-concept-panel {
