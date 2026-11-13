@@ -7821,6 +7821,20 @@ main .section-label-line {
         flex-basis: 34px;
     }
     #gallery-page .gallery-section-heading .gallery-progress-term { font-size: 14px; }
+    #text-page .text-container {
+        width: calc(100% - 16px);
+        margin-inline: auto;
+        padding: 44px 10px 16px;
+    }
+    #text-page .text-container h1 {
+        position: static;
+        font-size: clamp(30px, 8.6vw, 38px);
+        line-height: 1.2;
+    }
+    #text-page .artist-profile-panel {
+        top: 0;
+        margin-top: 16px;
+    }
     #intro-page .intro-layout {
         width: calc(100% - 20px);
         grid-template-columns: minmax(0, 1fr);
