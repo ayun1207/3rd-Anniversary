@@ -15,8 +15,10 @@
 
 ### 預定使用 Cloudflare Pages
 
+2026-11-14 最終發布檢查已完成，完整設定與結果見 `deployment.md`。本輪已補齊正式 title、24 張作品 alt，並指定 `.node-version`。乾淨副本的全新安裝、嚴格內容驗證與建置皆通過，GitHub 需再推送本輪收尾修改後才會包含這些內容。
+
 - 連接目前 GitHub 儲存庫與 `main`，建置指令為 `npm run build`，輸出目錄為 `dist`。建議 `NODE_VERSION=24`，`VITE_BASE_PATH` 使用 `/` 或留空，沿用目前 Vite 預設。
-- 本機根路徑已實測，既有 GitHub Pages 流程繼續使用 `/3rd-Anniversary/`。網站建置約 75 檔、8.6 MB，最大檔案約 700 KB。
+- 本機根路徑已實測，既有 GitHub Pages 流程繼續使用 `/3rd-Anniversary/`。最新建置共 125 檔、約 11.6 MB，最大檔案約 700 KB；125 檔逐一 HTTP 檢查通過。
 - 尚未建立 Cloudflare Pages 專案或發布網址。部署後須重新驗證真實網路冷載入、快取回應及字體資產狀態。
 - 設定依據為 [Cloudflare Vue 部署說明](https://developers.cloudflare.com/pages/framework-guides/deploy-a-vue-site/) 與 [Pages 平台限制](https://developers.cloudflare.com/pages/platform/limits/)。
 

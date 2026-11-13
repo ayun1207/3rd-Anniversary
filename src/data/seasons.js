@@ -72,7 +72,7 @@ export const seasonsData = names.map((name, index) => {
     imageHeight: artwork?.height ?? null,
     imageSmallWidth: artwork?.compactWidth ?? null,
     imageSmallHeight: artwork?.compactHeight ?? null,
-    alt: `圖片 ${id}`,
+    alt: `${name}節氣主題的三周年委託作品`,
     tone: tones[index],
     orientation: artwork?.orientation ?? null
   }

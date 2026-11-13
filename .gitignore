@@ -6,3 +6,5 @@ artwork-originals/
 作品圖排版/
 .codex-output/
 .playwright-mcp/
+.audit-*.png
+.*-audit.png
