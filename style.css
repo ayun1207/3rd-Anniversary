@@ -7800,6 +7800,16 @@ main .section-label-line {
         height: auto;
     }
     #gallery-page .carousel-viewport { cursor: zoom-in; }
+    #gallery-page .gallery-section-heading h2 {
+        font-size: clamp(30px, 8.6vw, 38px);
+        line-height: 1.2;
+    }
+    #gallery-page .gallery-section-heading .gallery-progress-orbit {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+    }
+    #gallery-page .gallery-section-heading .gallery-progress-term { font-size: 14px; }
     #intro-page .intro-layout {
         width: calc(100% - 20px);
         grid-template-columns: minmax(0, 1fr);

@@ -22,10 +22,16 @@ let panX = 0;
 let panY = 0;
 let gesture;
 let lastTap = 0;
+let readingZoom = 1;
+let manualZoom = false;
+let focusedSlide;
+const slideObserver = new MutationObserver(() => {
+    if (opened.value && props.stage.querySelector('.slide-item.is-current') !== focusedSlide) fitReading();
+});
 
 function paintZoom() {
-    const limitX = props.stage.offsetWidth * (zoom.value - 1) / 2;
-    const limitY = props.stage.offsetHeight * (zoom.value - 1) / 2;
+    const limitX = props.stage.offsetWidth * (zoom.value - 1) / 2 + 16;
+    const limitY = props.stage.offsetHeight * (zoom.value - 1) / 2 + 16;
     panX = Math.max(-limitX, Math.min(limitX, panX));
     panY = Math.max(-limitY, Math.min(limitY, panY));
     gsap.set(props.stage, { scale: zoom.value, x: panX, y: panY });
@@ -34,6 +40,32 @@ function paintZoom() {
 function resetZoom() {
     zoom.value = 1;
     panX = panY = 0;
+    paintZoom();
+}
+
+function fitReading() {
+    resetZoom();
+    manualZoom = false;
+    focusedSlide = props.stage.querySelector('.slide-item.is-current');
+    const caption = focusedSlide?.querySelector('.slide-caption:not([hidden])');
+    const stageRect = props.stage.getBoundingClientRect();
+    const bounds = viewport.value.getBoundingClientRect();
+    if (caption) {
+        const text = caption.getBoundingClientRect();
+        readingZoom = Math.max(1, Math.min(2.4, (bounds.width - 32) / text.width, (bounds.height - 32) / text.height));
+        zoom.value = readingZoom;
+        // 在保留構圖的前提下平移，讓整段文字留在閱讀視窗安全範圍。
+        const centerX = stageRect.left + stageRect.width / 2;
+        const centerY = stageRect.top + stageRect.height / 2;
+        const left = centerX + (text.left - centerX) * readingZoom;
+        const right = centerX + (text.right - centerX) * readingZoom;
+        const top = centerY + (text.top - centerY) * readingZoom;
+        const bottom = centerY + (text.bottom - centerY) * readingZoom;
+        panX = Math.max(bounds.left + 16 - left, Math.min(0, bounds.right - 16 - right));
+        panY = Math.max(bounds.top + 16 - top, Math.min(0, bounds.bottom - 16 - bottom));
+    } else {
+        readingZoom = 1;
+    }
     paintZoom();
 }
 
@@ -51,7 +83,9 @@ async function openViewer() {
     opened.value = true;
     await nextTick();
     dialog.value.showModal();
-    resetZoom();
+    props.stage.closest('#gallery-page').classList.add('is-artwork-viewing');
+    fitReading();
+    slideObserver.observe(props.stage, { subtree: true, attributes: true, attributeFilter: ['class'] });
     transition = gsap.fromTo(dialog.value, { opacity: 0 }, {
         opacity: 1, duration: reducedMotion.matches ? 0 : 0.35, ease: 'sine.out'
     });
@@ -61,6 +95,8 @@ async function openViewer() {
 function closeViewer() {
     if (!opened.value) return;
     transition?.kill();
+    slideObserver.disconnect();
+    props.stage.closest('#gallery-page').classList.remove('is-artwork-viewing');
     gsap.set(props.stage, { clearProps: 'transform' });
     placeholder.replaceWith(props.stage);
     placeholder = null;
@@ -72,7 +108,6 @@ function closeViewer() {
 }
 
 function changeArtwork(direction) {
-    resetZoom();
     void props.move(direction);
 }
 
@@ -93,9 +128,11 @@ function moveGesture(event) {
     event.stopPropagation();
     if (!gesture) return;
     if (event.touches.length > 1 && gesture.distance) {
+        manualZoom = true;
         zoom.value = Math.max(1, Math.min(3, gesture.scale * touchDistance(event.touches) / gesture.distance));
+        if (zoom.value === 1) manualZoom = false;
         paintZoom();
-    } else if (zoom.value > 1 && !gesture.distance) {
+    } else if (zoom.value > 1 && manualZoom && !gesture.distance) {
         panX = gesture.panX + event.touches[0].clientX - gesture.x;
         panY = gesture.panY + event.touches[0].clientY - gesture.y;
         paintZoom();
@@ -107,14 +144,17 @@ function endGesture(event) {
     if (!gesture || event.touches.length) return;
     const dx = event.changedTouches[0].clientX - gesture.x;
     const dy = event.changedTouches[0].clientY - gesture.y;
-    if (!gesture.distance && zoom.value === 1 && Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+    if (!gesture.distance && !manualZoom && Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) {
         changeArtwork(dx < 0 ? 1 : -1);
     } else if (!gesture.distance && Math.hypot(dx, dy) < 10) {
         const now = performance.now();
         if (now - lastTap < 300) {
-            zoom.value = zoom.value > 1 ? 1 : 2;
-            panX = panY = 0;
-            paintZoom();
+            if (zoom.value > 1) {
+                resetZoom();
+                manualZoom = false;
+            } else {
+                fitReading();
+            }
         }
         lastTap = now;
     }
@@ -137,7 +177,7 @@ function handleKey(event) {
 function updateMedia() {
     if (!mobile.matches) closeViewer();
     if (reducedMotion.matches) transition?.progress(1);
-    if (opened.value) resetZoom();
+    if (opened.value) fitReading();
 }
 watch(() => props.currentChapter.value, chapter => { if (chapter !== 'gallery') closeViewer(); });
 mobile.addEventListener('change', updateMedia);
@@ -158,11 +198,11 @@ defineExpose({ openViewer });
         <div class="artwork-viewer-shade" aria-hidden="true" @click="closeViewer"></div>
         <button ref="closeButton" class="artwork-viewer-close" type="button" aria-label="關閉放大作品" @click="closeViewer">×</button>
         <div ref="viewport" class="artwork-viewer-viewport"
+            @click="event => { if (event.target === viewport) closeViewer(); }"
             @touchstart.capture="startGesture" @touchmove.capture.prevent="moveGesture"
             @touchend.capture="endGesture" @touchcancel.capture="gesture = null"></div>
-        <div class="artwork-viewer-controls">
+        <div class="artwork-viewer-controls" @click.self="closeViewer">
             <button type="button" aria-label="上一張作品" @click="changeArtwork(-1)">‹</button>
-            <p>{{ zoom > 1 ? '拖曳查看細節 · 箭頭換作 · 輕點兩下還原' : '左右滑動換作 · 雙指或輕點兩下縮放' }}</p>
             <button type="button" aria-label="下一張作品" @click="changeArtwork(1)">›</button>
         </div>
     </dialog>
@@ -184,6 +224,7 @@ defineExpose({ openViewer });
     color: #f2f4eb;
 }
 #gallery-page .artwork-viewer[open] { display: grid; place-items: center; }
+#gallery-page.is-artwork-viewing .gallery-sticky-shell { visibility: hidden; }
 .artwork-viewer::backdrop { background: transparent; }
 .artwork-viewer-shade { position: absolute; inset: 0; background: rgba(24, 39, 33, 0.62); }
 .artwork-viewer-viewport {
@@ -219,8 +260,7 @@ defineExpose({ openViewer });
     font: inherit;
     font-size: 40px;
 }
-.artwork-viewer-close { position: absolute; right: max(12px, env(safe-area-inset-right)); top: max(12px, env(safe-area-inset-top)); z-index: 2; font-size: 30px; }
+.artwork-viewer-close { position: absolute; right: max(12px, env(safe-area-inset-right)); top: max(78px, calc(env(safe-area-inset-top) + 78px)); z-index: 2; font-size: 30px; }
 .artwork-viewer-controls { position: absolute; bottom: max(12px, env(safe-area-inset-bottom)); left: 12px; right: 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.artwork-viewer-controls p { font-size: 12px; line-height: 1.6; text-align: center; }
 .artwork-viewer button:focus-visible { outline: 1px solid #e0eade; border-radius: 8px; }
 </style>
