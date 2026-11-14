@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke-linecap="round">
+  <defs>
+    <linearGradient id="outer0" gradientUnits="userSpaceOnUse" x1="32.000" y1="6.000" x2="50.385" y2="13.615"><stop stop-color="#9dc3e1"/><stop offset="1" stop-color="#b0cee9"/></linearGradient>
+    <linearGradient id="outer1" gradientUnits="userSpaceOnUse" x1="50.385" y1="13.615" x2="58.000" y2="32.000"><stop stop-color="#b0cee9"/><stop offset="1" stop-color="#e8e8e0"/></linearGradient>
+    <linearGradient id="outer2" gradientUnits="userSpaceOnUse" x1="58.000" y1="32.000" x2="50.385" y2="50.385"><stop stop-color="#e8e8e0"/><stop offset="1" stop-color="#f6ce91"/></linearGradient>
+    <linearGradient id="outer3" gradientUnits="userSpaceOnUse" x1="50.385" y1="50.385" x2="32.000" y2="58.000"><stop stop-color="#f6ce91"/><stop offset="1" stop-color="#faba81"/></linearGradient>
+    <linearGradient id="outer4" gradientUnits="userSpaceOnUse" x1="32.000" y1="58.000" x2="13.615" y2="50.385"><stop stop-color="#faba81"/><stop offset="1" stop-color="#f5aba0"/></linearGradient>
+    <linearGradient id="outer5" gradientUnits="userSpaceOnUse" x1="13.615" y1="50.385" x2="6.000" y2="32.000"><stop stop-color="#f5aba0"/><stop offset="1" stop-color="#e1b2c0"/></linearGradient>
+    <linearGradient id="outer6" gradientUnits="userSpaceOnUse" x1="6.000" y1="32.000" x2="13.615" y2="13.615"><stop stop-color="#e1b2c0"/><stop offset="1" stop-color="#bbcee1"/></linearGradient>
+    <linearGradient id="outer7" gradientUnits="userSpaceOnUse" x1="13.615" y1="13.615" x2="32.000" y2="6.000"><stop stop-color="#bbcee1"/><stop offset="1" stop-color="#9dc3e1"/></linearGradient>
+    <linearGradient id="inner0" gradientUnits="userSpaceOnUse" x1="32.000" y1="14.000" x2="44.728" y2="19.272"><stop stop-color="#75a0bb"/><stop offset="1" stop-color="#7ca4b4"/></linearGradient>
+    <linearGradient id="inner1" gradientUnits="userSpaceOnUse" x1="44.728" y1="19.272" x2="50.000" y2="32.000"><stop stop-color="#7ca4b4"/><stop offset="1" stop-color="#b7d6e6"/></linearGradient>
+    <linearGradient id="inner2" gradientUnits="userSpaceOnUse" x1="50.000" y1="32.000" x2="44.728" y2="44.728"><stop stop-color="#b7d6e6"/><stop offset="1" stop-color="#c0b79c"/></linearGradient>
+    <linearGradient id="inner3" gradientUnits="userSpaceOnUse" x1="44.728" y1="44.728" x2="32.000" y2="50.000"><stop stop-color="#c0b79c"/><stop offset="1" stop-color="#c59c6a"/></linearGradient>
+    <linearGradient id="inner4" gradientUnits="userSpaceOnUse" x1="32.000" y1="50.000" x2="19.272" y2="44.728"><stop stop-color="#c59c6a"/><stop offset="1" stop-color="#c19085"/></linearGradient>
+    <linearGradient id="inner5" gradientUnits="userSpaceOnUse" x1="19.272" y1="44.728" x2="14.000" y2="32.000"><stop stop-color="#c19085"/><stop offset="1" stop-color="#b78ea3"/></linearGradient>
+    <linearGradient id="inner6" gradientUnits="userSpaceOnUse" x1="14.000" y1="32.000" x2="19.272" y2="19.272"><stop stop-color="#b78ea3"/><stop offset="1" stop-color="#98acce"/></linearGradient>
+    <linearGradient id="inner7" gradientUnits="userSpaceOnUse" x1="19.272" y1="19.272" x2="32.000" y2="14.000"><stop stop-color="#98acce"/><stop offset="1" stop-color="#75a0bb"/></linearGradient>
+    <linearGradient id="reflection" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".86"/><stop offset=".34" stop-color="#ffffff" stop-opacity="0"/><stop offset=".68" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#effaff" stop-opacity=".62"/></linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="none" stroke="#a8c3c6" stroke-width="1"/>
+  <path d="M32.000 6.000A26 26 0 0 1 50.385 13.615" fill="none" stroke="url(#outer0)" stroke-width="4"/>
+  <path d="M50.385 13.615A26 26 0 0 1 58.000 32.000" fill="none" stroke="url(#outer1)" stroke-width="4"/>
+  <path d="M58.000 32.000A26 26 0 0 1 50.385 50.385" fill="none" stroke="url(#outer2)" stroke-width="4"/>
+  <path d="M50.385 50.385A26 26 0 0 1 32.000 58.000" fill="none" stroke="url(#outer3)" stroke-width="4"/>
+  <path d="M32.000 58.000A26 26 0 0 1 13.615 50.385" fill="none" stroke="url(#outer4)" stroke-width="4"/>
+  <path d="M13.615 50.385A26 26 0 0 1 6.000 32.000" fill="none" stroke="url(#outer5)" stroke-width="4"/>
+  <path d="M6.000 32.000A26 26 0 0 1 13.615 13.615" fill="none" stroke="url(#outer6)" stroke-width="4"/>
+  <path d="M13.615 13.615A26 26 0 0 1 32.000 6.000" fill="none" stroke="url(#outer7)" stroke-width="4"/>
+  <path d="M32.000 14.000A18 18 0 0 1 44.728 19.272" fill="none" stroke="url(#inner0)" stroke-width="2.4"/>
+  <path d="M44.728 19.272A18 18 0 0 1 50.000 32.000" fill="none" stroke="url(#inner1)" stroke-width="2.4"/>
+  <path d="M50.000 32.000A18 18 0 0 1 44.728 44.728" fill="none" stroke="url(#inner2)" stroke-width="2.4"/>
+  <path d="M44.728 44.728A18 18 0 0 1 32.000 50.000" fill="none" stroke="url(#inner3)" stroke-width="2.4"/>
+  <path d="M32.000 50.000A18 18 0 0 1 19.272 44.728" fill="none" stroke="url(#inner4)" stroke-width="2.4"/>
+  <path d="M19.272 44.728A18 18 0 0 1 14.000 32.000" fill="none" stroke="url(#inner5)" stroke-width="2.4"/>
+  <path d="M14.000 32.000A18 18 0 0 1 19.272 19.272" fill="none" stroke="url(#inner6)" stroke-width="2.4"/>
+  <path d="M19.272 19.272A18 18 0 0 1 32.000 14.000" fill="none" stroke="url(#inner7)" stroke-width="2.4"/>
+  <circle cx="32" cy="32" r="27.4" fill="none" stroke="url(#reflection)" stroke-width="1"/>
+  <circle cx="32" cy="32" r="18.8" fill="none" stroke="url(#reflection)" stroke-width=".7"/>
+</svg>
