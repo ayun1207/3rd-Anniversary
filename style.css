@@ -7518,6 +7518,11 @@ html.desktop-layout .chapter-navigation {
     transform: translateX(calc(-100% - var(--desktop-scroll-x, 0px)));
 }
 html.desktop-layout .entrance { overflow-x: auto; }
+/* 封面底色固定覆蓋視窗，不隨放大後的內容捲走而露出內頁。 */
+html.desktop-layout .entrance::before,
+html.desktop-layout .entrance::after {
+    position: fixed;
+}
 html.desktop-layout .entrance-layout {
     min-width: min(1440px, calc(var(--desktop-viewport-width) - 2 * clamp(24px, calc(4 * var(--desktop-vw)), 64px)));
 }
@@ -7839,6 +7844,17 @@ main .section-label > span:not(.section-label-line),
 
 main .section-label-line {
     background: rgba(52, 82, 65, 0.28);
+}
+
+/* 寶石動畫前後維持同一個合成層，避免玻璃與文字重新取樣。 */
+@media (hover: hover) and (pointer: fine) {
+    #thanks-page .text-container {
+        transform: translateZ(0);
+    }
+    #thanks-page .commission-roster-card {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
 }
 
 #thanks-page .commission-roster-card li {

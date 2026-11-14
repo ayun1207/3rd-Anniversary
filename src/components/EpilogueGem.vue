@@ -21,6 +21,18 @@ let openingAnimation;
 let writingAnimation;
 let closingAnimation;
 let gemAnimation;
+let hoverAnimation;
+
+function setGemHover(hovered) {
+    if (hovered && !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    hoverAnimation?.kill();
+    hoverAnimation = gsap.to(trigger.value, {
+        scale: hovered ? 1.1 : 1,
+        duration: motionPreference.matches ? 0 : 0.28,
+        ease: 'sine.out',
+        force3D: true
+    });
+}
 
 function updateGemMotion() {
     gemAnimation?.kill();
@@ -112,15 +124,20 @@ function updateMotionPreference() {
     closingAnimation?.progress(1);
 }
 watch(() => props.currentChapter.value, chapter => {
-    if (chapter !== 'thanks') closeEpilogue(true);
+    if (chapter !== 'thanks') {
+        setGemHover(false);
+        closeEpilogue(true);
+    }
 });
 watch([() => props.currentChapter.value, opened], updateGemMotion, { flush: 'post' });
 onMounted(() => {
+    gsap.set(trigger.value, { scale: 1, force3D: true });
     updateGemMotion();
     document.addEventListener('visibilitychange', updateGemMotion);
 });
 motionPreference.addEventListener('change', updateMotionPreference);
 onBeforeUnmount(() => {
+    hoverAnimation?.kill();
     gemAnimation?.kill();
     openingAnimation?.kill();
     writingAnimation?.kill();
@@ -135,7 +152,8 @@ onBeforeUnmount(() => {
     <Teleport to="#thanks-page .text-container">
     <button v-show="currentChapter.value === 'thanks'" ref="trigger" type="button"
         :class="{ 'has-pointer-focus': pointerFocus }" @pointerdown="pointerFocus = true" @keydown="pointerFocus = false"
-        class="epilogue-gem-trigger" aria-label="開啟藏在寶石裡的結語" aria-haspopup="dialog" @click="openEpilogue">
+        class="epilogue-gem-trigger" aria-label="開啟藏在寶石裡的結語" aria-haspopup="dialog" @click="openEpilogue"
+        @mouseenter="setGemHover(true)" @mouseleave="setGemHover(false)">
         <span ref="gem" class="epilogue-gem season-gem" aria-hidden="true">
             <span class="gem-face gem-face-blue"></span>
             <span class="gem-face gem-face-gold"></span>
@@ -223,9 +241,6 @@ onBeforeUnmount(() => {
     inset: 0;
     background: radial-gradient(ellipse at 45% 38%, rgba(255, 255, 246, 0.72), transparent 32%);
 }
-.epilogue-gem-trigger:hover {
-    filter: brightness(1.12) drop-shadow(0 0 8px rgba(211, 231, 234, 0.45));
-}
 .epilogue-gem-trigger:focus-visible { outline: 1px solid #f4e6c9; outline-offset: 2px; border-radius: 16px; }
 .epilogue-gem-trigger.has-pointer-focus:focus { outline: none; }
 .epilogue-dialog {
@@ -245,11 +260,13 @@ onBeforeUnmount(() => {
 .epilogue-dialog[open] { display: grid; place-items: center; }
 .epilogue-dialog::backdrop { background: transparent; }
 .epilogue-shade {
+    opacity: 0;
     position: fixed;
     inset: 0;
     background: rgba(19, 34, 31, 0.72);
 }
 .epilogue-panel {
+    opacity: 0;
     position: relative;
     box-sizing: border-box;
     width: min(980px, 100%);
