@@ -1,6 +1,7 @@
 <script setup>
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { gsap } from 'gsap';
+import { mobileLayoutMedia } from '../layout/desktopViewport.js';
 
 const props = defineProps({
     stage: { type: Object, required: true },
@@ -14,7 +15,7 @@ const closeButton = ref(null);
 const opened = ref(false);
 const zoom = ref(1);
 const pointerFocus = ref(true);
-const mobile = matchMedia('(max-width: 900px)');
+const mobile = mobileLayoutMedia;
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let placeholder;
 let transition;

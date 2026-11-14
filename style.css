@@ -131,7 +131,7 @@ body {
     isolation: isolate;
     background: var(--paper-base);
     color: var(--ink-primary);
-    min-height: 100vh;
+    min-height: calc(100 * var(--desktop-vh, 1vh));
     display: flex;
     flex-direction: column;
 }
@@ -140,7 +140,7 @@ body {
 .site-header {
     height: 96px;
     flex-shrink: 0;
-    padding: 0 clamp(20px, 4vw, 64px);
+    padding: 0 clamp(20px, calc(4 * var(--desktop-vw, 1vw)), 64px);
     display: flex;
     align-items: center;
     gap: 18px;
@@ -213,9 +213,9 @@ body {
 }
 
 .menu-panel {
-    width: min(340px, 82vw);
+    width: min(340px, calc(82 * var(--desktop-vw, 1vw)));
     height: 100%;
-    padding: 28px clamp(24px, 4vw, 40px) 32px;
+    padding: 28px clamp(24px, calc(4 * var(--desktop-vw, 1vw)), 40px) 32px;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
@@ -283,7 +283,7 @@ body {
 .menu-navigation {
     display: flex;
     flex-direction: column;
-    margin-top: clamp(42px, 8vh, 76px);
+    margin-top: clamp(42px, calc(8 * var(--desktop-vh, 1vh)), 76px);
 }
 
 .nav-btn {
@@ -297,7 +297,7 @@ body {
     text-align: left;
     color: var(--ink-secondary);
     font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
-    font-size: clamp(1.08rem, 1.4vw, 1.2rem);
+    font-size: clamp(1.08rem, calc(1.4 * var(--desktop-vw, 1vw)), 1.2rem);
     font-weight: 400;
     line-height: 1.4;
     letter-spacing: 0.16em;
@@ -429,7 +429,7 @@ html.gsap-motion *::after {
 }
 html.gsap-motion .chapter-home:hover .menu-emblem { transform: none; }
 button:not(#enterExhibition) { scale: var(--press-scale, 1); }
-.chapter-navigation-links { position: relative; display: flex; gap: clamp(8px, 1.4vw, 24px); }
+.chapter-navigation-links { position: relative; display: flex; gap: clamp(8px, calc(1.4 * var(--desktop-vw, 1vw)), 24px); }
 .chapter-navigation-link,
 .chapter-navigation-trigger {
     position: relative;
@@ -472,7 +472,7 @@ button:not(#enterExhibition) { scale: var(--press-scale, 1); }
     box-shadow: none;
 }
 .chapter-navigation .chapter-home:hover .menu-emblem { transform: rotate(10deg); }
-@media (min-width: 901px) {
+@media (min-width: 901px), (hover: hover) and (pointer: fine) {
     body > .site-header { padding-top: 86px; }
 }
 .chapter-navigation :focus-visible { outline: 1px solid #c7d8ce; outline-offset: 2px; border-radius: 8px; }
@@ -481,13 +481,24 @@ button:not(#enterExhibition) { scale: var(--press-scale, 1); }
 .page-content { scroll-margin-top: 78px; }
 html.entrance-open #chapter-navigation,
 html.entrance-pending #chapter-navigation { visibility: hidden; }
-@media (max-width: 900px) {
-    .chapter-navigation { top: 10px; right: 16px; width: 224px; padding: 2px 10px 2px 4px; gap: 8px; border-radius: 24px; flex-wrap: wrap; }
+@media (max-width: 900px) and (hover: none) {
+    .chapter-navigation { top: 10px; right: 16px; width: min(224px, calc(100vw - 32px)); padding: 2px 10px 2px 4px; gap: 8px; border-radius: 24px; flex-wrap: wrap; }
     .chapter-navigation-trigger { flex: 1; }
     .chapter-navigation-trigger { display: flex; width: 100%; align-items: center; justify-content: space-between; min-height: 48px; color: #f0eee3; }
     .chapter-navigation-chevron { width: 7px; height: 7px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(45deg); }
     .is-expanded .chapter-navigation-chevron { transform: rotate(225deg); }
-    .chapter-navigation-links { display: none; flex-basis: 100%; flex-direction: column; gap: 0; padding: 4px 0 10px; }
+    .chapter-navigation-links {
+        display: none;
+        flex-basis: 100%;
+        flex-direction: column;
+        gap: 0;
+        max-height: calc(100dvh - 90px);
+        overflow-y: auto;
+        overscroll-behavior-y: contain;
+        scrollbar-width: thin;
+        padding: 4px 0 10px;
+    }
+    .chapter-navigation-links .chapter-navigation-link { flex-shrink: 0; }
     .is-expanded .chapter-navigation-links { display: flex; }
     .chapter-navigation-link { text-align: left; }
     .site-header .current-page-label { visibility: hidden; }
@@ -500,7 +511,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     position: relative;
     display: block;
     min-height: 0;
-    padding: clamp(64px, 7vw, 96px) 0 clamp(72px, 8vw, 112px);
+    padding: clamp(64px, calc(7 * var(--desktop-vw, 1vw)), 96px) 0 clamp(72px, calc(8 * var(--desktop-vw, 1vw)), 112px);
     border-top: 0;
     background: transparent;
     overflow: clip;
@@ -513,15 +524,15 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     width: var(--editorial-frame);
     max-width: 1180px;
     margin: 0 auto;
-    padding-bottom: clamp(26px, 3vw, 40px);
+    padding-bottom: clamp(26px, calc(3 * var(--desktop-vw, 1vw)), 40px);
 }
 
 .messages-heading {
     position: relative;
     z-index: 1;
     isolation: isolate;
-    padding: clamp(38px, 4vw, 54px) clamp(18px, 3vw, 48px) clamp(26px, 3.2vw, 42px);
-    margin-bottom: clamp(12px, 1.5vw, 20px);
+    padding: clamp(38px, calc(4 * var(--desktop-vw, 1vw)), 54px) clamp(18px, calc(3 * var(--desktop-vw, 1vw)), 48px) clamp(26px, calc(3.2 * var(--desktop-vw, 1vw)), 42px);
+    margin-bottom: clamp(12px, calc(1.5 * var(--desktop-vw, 1vw)), 20px);
     border-top: 1px solid rgba(117, 105, 81, 0.24);
 }
 
@@ -531,7 +542,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     z-index: -1;
     inset: 0;
     border: 1px solid var(--glass-border);
-    border-radius: clamp(22px, 2.4vw, 34px);
+    border-radius: clamp(22px, calc(2.4 * var(--desktop-vw, 1vw)), 34px);
     background:
         radial-gradient(ellipse at 14% 108%, rgba(243, 164, 176, 0.14), transparent 44%),
         radial-gradient(ellipse at 84% 108%, rgba(141, 183, 221, 0.12), transparent 46%),
@@ -553,7 +564,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     margin: 0;
     color: var(--ink-primary);
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
-    font-size: clamp(2rem, 4vw, 3.6rem);
+    font-size: clamp(2rem, calc(4 * var(--desktop-vw, 1vw)), 3.6rem);
     font-weight: 300;
     line-height: 1.35;
     letter-spacing: 0.16em;
@@ -562,12 +573,12 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
 .message-card {
     position: relative;
     grid-column: 1 / span 6;
-    min-height: clamp(190px, 21vw, 270px);
-    padding: clamp(28px, 4vw, 52px);
+    min-height: clamp(190px, calc(21 * var(--desktop-vw, 1vw)), 270px);
+    padding: clamp(28px, calc(4 * var(--desktop-vw, 1vw)), 52px);
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(255, 255, 255, 0.68);
-    border-radius: clamp(18px, 2vw, 28px);
+    border-radius: clamp(18px, calc(2 * var(--desktop-vw, 1vw)), 28px);
     background:
         radial-gradient(ellipse at 12% 110%, rgba(141, 183, 221, 0.13), transparent 47%),
         radial-gradient(ellipse at 102% -8%, rgba(243, 164, 176, 0.08), transparent 42%),
@@ -586,17 +597,17 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
 
 .message-card:nth-child(even) {
     grid-column: 7 / span 6;
-    margin-top: clamp(34px, 5vw, 72px);
+    margin-top: clamp(34px, calc(5 * var(--desktop-vw, 1vw)), 72px);
 }
 
 .message-card:nth-child(4n + 3) {
     grid-column: 2 / span 5;
-    margin-top: clamp(8px, 2vw, 28px);
+    margin-top: clamp(8px, calc(2 * var(--desktop-vw, 1vw)), 28px);
 }
 
 .message-card:nth-child(4n) {
     grid-column: 8 / span 5;
-    margin-top: clamp(58px, 7vw, 96px);
+    margin-top: clamp(58px, calc(7 * var(--desktop-vw, 1vw)), 96px);
 }
 
 .message-card:nth-child(3n + 2) {
@@ -630,7 +641,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     margin: 0;
     color: var(--ink-secondary);
     font-family: var(--site-font);
-    font-size: clamp(1.02rem, 1.35vw, 1.18rem);
+    font-size: clamp(1.02rem, calc(1.35 * var(--desktop-vw, 1vw)), 1.18rem);
     font-weight: 400;
     line-height: 2.05;
     letter-spacing: 0.075em;
@@ -641,7 +652,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     position: relative;
     z-index: 1;
     margin-top: auto;
-    padding-top: clamp(28px, 4vw, 50px);
+    padding-top: clamp(28px, calc(4 * var(--desktop-vw, 1vw)), 50px);
     align-self: flex-end;
     color: var(--ink-secondary);
     font-family: var(--site-font);
@@ -659,7 +670,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     background: rgba(117, 105, 81, 0.24);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px) and (hover: none) {
     .messages-page,
     .page-content.messages-page,
     .page-content.messages-page.active {
@@ -669,7 +680,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
 
 }
 
-@media (max-width: 700px) {
+@media (max-width: 700px) and (hover: none) {
     .messages-heading {
         padding: 54px 18px 62px;
         margin-bottom: 38px;
@@ -716,7 +727,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
 
 .messages-carousel {
     box-sizing: border-box;
-    padding-inline: clamp(3.5rem, 5.5vw, 5.75rem);
+    padding-inline: clamp(3.5rem, calc(5.5 * var(--desktop-vw, 1vw)), 5.75rem);
     position: relative;
     isolation: isolate;
 }
@@ -740,7 +751,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     align-self: start;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(10px, 1.3vw, 18px) clamp(16px, 2.4vw, 32px);
+    gap: clamp(10px, calc(1.3 * var(--desktop-vw, 1vw)), 18px) clamp(16px, calc(2.4 * var(--desktop-vw, 1vw)), 32px);
     align-items: start;
     visibility: hidden;
     opacity: 0;
@@ -760,15 +771,15 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     height: 190px;
     min-height: 0;
     margin: 0;
-    padding: clamp(20px, 2.3vw, 30px);
-    padding-bottom: clamp(54px, 5vw, 62px);
+    padding: clamp(20px, calc(2.3 * var(--desktop-vw, 1vw)), 30px);
+    padding-bottom: clamp(54px, calc(5 * var(--desktop-vw, 1vw)), 62px);
 }
 
 .messages-carousel .message-group .message-card:nth-child(odd) {
     justify-self: start;
 }
 
-@media (min-width: 561px) {
+@media (min-width: 561px), (hover: hover) and (pointer: fine) {
     .messages-carousel .message-group .message-card:nth-child(1) {
         grid-column: 1;
         grid-row: 1;
@@ -799,7 +810,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
 
 .messages-carousel .message-group .message-card:nth-child(even) {
     justify-self: end;
-    margin-top: clamp(22px, 2.2vw, 34px);
+    margin-top: clamp(22px, calc(2.2 * var(--desktop-vw, 1vw)), 34px);
 }
 
 .messages-carousel .message-group .message-card:nth-child(3) {
@@ -810,7 +821,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
 
 .messages-carousel .message-group .message-card:nth-child(4) {
     width: 92%;
-    margin-top: clamp(20px, 2vw, 30px);
+    margin-top: clamp(20px, calc(2 * var(--desktop-vw, 1vw)), 30px);
     margin-right: 0;
 }
 
@@ -818,7 +829,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     margin-top: 0;
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 1100px), (hover: hover) and (pointer: fine) {
     .messages-viewport {
         overflow-x: clip;
         overflow-y: visible;
@@ -826,7 +837,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
 
     .message-group {
         grid-template-columns: repeat(12, minmax(0, 1fr));
-        column-gap: clamp(10px, 1vw, 14px);
+        column-gap: clamp(10px, calc(1 * var(--desktop-vw, 1vw)), 14px);
         row-gap: 36px;
         box-sizing: border-box;
         padding: 16px 18px 44px;
@@ -874,7 +885,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     }
 
     .messages-carousel .message-group .message-card p {
-        font-size: clamp(0.8rem, 0.96vw, 0.95rem);
+        font-size: clamp(0.8rem, calc(0.96 * var(--desktop-vw, 1vw)), 0.95rem);
         line-height: 1.65;
         letter-spacing: 0.035em;
     }
@@ -888,13 +899,13 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
 
 .messages-carousel .message-card footer {
     position: absolute;
-    right: clamp(20px, 2.3vw, 30px);
-    bottom: clamp(18px, 2vw, 24px);
+    right: clamp(20px, calc(2.3 * var(--desktop-vw, 1vw)), 30px);
+    bottom: clamp(18px, calc(2 * var(--desktop-vw, 1vw)), 24px);
     margin: 0;
     padding-top: 0;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px) and (hover: none) {
     .messages-carousel .message-group .message-card {
         height: 200px;
     }
@@ -931,8 +942,8 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     transform: translateY(-50%);
 }
 
-.messages-prev { left: clamp(-22px, -2vw, -34px); }
-.messages-next { right: clamp(-22px, -2vw, -34px); }
+.messages-prev { left: clamp(-22px, calc(-2 * var(--desktop-vw, 1vw)), -34px); }
+.messages-next { right: clamp(-22px, calc(-2 * var(--desktop-vw, 1vw)), -34px); }
 
 .messages-arrow svg {
     width: 22px;
@@ -973,7 +984,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     left: auto !important;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 700px) and (hover: none) {
     .messages-carousel {
         padding-right: 0 !important;
         padding-bottom: 3.4rem !important;
@@ -1008,7 +1019,7 @@ html.entrance-pending #chapter-navigation { visibility: hidden; }
     border: 0;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 700px) and (hover: none) {
     .message-group {
         gap: 12px 10px;
     }
@@ -1086,7 +1097,7 @@ main {
     isolation: isolate;
     align-items: center;
     justify-content: center;
-    padding: clamp(32px, 5vw, 76px) clamp(24px, 7vw, 110px) 72px;
+    padding: clamp(32px, calc(5 * var(--desktop-vw, 1vw)), 76px) clamp(24px, calc(7 * var(--desktop-vw, 1vw)), 110px) 72px;
     overflow: hidden;
 }
 
@@ -1094,10 +1105,10 @@ main {
     position: relative;
     z-index: 1;
     width: min(1380px, 100%);
-    min-height: min(680px, calc(100vh - 190px));
+    min-height: min(680px, calc(calc(100 * var(--desktop-vh, 1vh)) - 190px));
     display: grid;
     grid-template-columns: minmax(340px, 0.86fr) minmax(480px, 1.14fr);
-    gap: clamp(24px, 4vw, 68px);
+    gap: clamp(24px, calc(4 * var(--desktop-vw, 1vw)), 68px);
     align-items: center;
 }
 
@@ -1107,7 +1118,7 @@ main {
 
 .intro-copy h1 {
     font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
-    font-size: clamp(2.5rem, 5.4vw, 5.1rem);
+    font-size: clamp(2.5rem, calc(5.4 * var(--desktop-vw, 1vw)), 5.1rem);
     font-weight: 400;
     line-height: 1.45;
     letter-spacing: 0.08em;
@@ -1116,7 +1127,7 @@ main {
 }
 
 .intro-rule {
-    width: min(220px, 34vw);
+    width: min(220px, calc(34 * var(--desktop-vw, 1vw)));
     height: 1px;
     margin: 34px 0;
     background: linear-gradient(90deg, rgba(117, 105, 81, 0.65), transparent);
@@ -1126,7 +1137,7 @@ main {
 .intro-description {
     max-width: 620px;
     color: var(--ink-secondary);
-    font-size: clamp(1rem, 1.25vw, 1.08rem);
+    font-size: clamp(1rem, calc(1.25 * var(--desktop-vw, 1vw)), 1.08rem);
     line-height: 2.15;
     letter-spacing: 0.055em;
 }
@@ -1134,7 +1145,7 @@ main {
 .intro-lead {
     max-width: 35em;
     font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
-    font-size: clamp(1rem, 1.15vw, 1.06rem);
+    font-size: clamp(1rem, calc(1.15 * var(--desktop-vw, 1vw)), 1.06rem);
     line-height: 2.3;
     letter-spacing: 0.075em;
     text-wrap: pretty;
@@ -1157,7 +1168,7 @@ main {
     --solar-leaf-angle: 0deg;
     --season-accent: #817d75;
     position: relative;
-    width: min(560px, 43vw, calc(100vh - 150px));
+    width: min(560px, calc(43 * var(--desktop-vw, 1vw)), calc(calc(100 * var(--desktop-vh, 1vh)) - 150px));
     aspect-ratio: 1;
     justify-self: center;
     border-radius: 50%;
@@ -1255,7 +1266,7 @@ main {
     text-align: center;
 
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
-    font-size: clamp(0.73rem, 1vw, 0.93rem);
+    font-size: clamp(0.73rem, calc(1 * var(--desktop-vw, 1vw)), 0.93rem);
     font-weight: 400;
     line-height: 1;
     letter-spacing: 0.1em;
@@ -1296,7 +1307,7 @@ main {
 }
 
 .solar-cardinal {
-    font-size: clamp(0.77rem, 1.03vw, 0.96rem);
+    font-size: clamp(0.77rem, calc(1.03 * var(--desktop-vw, 1vw)), 0.96rem);
     font-weight: 500;
     letter-spacing: 0.11em;
     text-shadow: 0 1px 8px rgba(255, 253, 248, 0.56);
@@ -1527,7 +1538,7 @@ main {
     width: 86%;
     transform: translate(-50%, -50%);
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
-    font-size: clamp(1.26rem, 1.85vw, 1.58rem);
+    font-size: clamp(1.26rem, calc(1.85 * var(--desktop-vw, 1vw)), 1.58rem);
     line-height: 1;
     letter-spacing: 0.12em;
     color: color-mix(in srgb, var(--season-accent) 78%, #34413b);
@@ -1554,7 +1565,7 @@ main {
     font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
     font-weight: 350;
     font-variation-settings: "PADG" 4;
-    font-size: clamp(0.62rem, 0.79vw, 0.75rem);
+    font-size: clamp(0.62rem, calc(0.79 * var(--desktop-vw, 1vw)), 0.75rem);
     line-height: 1.7;
     letter-spacing: 0.075em;
     transition: color 620ms ease;
@@ -1577,9 +1588,9 @@ main {
 /* 結語：只保留一個安靜的長方形文字框。 */
 .site-epilogue {
     width: var(--editorial-frame);
-    min-height: clamp(320px, 44svh, 500px);
+    min-height: clamp(320px, calc(44 * var(--desktop-vh, 1svh)), 500px);
     margin: 0 auto;
-    padding: clamp(88px, 10vw, 150px) 0 clamp(110px, 13vw, 190px);
+    padding: clamp(88px, calc(10 * var(--desktop-vw, 1vw)), 150px) 0 clamp(110px, calc(13 * var(--desktop-vw, 1vw)), 190px);
     display: grid;
     place-items: center;
     overflow: visible;
@@ -1593,8 +1604,8 @@ main {
 
 .site-epilogue-inner {
     width: min(100%, 760px);
-    min-height: clamp(170px, 22svh, 230px);
-    padding: clamp(42px, 5vw, 68px) clamp(28px, 6vw, 82px);
+    min-height: clamp(170px, calc(22 * var(--desktop-vh, 1svh)), 230px);
+    padding: clamp(42px, calc(5 * var(--desktop-vw, 1vw)), 68px) clamp(28px, calc(6 * var(--desktop-vw, 1vw)), 82px);
     display: grid;
     place-items: center;
     border: 1px solid rgba(117, 105, 81, 0.28);
@@ -1611,14 +1622,14 @@ main {
     min-height: 4.8em;
     margin: 0;
     color: var(--ink-secondary);
-    font-size: clamp(1rem, 1.25vw, 1.08rem);
+    font-size: clamp(1rem, calc(1.25 * var(--desktop-vw, 1vw)), 1.08rem);
     line-height: 2.35;
     letter-spacing: 0.1em;
     text-align: center;
     text-wrap: pretty;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     .site-epilogue {
         min-height: 300px;
         padding: 72px 0 110px;
@@ -1639,7 +1650,7 @@ main {
     position: relative;
     width: min(100%, 760px);
     min-height: 176px;
-    padding: 46px clamp(34px, 6vw, 72px);
+    padding: 46px clamp(34px, calc(6 * var(--desktop-vw, 1vw)), 72px);
     border-color: var(--glass-border);
     border-radius: 36px;
     background:
@@ -1688,7 +1699,7 @@ main {
     margin-top: 0.22em;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     .site-epilogue-final {
         min-height: 176px;
         padding: 42px 30px;
@@ -1707,7 +1718,7 @@ main {
     }
 }
 
-@media (min-width: 769px) and (max-width: 1100px) {
+@media (min-width: 769px) and (max-width: 1100px) and (hover: none) {
     .intro-layout {
         grid-template-columns: minmax(290px, 0.9fr) minmax(360px, 1.1fr);
         gap: 24px;
@@ -1723,7 +1734,7 @@ main {
     }
 }
 
-@media (min-width: 769px) and (max-width: 900px) {
+@media (min-width: 769px) and (max-width: 900px) and (hover: none) {
     .intro-page {
         align-items: flex-start;
         overflow-y: auto;
@@ -1746,7 +1757,7 @@ main {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     .intro-page {
         padding: 28px 24px 56px;
         align-items: flex-start;
@@ -1843,7 +1854,7 @@ main {
     min-width: 0;
     display: grid;
     grid-template-columns: minmax(0, 1.85fr) minmax(280px, 1fr);
-    gap: clamp(24px, 3vw, 52px);
+    gap: clamp(24px, calc(3 * var(--desktop-vw, 1vw)), 52px);
     align-items: center;
     padding: 8px;
 }
@@ -1858,7 +1869,7 @@ main {
 
 .slide-image {
     position: relative;
-    height: min(78vh, 900px);
+    height: min(calc(78 * var(--desktop-vh, 1vh)), 900px);
     min-width: 0;
     display: flex;
     align-items: center;
@@ -2028,7 +2039,7 @@ main {
     text-align: right;
     font-family: "Noto Serif TC", "Noto Serif CJK TC", "Source Han Serif TC",
         "Songti TC", "PMingLiU", "MingLiU", serif;
-    font-size: clamp(1.7rem, 2.6vw, 2.5rem);
+    font-size: clamp(1.7rem, calc(2.6 * var(--desktop-vw, 1vw)), 2.5rem);
     font-weight: 400;
     font-style: italic;
     line-height: 0.9;
@@ -2047,7 +2058,7 @@ main {
 .slide-caption h2 {
     margin: 28px 0 20px;
     font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
-    font-size: clamp(1.5rem, 2.5vw, 2.15rem);
+    font-size: clamp(1.5rem, calc(2.5 * var(--desktop-vw, 1vw)), 2.15rem);
     font-weight: 400;
     line-height: 1.65;
     letter-spacing: 0.08em;
@@ -2056,7 +2067,7 @@ main {
 
 .caption-description {
     color: var(--ink-secondary);
-    font-size: clamp(1rem, 1.05vw, 1.06rem);
+    font-size: clamp(1rem, calc(1.05 * var(--desktop-vw, 1vw)), 1.06rem);
     line-height: 2.2;
     letter-spacing: 0.06em;
 }
@@ -2122,18 +2133,18 @@ main {
 }
 
 .arrow-prev {
-    left: clamp(4px, 0.6vw, 12px);
+    left: clamp(4px, calc(0.6 * var(--desktop-vw, 1vw)), 12px);
 }
 
 .arrow-next {
-    right: clamp(4px, 0.6vw, 12px);
+    right: clamp(4px, calc(0.6 * var(--desktop-vw, 1vw)), 12px);
 }
 
 /* 文字頁面 */
 .info-page {
     justify-content: center;
     align-items: flex-start;
-    padding: clamp(64px, 10vh, 120px) clamp(24px, 7vw, 96px);
+    padding: clamp(64px, calc(10 * var(--desktop-vh, 1vh)), 120px) clamp(24px, calc(7 * var(--desktop-vw, 1vw)), 96px);
     overflow-y: auto;
 }
 
@@ -2166,7 +2177,7 @@ main {
 }
 
 .text-container p:not(.section-label) {
-    font-size: clamp(1rem, 1.15vw, 1.08rem);
+    font-size: clamp(1rem, calc(1.15 * var(--desktop-vw, 1vw)), 1.08rem);
     color: var(--ink-secondary);
     line-height: 1.9;
     margin-bottom: 20px;
@@ -2174,7 +2185,7 @@ main {
 
 #text-page .text-container,
 #thanks-page .text-container {
-    padding: clamp(24px, 5vw, 56px);
+    padding: clamp(24px, calc(5 * var(--desktop-vw, 1vw)), 56px);
     border: 1px solid rgba(255, 255, 255, 0.65);
     border-radius: 24px;
     background: rgba(255, 253, 249, 0.48);
@@ -2255,7 +2266,7 @@ main {
     .cycle-marker { transition: none; }
     .cycle-complete .cycle-orbit { animation: none; }
 }
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     #gallery-page {
         align-items: flex-start;
         overflow-y: auto;
@@ -2354,7 +2365,7 @@ body.entrance-open {
     width: 100vw;
     height: 100vh;
     height: 100dvh;
-    max-width: 100vw;
+    max-width: calc(100 * var(--desktop-vw, 1vw));
     max-height: 100vh;
     max-height: 100dvh;
     margin: 0;
@@ -2415,7 +2426,7 @@ body.entrance-open {
     position: absolute;
     top: -10%;
     right: -3%;
-    width: min(48vw, 720px);
+    width: min(calc(48 * var(--desktop-vw, 1vw)), 720px);
     aspect-ratio: 1;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(238, 208, 149, 0.26), rgba(245, 228, 194, 0.1) 38%, transparent 69%);
@@ -2426,8 +2437,8 @@ body.entrance-open {
     position: absolute;
     top: 2%;
     right: -4%;
-    width: min(55vw, 820px);
-    height: min(42vh, 390px);
+    width: min(calc(55 * var(--desktop-vw, 1vw)), 820px);
+    height: min(calc(42 * var(--desktop-vh, 1vh)), 390px);
     opacity: 0.36;
     border-radius: 50%;
     background: radial-gradient(
@@ -2600,8 +2611,8 @@ html.font-fallback.entrance-open .entrance-season-winter {
 .entrance-season-spring {
     top: 2%;
     left: 1%;
-    width: min(46vw, 720px);
-    height: 42vh;
+    width: min(calc(46 * var(--desktop-vw, 1vw)), 720px);
+    height: calc(42 * var(--desktop-vh, 1vh));
     --entrance-season-opacity: 0.76;
     transform: rotate(-3deg);
 }
@@ -2632,7 +2643,7 @@ html.font-fallback.entrance-open .entrance-season-winter {
 
 .season-petal {
     position: absolute;
-    width: clamp(17px, 1.45vw, 23px);
+    width: clamp(17px, calc(1.45 * var(--desktop-vw, 1vw)), 23px);
     aspect-ratio: 1;
     background:
         radial-gradient(circle at 50% 50%, rgba(172, 128, 77, 0.62) 0 9%, transparent 11%),
@@ -2681,8 +2692,8 @@ html.font-fallback.entrance-open .entrance-season-winter {
 .entrance-season-summer {
     top: 3%;
     right: 1%;
-    width: min(46vw, 720px);
-    height: 41vh;
+    width: min(calc(46 * var(--desktop-vw, 1vw)), 720px);
+    height: calc(41 * var(--desktop-vh, 1vh));
     --entrance-season-opacity: 0.7;
     transform: rotate(-4deg);
 }
@@ -2748,8 +2759,8 @@ html.font-fallback.entrance-open .entrance-season-winter {
     right: 2%;
     bottom: 2%;
     z-index: 1;
-    width: min(48vw, 760px);
-    height: 54vh;
+    width: min(calc(48 * var(--desktop-vw, 1vw)), 760px);
+    height: calc(54 * var(--desktop-vh, 1vh));
     opacity: 0;
     pointer-events: none;
     mix-blend-mode: multiply;
@@ -2803,8 +2814,8 @@ html.font-fallback.entrance-open .entrance-season-winter {
 .entrance-season-autumn {
     right: 1%;
     bottom: 2%;
-    width: min(45vw, 700px);
-    height: 43vh;
+    width: min(calc(45 * var(--desktop-vw, 1vw)), 700px);
+    height: calc(43 * var(--desktop-vh, 1vh));
     --entrance-season-opacity: 0.72;
     mix-blend-mode: normal;
 }
@@ -2813,7 +2824,7 @@ html.font-fallback.entrance-open .entrance-season-winter {
     position: absolute;
     top: 3%;
     right: 12%;
-    width: clamp(96px, 11vw, 164px);
+    width: clamp(96px, calc(11 * var(--desktop-vw, 1vw)), 164px);
     aspect-ratio: 1;
     border-radius: 50%;
     background:
@@ -2851,8 +2862,8 @@ html.font-fallback.entrance-open .entrance-season-winter {
 .entrance-season-winter {
     left: 1%;
     bottom: 1%;
-    width: min(46vw, 720px);
-    height: 43vh;
+    width: min(calc(46 * var(--desktop-vw, 1vw)), 720px);
+    height: calc(43 * var(--desktop-vh, 1vh));
     --entrance-season-opacity: 0.9;
     mix-blend-mode: normal;
     background: radial-gradient(ellipse at 31% 66%, rgba(176, 205, 214, 0.22), transparent 64%);
@@ -2915,7 +2926,7 @@ html.font-fallback.entrance-open .entrance-season-winter {
     max-width: 820px;
     margin: auto;
     text-align: center;
-    transform: translateY(clamp(24px, 5vh, 48px));
+    transform: translateY(clamp(24px, calc(5 * var(--desktop-vh, 1vh)), 48px));
 }
 .entrance-content,
 .entrance-content * {
@@ -2925,7 +2936,7 @@ html.font-fallback.entrance-open .entrance-season-winter {
 .entrance-eyebrow { margin-bottom: 30px; font-size: 0.72rem; letter-spacing: 0.22em; line-height: 2; color: #796f5d; }
 .entrance h1 {
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
-    font-size: clamp(2.15rem, 5vw, 3.85rem);
+    font-size: clamp(2.15rem, calc(5 * var(--desktop-vw, 1vw)), 3.85rem);
     font-weight: 400;
     line-height: 1.45;
     letter-spacing: 0.12em;
@@ -2936,14 +2947,14 @@ html.font-fallback.entrance-open .entrance-season-winter {
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
     font-weight: 300;
     max-width: 36em;
-    margin: 26px auto clamp(14px, 2vh, 22px);
+    margin: 26px auto clamp(14px, calc(2 * var(--desktop-vh, 1vh)), 22px);
     color: #6e7366;
-    font-size: clamp(0.86rem, 1.25vw, 1rem);
+    font-size: clamp(0.86rem, calc(1.25 * var(--desktop-vw, 1vw)), 1rem);
     line-height: 2.1;
     letter-spacing: 0.12em;
     text-wrap: balance;
 }
-.entrance-seasons { display: flex; justify-content: center; gap: clamp(20px, 4vw, 38px); margin: 0 0 18px; font-size: 0.72rem; letter-spacing: 0.16em; }
+.entrance-seasons { display: flex; justify-content: center; gap: clamp(20px, calc(4 * var(--desktop-vw, 1vw)), 38px); margin: 0 0 18px; font-size: 0.72rem; letter-spacing: 0.16em; }
 .entrance-seasons span:nth-child(1) { color: #a36369; }
 .entrance-seasons span:nth-child(2) { color: #5d7959; }
 .entrance-seasons span:nth-child(3) { color: #9a753b; }
@@ -2979,7 +2990,7 @@ html.font-fallback.entrance-open .entrance-season-winter {
     display: inline-block;
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
     font-weight: 300;
-    font-size: clamp(1.2rem, 2.4vw, 1.4rem);
+    font-size: clamp(1.2rem, calc(2.4 * var(--desktop-vw, 1vw)), 1.4rem);
     letter-spacing: 0.16em;
     opacity: calc(0.65 + var(--proximity) * 0.35);
     transform: scale(calc(1 + var(--proximity) * 0.22));
@@ -2994,7 +3005,7 @@ html.font-fallback.entrance-open .entrance-season-winter {
 .music-toggle:hover { background: rgba(255, 253, 248, 0.85); }
 .music-status { position: fixed; bottom: 16px; left: 20px; right: 20px; z-index: 20; text-align: center; font-size: 0.8rem; }
 .music-status:not(:empty) { padding: 12px; border-radius: 12px; background: #fffdf8; }
-@media (max-width: 600px) {
+@media (max-width: 600px) and (hover: none) {
     .entrance { padding: 36px 20px; }
     .entrance-content { transform: translateY(18px); }
     .entrance-light { width: 88vw; right: -28%; }
@@ -3079,14 +3090,14 @@ main {
 }
 
 .page-content.intro-page {
-    min-height: calc(100svh - 82px);
+    min-height: calc(calc(100 * var(--desktop-vh, 1svh)) - 82px);
     display: flex;
     overflow: clip;
 }
 
 #gallery-page {
     display: block;
-    padding: clamp(96px, 12vw, 180px) 0 clamp(120px, 14vw, 220px);
+    padding: clamp(96px, calc(12 * var(--desktop-vw, 1vw)), 180px) 0 clamp(120px, calc(14 * var(--desktop-vw, 1vw)), 220px);
     overflow: clip;
 }
 
@@ -3106,13 +3117,13 @@ main {
     position: relative;
     visibility: visible;
     pointer-events: auto;
-    width: min(1280px, 88vw);
-    min-height: min(860px, 88svh);
-    margin: 0 auto clamp(130px, 18vw, 260px);
-    padding: clamp(18px, 2.5vw, 42px);
+    width: min(1280px, calc(88 * var(--desktop-vw, 1vw)));
+    min-height: min(860px, calc(88 * var(--desktop-vh, 1svh)));
+    margin: 0 auto clamp(130px, calc(18 * var(--desktop-vw, 1vw)), 260px);
+    padding: clamp(18px, calc(2.5 * var(--desktop-vw, 1vw)), 42px);
     display: grid;
     grid-template-columns: minmax(0, 1.48fr) minmax(240px, 0.52fr);
-    gap: clamp(34px, 5vw, 90px);
+    gap: clamp(34px, calc(5 * var(--desktop-vw, 1vw)), 90px);
     align-items: center;
 }
 
@@ -3125,7 +3136,7 @@ main {
     width: auto;
     height: auto;
     max-width: 100%;
-    max-height: min(78svh, 900px);
+    max-height: min(calc(78 * var(--desktop-vh, 1svh)), 900px);
 }
 
 .slide-caption {
@@ -3172,18 +3183,18 @@ main {
 
 .slide-item:nth-child(n+13):nth-child(-n+18) .slide-caption {
     align-self: end;
-    margin-bottom: clamp(24px, 6vw, 90px);
+    margin-bottom: clamp(24px, calc(6 * var(--desktop-vw, 1vw)), 90px);
 }
 
 .slide-item:nth-child(n+19):nth-child(-n+24) .slide-caption {
     align-self: start;
-    margin-top: clamp(30px, 7vw, 100px);
+    margin-top: clamp(30px, calc(7 * var(--desktop-vw, 1vw)), 100px);
 }
 
 .gallery-scroll-progress {
     position: fixed;
     top: 50%;
-    right: clamp(14px, 3vw, 48px);
+    right: clamp(14px, calc(3 * var(--desktop-vw, 1vw)), 48px);
     z-index: 22;
     display: flex;
     align-items: center;
@@ -3251,13 +3262,13 @@ html.has-content-reveal .content-reveal.is-content-visible {
 .info-page,
 .page-content.info-page,
 .page-content.info-page.active {
-    min-height: 72svh;
+    min-height: calc(72 * var(--desktop-vh, 1svh));
     display: flex;
     align-items: center;
     overflow: visible;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     html { scroll-padding-top: 70px; }
 
     .site-header { height: 70px; }
@@ -3365,18 +3376,18 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .page-content.intro-page {
     min-height: auto;
-    padding-top: clamp(36px, 4vw, 64px);
-    padding-bottom: clamp(96px, 11vw, 150px);
+    padding-top: clamp(36px, calc(4 * var(--desktop-vw, 1vw)), 64px);
+    padding-bottom: clamp(96px, calc(11 * var(--desktop-vw, 1vw)), 150px);
     border-bottom: 0;
 }
 
 .intro-layout {
-    min-height: min(620px, calc(86svh - 150px));
+    min-height: min(620px, calc(calc(86 * var(--desktop-vh, 1svh)) - 150px));
 }
 
 #gallery-page {
     position: relative;
-    padding: clamp(72px, 8vw, 118px) 0 clamp(92px, 10vw, 150px);
+    padding: clamp(72px, calc(8 * var(--desktop-vw, 1vw)), 118px) 0 clamp(92px, calc(10 * var(--desktop-vw, 1vw)), 150px);
     border-top: 0;
     border-bottom: 0;
     background: transparent;
@@ -3386,13 +3397,13 @@ html.has-content-reveal .content-reveal.is-content-visible {
     position: relative;
     z-index: 2;
     isolation: isolate;
-    width: var(--glass-frame, min(1180px, 82vw));
-    margin: 0 auto clamp(28px, 4vw, 54px);
+    width: var(--glass-frame, min(1180px, calc(82 * var(--desktop-vw, 1vw))));
+    margin: 0 auto clamp(28px, calc(4 * var(--desktop-vw, 1vw)), 54px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    padding: clamp(38px, 4vw, 58px) clamp(24px, 3vw, 48px) clamp(28px, 3vw, 42px);
+    padding: clamp(38px, calc(4 * var(--desktop-vw, 1vw)), 58px) clamp(24px, calc(3 * var(--desktop-vw, 1vw)), 48px) clamp(28px, calc(3 * var(--desktop-vw, 1vw)), 42px);
     border-top: 1px solid rgba(117, 105, 81, 0.24);
 }
 
@@ -3402,7 +3413,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     z-index: -1;
     inset: 0;
     border: 1px solid var(--glass-border);
-    border-radius: clamp(22px, 2.4vw, 34px);
+    border-radius: clamp(22px, calc(2.4 * var(--desktop-vw, 1vw)), 34px);
     background:
         var(--glass-refraction),
         linear-gradient(128deg, rgba(255, 255, 255, 0.32), transparent 52%),
@@ -3422,7 +3433,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 .gallery-section-heading h2 {
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
     color: var(--ink-primary);
-    font-size: clamp(1.55rem, 2.7vw, 2.45rem);
+    font-size: clamp(1.55rem, calc(2.7 * var(--desktop-vw, 1vw)), 2.45rem);
     font-weight: 300;
     letter-spacing: 0.18em;
 }
@@ -3441,21 +3452,21 @@ html.has-content-reveal .content-reveal.is-content-visible {
 .gallery-stage {
     position: relative;
     isolation: isolate;
-    width: min(1130px, 73vw);
+    width: min(1130px, calc(73 * var(--desktop-vw, 1vw)));
     height: auto;
     min-height: 0;
     /* 2000×1175 圖檔含上下透明帶；可視作品範圍為約 2000×1126。 */
     aspect-ratio: 2000 / 1126;
     margin: 0 auto;
     border: 0;
-    border-radius: clamp(18px, 2vw, 30px);
+    border-radius: clamp(18px, calc(2 * var(--desktop-vw, 1vw)), 30px);
     background: transparent;
     box-shadow: none;
     overflow: hidden;
 }
 
 .gallery-stage .carousel-viewport {
-    width: calc(100% - clamp(86px, 10vw, 150px));
+    width: calc(100% - clamp(86px, calc(10 * var(--desktop-vw, 1vw)), 150px));
     height: 100%;
     margin: 0 auto;
     overflow: hidden;
@@ -3479,11 +3490,11 @@ html.has-content-reveal .content-reveal.is-content-visible {
     height: 100%;
     min-height: 0;
     margin: 0;
-    padding: clamp(54px, 5vw, 78px) clamp(30px, 4vw, 66px) clamp(34px, 4vw, 58px);
+    padding: clamp(54px, calc(5 * var(--desktop-vw, 1vw)), 78px) clamp(30px, calc(4 * var(--desktop-vw, 1vw)), 66px) clamp(34px, calc(4 * var(--desktop-vw, 1vw)), 58px);
     display: grid;
     grid-template-columns: minmax(0, 1.55fr) minmax(230px, 0.55fr);
     grid-template-rows: minmax(0, 1fr);
-    gap: clamp(28px, 4vw, 72px);
+    gap: clamp(28px, calc(4 * var(--desktop-vw, 1vw)), 72px);
     align-items: center;
     opacity: 1;
     visibility: hidden;
@@ -3553,7 +3564,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     margin: 0 0 2.5%;
     color: #1b241f;
     font-family: var(--artwork-font) !important;
-    font-size: calc(clamp(0.65rem, 1.82vw, 1.64rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.65rem, calc(1.82 * var(--desktop-vw, 1vw)), 1.64rem) * var(--artwork-text-scale));
     font-weight: 300;
     font-synthesis: none;
     line-height: 1.4;
@@ -3564,7 +3575,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 .gallery-stage .carousel-viewport .slide-item.has-artwork .caption-description {
     color: #1e2823;
     font-family: var(--artwork-font) !important;
-    font-size: calc(clamp(0.58rem, 1.7vw, 1.5rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.58rem, calc(1.7 * var(--desktop-vw, 1vw)), 1.5rem) * var(--artwork-text-scale));
     font-weight: 300;
     font-synthesis: none;
     line-height: 1.48;
@@ -3581,10 +3592,10 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="01"] .caption-description {
     position: relative;
-    top: clamp(6px, 0.55vw, 8px);
+    top: clamp(6px, calc(0.55 * var(--desktop-vw, 1vw)), 8px);
     left: -1.35%;
     text-align: center;
-    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.52rem, calc(1.57 * var(--desktop-vw, 1vw)), 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3617,8 +3628,8 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="04"] .caption-description {
     position: relative;
-    top: clamp(2px, 0.3vw, 4px);
-    font-size: calc(clamp(0.51rem, 1.57vw, 1.38rem) * var(--artwork-text-scale));
+    top: clamp(2px, calc(0.3 * var(--desktop-vw, 1vw)), 4px);
+    font-size: calc(clamp(0.51rem, calc(1.57 * var(--desktop-vw, 1vw)), 1.38rem) * var(--artwork-text-scale));
     line-height: 1.25;
     letter-spacing: 0.006em;
     text-align: left;
@@ -3626,7 +3637,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 }
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="04"] .slide-caption h2 {
-    margin-bottom: clamp(4px, 1.1vw, 14px);
+    margin-bottom: clamp(4px, calc(1.1 * var(--desktop-vw, 1vw)), 14px);
 }
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="05"] .slide-caption {
@@ -3648,9 +3659,9 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="06"] .caption-description {
     position: relative;
-    top: clamp(6px, 0.55vw, 8px);
+    top: clamp(6px, calc(0.55 * var(--desktop-vw, 1vw)), 8px);
     text-align: center;
-    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.52rem, calc(1.57 * var(--desktop-vw, 1vw)), 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3663,7 +3674,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="07"] .caption-description {
     text-align: center;
-    font-size: calc(clamp(0.51rem, 1.54vw, 1.4rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.51rem, calc(1.54 * var(--desktop-vw, 1vw)), 1.4rem) * var(--artwork-text-scale));
     letter-spacing: 0.01em;
 }
 
@@ -3675,7 +3686,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="08"] .caption-description {
     text-align: center;
-    font-size: calc(clamp(0.51rem, 1.54vw, 1.4rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.51rem, calc(1.54 * var(--desktop-vw, 1vw)), 1.4rem) * var(--artwork-text-scale));
     letter-spacing: 0.01em;
 }
 
@@ -3687,7 +3698,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="10"] .caption-description {
     text-align: center;
-    font-size: calc(clamp(0.5rem, 1.5vw, 1.36rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.5rem, calc(1.5 * var(--desktop-vw, 1vw)), 1.36rem) * var(--artwork-text-scale));
     letter-spacing: 0.006em;
 }
 
@@ -3699,10 +3710,10 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="11"] .caption-description {
     position: relative;
-    top: clamp(6px, 0.55vw, 8px);
+    top: clamp(6px, calc(0.55 * var(--desktop-vw, 1vw)), 8px);
     left: -3.3%;
     text-align: center;
-    font-size: calc(clamp(0.51rem, 1.55vw, 1.41rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.51rem, calc(1.55 * var(--desktop-vw, 1vw)), 1.41rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3715,10 +3726,10 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="12"] .caption-description {
     position: relative;
-    top: clamp(4px, 0.45vw, 6px);
+    top: clamp(4px, calc(0.45 * var(--desktop-vw, 1vw)), 6px);
     left: 2.7%;
     text-align: center;
-    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.52rem, calc(1.57 * var(--desktop-vw, 1vw)), 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.008em;
 }
@@ -3731,7 +3742,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="13"] .caption-description {
     text-align: center;
-    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.52rem, calc(1.57 * var(--desktop-vw, 1vw)), 1.42rem) * var(--artwork-text-scale));
     letter-spacing: 0.008em;
 }
 
@@ -3743,9 +3754,9 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="14"] .caption-description {
     position: relative;
-    top: clamp(3px, 0.35vw, 5px);
+    top: clamp(3px, calc(0.35 * var(--desktop-vw, 1vw)), 5px);
     text-align: center;
-    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.52rem, calc(1.57 * var(--desktop-vw, 1vw)), 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3758,9 +3769,9 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="16"] .caption-description {
     position: relative;
-    top: clamp(3px, 0.35vw, 5px);
+    top: clamp(3px, calc(0.35 * var(--desktop-vw, 1vw)), 5px);
     text-align: center;
-    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.52rem, calc(1.57 * var(--desktop-vw, 1vw)), 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3773,9 +3784,9 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="17"] .caption-description {
     position: relative;
-    top: clamp(3px, 0.35vw, 5px);
+    top: clamp(3px, calc(0.35 * var(--desktop-vw, 1vw)), 5px);
     text-align: center;
-    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.52rem, calc(1.57 * var(--desktop-vw, 1vw)), 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3788,7 +3799,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="18"] .caption-description {
     text-align: center;
-    font-size: calc(clamp(0.51rem, 1.53vw, 1.38rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.51rem, calc(1.53 * var(--desktop-vw, 1vw)), 1.38rem) * var(--artwork-text-scale));
     letter-spacing: 0.006em;
 }
 
@@ -3800,9 +3811,9 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="19"] .caption-description {
     position: relative;
-    top: clamp(3px, 0.35vw, 5px);
+    top: clamp(3px, calc(0.35 * var(--desktop-vw, 1vw)), 5px);
     text-align: center;
-    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.52rem, calc(1.57 * var(--desktop-vw, 1vw)), 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3815,9 +3826,9 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="20"] .caption-description {
     position: relative;
-    top: clamp(3px, 0.35vw, 5px);
+    top: clamp(3px, calc(0.35 * var(--desktop-vw, 1vw)), 5px);
     text-align: center;
-    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.52rem, calc(1.57 * var(--desktop-vw, 1vw)), 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3830,9 +3841,9 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="21"] .caption-description {
     position: relative;
-    top: clamp(3px, 0.35vw, 5px);
+    top: clamp(3px, calc(0.35 * var(--desktop-vw, 1vw)), 5px);
     text-align: center;
-    font-size: calc(clamp(0.52rem, 1.57vw, 1.42rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.52rem, calc(1.57 * var(--desktop-vw, 1vw)), 1.42rem) * var(--artwork-text-scale));
     line-height: 1.24;
     letter-spacing: 0.006em;
 }
@@ -3845,9 +3856,9 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="23"] .caption-description {
     position: relative;
-    top: clamp(1px, 0.2vw, 3px);
+    top: clamp(1px, calc(0.2 * var(--desktop-vw, 1vw)), 3px);
     text-align: center;
-    font-size: calc(clamp(0.52rem, 1.58vw, 1.42rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.52rem, calc(1.58 * var(--desktop-vw, 1vw)), 1.42rem) * var(--artwork-text-scale));
     line-height: 1.28;
     letter-spacing: 0.004em;
 }
@@ -3860,7 +3871,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="24"] .caption-description {
     text-align: center;
-    font-size: calc(clamp(0.5rem, 1.5vw, 1.36rem) * var(--artwork-text-scale));
+    font-size: calc(clamp(0.5rem, calc(1.5 * var(--desktop-vw, 1vw)), 1.36rem) * var(--artwork-text-scale));
     letter-spacing: 0.004em;
 }
 
@@ -3873,7 +3884,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="21"] .slide-caption h2,
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="23"] .slide-caption h2,
 .gallery-stage .carousel-viewport .slide-item[data-artwork-id="24"] .slide-caption h2 {
-    margin-bottom: clamp(4px, 1.1vw, 14px);
+    margin-bottom: clamp(4px, calc(1.1 * var(--desktop-vw, 1vw)), 14px);
 }
 
 .gallery-stage .slide-image {
@@ -3913,7 +3924,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     width: auto;
     height: auto;
     max-width: 100%;
-    max-height: min(58svh, 650px);
+    max-height: min(calc(58 * var(--desktop-vh, 1svh)), 650px);
 }
 
 .gallery-stage .slide-caption {
@@ -3944,12 +3955,12 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 .gallery-stage .slide-item:nth-child(n+13):nth-child(-n+18) .slide-caption {
     align-self: end;
-    margin-bottom: clamp(10px, 4vw, 54px);
+    margin-bottom: clamp(10px, calc(4 * var(--desktop-vw, 1vw)), 54px);
 }
 
 .gallery-stage .slide-item:nth-child(n+19):nth-child(-n+24) .slide-caption {
     align-self: start;
-    margin-top: clamp(18px, 5vw, 66px);
+    margin-top: clamp(18px, calc(5 * var(--desktop-vw, 1vw)), 66px);
 }
 
 .gallery-stage .caption-label {
@@ -3981,8 +3992,8 @@ html.has-content-reveal .content-reveal.is-content-visible {
         0 4px 16px rgba(243, 164, 176, 0.045);
 }
 
-.gallery-stage .arrow-prev { left: clamp(14px, 2vw, 30px); }
-.gallery-stage .arrow-next { right: clamp(14px, 2vw, 30px); }
+.gallery-stage .arrow-prev { left: clamp(14px, calc(2 * var(--desktop-vw, 1vw)), 30px); }
+.gallery-stage .arrow-next { right: clamp(14px, calc(2 * var(--desktop-vw, 1vw)), 30px); }
 
 .cycle-complete .gallery-stage {
     animation: gallery-cycle-breathe 900ms ease-out;
@@ -3993,7 +4004,7 @@ html.has-content-reveal .content-reveal.is-content-visible {
     45% { box-shadow: 0 30px 84px rgba(141, 183, 221, 0.12), 0 0 0 7px rgba(252, 194, 111, 0.065), inset 0 0 0 8px rgba(255, 253, 248, 0.22); }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     .page-content.intro-page {
         padding-top: 34px;
         padding-bottom: 92px;
@@ -4144,10 +4155,10 @@ html.has-content-reveal .content-reveal.is-content-visible {
     flex: 0 1 auto;
 }
 
-@media (min-width: 901px) {
+@media (min-width: 901px), (hover: hover) and (pointer: fine) {
     .site-header {
         width: 78px;
-        height: 100svh;
+        height: calc(100 * var(--desktop-vh, 1svh));
         right: auto;
         bottom: 0;
         padding: 18px 0 22px;
@@ -4194,13 +4205,13 @@ html.has-content-reveal .content-reveal.is-content-visible {
 
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px) and (hover: none) {
     .site-header .music-toggle { margin-left: 0; }
 
     .gallery-section-heading { margin-bottom: 28px; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     .gallery-stage {
         height: auto;
         min-height: 0;
@@ -4265,8 +4276,8 @@ html.has-content-reveal .content-reveal.is-content-visible {
 }
 
 main {
-    --editorial-frame: min(1360px, 86vw);
-    --glass-frame: min(1180px, 82vw);
+    --editorial-frame: min(1360px, calc(86 * var(--desktop-vw, 1vw)));
+    --glass-frame: min(1180px, calc(82 * var(--desktop-vw, 1vw)));
     position: relative;
     z-index: 1;
     isolation: isolate;
@@ -4291,16 +4302,16 @@ main::before {
 
 /* 理時序改為偏心的書頁構圖，並縮短首章，讓下一章自然進入視野。 */
 .page-content.intro-page {
-    padding: clamp(30px, 3.6vw, 54px) clamp(24px, 5vw, 82px)
-        clamp(72px, 8vw, 110px);
+    padding: clamp(30px, calc(3.6 * var(--desktop-vw, 1vw)), 54px) clamp(24px, calc(5 * var(--desktop-vw, 1vw)), 82px)
+        clamp(72px, calc(8 * var(--desktop-vw, 1vw)), 110px);
 }
 
 .intro-layout {
     width: var(--glass-frame);
-    min-height: min(560px, calc(74svh - 72px));
-    padding: clamp(28px, 3vw, 48px);
+    min-height: min(560px, calc(calc(74 * var(--desktop-vh, 1svh)) - 72px));
+    padding: clamp(28px, calc(3 * var(--desktop-vw, 1vw)), 48px);
     grid-template-columns: minmax(340px, 0.94fr) minmax(500px, 1.06fr);
-    gap: clamp(20px, 3vw, 48px);
+    gap: clamp(20px, calc(3 * var(--desktop-vw, 1vw)), 48px);
     align-items: center;
 }
 
@@ -4310,7 +4321,7 @@ main::before {
     z-index: -1;
     inset: 0;
     border: 1px solid var(--glass-border);
-    border-radius: clamp(28px, 3vw, 46px);
+    border-radius: clamp(28px, calc(3 * var(--desktop-vw, 1vw)), 46px);
     background:
         var(--glass-refraction),
         linear-gradient(128deg, var(--glass-highlight), transparent 44%),
@@ -4332,11 +4343,11 @@ main::before {
     width: min(100%, 540px);
     justify-self: end;
     align-self: start;
-    padding-top: clamp(58px, 8vh, 96px);
+    padding-top: clamp(58px, calc(8 * var(--desktop-vh, 1vh)), 96px);
 }
 
 .intro-copy h1 {
-    font-size: clamp(2.65rem, 5vw, 4.75rem);
+    font-size: clamp(2.65rem, calc(5 * var(--desktop-vw, 1vw)), 4.75rem);
 }
 
 .solar-cycle {
@@ -4350,8 +4361,8 @@ main::before {
 .page-content.info-page.active {
     position: relative;
     isolation: isolate;
-    min-height: clamp(440px, 58svh, 680px);
-    padding: clamp(82px, 10vw, 150px) 0;
+    min-height: clamp(440px, calc(58 * var(--desktop-vh, 1svh)), 680px);
+    padding: clamp(82px, calc(10 * var(--desktop-vw, 1vw)), 150px) 0;
     align-items: stretch;
     border-top: 0;
     background-color: transparent;
@@ -4363,14 +4374,14 @@ main::before {
 #thanks-page .text-container {
     position: relative;
     max-width: 1180px;
-    min-height: clamp(250px, 32svh, 380px);
+    min-height: clamp(250px, calc(32 * var(--desktop-vh, 1svh)), 380px);
     margin: 0 auto;
-    padding: clamp(48px, 6vw, 86px) clamp(18px, 3vw, 48px);
+    padding: clamp(48px, calc(6 * var(--desktop-vw, 1vw)), 86px) clamp(18px, calc(3 * var(--desktop-vw, 1vw)), 48px);
     display: grid;
     grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
     align-items: center;
     border: 1px solid var(--glass-border);
-    border-radius: clamp(28px, 3vw, 46px);
+    border-radius: clamp(28px, calc(3 * var(--desktop-vw, 1vw)), 46px);
     background:
         var(--glass-refraction),
         linear-gradient(132deg, var(--glass-highlight), transparent 46%),
@@ -4390,8 +4401,8 @@ main::before {
 .info-page .text-container::after {
     content: '';
     position: absolute;
-    top: clamp(48px, 6vw, 86px);
-    bottom: clamp(48px, 6vw, 86px);
+    top: clamp(48px, calc(6 * var(--desktop-vw, 1vw)), 86px);
+    bottom: clamp(48px, calc(6 * var(--desktop-vw, 1vw)), 86px);
     left: 36%;
     width: 1px;
     background: linear-gradient(to bottom, rgba(117, 105, 81, 0.2), transparent 82%);
@@ -4405,7 +4416,7 @@ main::before {
     margin: 0;
     color: var(--ink-primary);
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
-    font-size: clamp(2rem, 4vw, 3.6rem);
+    font-size: clamp(2rem, calc(4 * var(--desktop-vw, 1vw)), 3.6rem);
     font-weight: 300;
     line-height: 1.35;
     letter-spacing: 0.16em;
@@ -4421,7 +4432,7 @@ main::before {
 #thanks-page .text-container {
     grid-template-columns: minmax(0, 1fr);
     align-items: start;
-    row-gap: clamp(38px, 5vw, 64px);
+    row-gap: clamp(38px, calc(5 * var(--desktop-vw, 1vw)), 64px);
 }
 
 #thanks-page .text-container::after {
@@ -4447,16 +4458,16 @@ main::before {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(18px, 2.6vw, 34px);
+    gap: clamp(18px, calc(2.6 * var(--desktop-vw, 1vw)), 34px);
     align-items: stretch;
 }
 
 .commission-roster-card {
     position: relative;
     min-width: 0;
-    padding: clamp(34px, 4vw, 50px) clamp(24px, 3vw, 38px);
+    padding: clamp(34px, calc(4 * var(--desktop-vw, 1vw)), 50px) clamp(24px, calc(3 * var(--desktop-vw, 1vw)), 38px);
     border: 1px solid rgba(255, 255, 255, 0.66);
-    border-radius: clamp(24px, 2.8vw, 34px);
+    border-radius: clamp(24px, calc(2.8 * var(--desktop-vw, 1vw)), 34px);
     background:
         var(--glass-refraction),
         linear-gradient(125deg, rgba(255, 255, 255, 0.3), transparent 58%),
@@ -4494,7 +4505,7 @@ main::before {
 .commission-roster-card li {
     color: var(--ink-secondary);
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
-    font-size: clamp(1rem, 1.15vw, 1.08rem);
+    font-size: clamp(1rem, calc(1.15 * var(--desktop-vw, 1vw)), 1.08rem);
     font-weight: 400;
     line-height: 1.8;
     letter-spacing: 0.1em;
@@ -4505,7 +4516,7 @@ main::before {
     display: none;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 700px) and (hover: none) {
     #thanks-page .text-container {
         row-gap: 34px;
     }
@@ -4595,9 +4606,9 @@ main::before {
     position: relative;
     isolation: isolate;
     width: var(--editorial-frame);
-    min-height: clamp(440px, 58svh, 640px);
+    min-height: clamp(440px, calc(58 * var(--desktop-vh, 1svh)), 640px);
     margin: 0 auto;
-    padding: clamp(96px, 10vw, 154px) 0 clamp(118px, 13vw, 198px);
+    padding: clamp(96px, calc(10 * var(--desktop-vw, 1vw)), 154px) 0 clamp(118px, calc(13 * var(--desktop-vw, 1vw)), 198px);
     display: grid;
     place-items: center;
     overflow: clip;
@@ -4619,9 +4630,9 @@ main::before {
     content: '';
     position: absolute;
     z-index: 1;
-    top: clamp(74px, 8vw, 118px);
+    top: clamp(74px, calc(8 * var(--desktop-vw, 1vw)), 118px);
     left: 50%;
-    width: clamp(46px, 5vw, 74px);
+    width: clamp(46px, calc(5 * var(--desktop-vw, 1vw)), 74px);
     height: 1px;
     background: linear-gradient(
         to right,
@@ -4638,7 +4649,7 @@ main::before {
     z-index: -1;
     top: 50%;
     left: 50%;
-    width: clamp(190px, 22vw, 310px);
+    width: clamp(190px, calc(22 * var(--desktop-vw, 1vw)), 310px);
     aspect-ratio: 1;
     border: 1px solid rgba(117, 105, 81, 0.11);
     border-radius: 50%;
@@ -4685,8 +4696,8 @@ main::before {
     position: relative;
     z-index: 1;
     width: min(100%, 760px);
-    min-height: clamp(190px, 24svh, 270px);
-    padding: clamp(50px, 6vw, 82px) clamp(26px, 5vw, 72px);
+    min-height: clamp(190px, calc(24 * var(--desktop-vh, 1svh)), 270px);
+    padding: clamp(50px, calc(6 * var(--desktop-vw, 1vw)), 82px) clamp(26px, calc(5 * var(--desktop-vw, 1vw)), 72px);
     display: grid;
     place-items: center;
 }
@@ -4696,7 +4707,7 @@ main::before {
     content: '';
     position: absolute;
     top: 50%;
-    width: clamp(26px, 4vw, 54px);
+    width: clamp(26px, calc(4 * var(--desktop-vw, 1vw)), 54px);
     height: 1px;
     background: linear-gradient(to right, transparent, rgba(117, 105, 81, 0.18));
 }
@@ -4713,7 +4724,7 @@ main::before {
     min-height: 4.8em;
     margin: 0;
     color: var(--ink-secondary);
-    font-size: clamp(1rem, 1.25vw, 1.08rem);
+    font-size: clamp(1rem, calc(1.25 * var(--desktop-vw, 1vw)), 1.08rem);
     line-height: 2.35;
     letter-spacing: 0.1em;
     text-wrap: pretty;
@@ -4721,7 +4732,7 @@ main::before {
 
 .site-epilogue-signature {
     min-height: 1.8em;
-    margin: clamp(22px, 3vw, 36px) 0 0 auto;
+    margin: clamp(22px, calc(3 * var(--desktop-vw, 1vw)), 36px) 0 0 auto;
     color: var(--ink-secondary);
     font-size: 0.82rem;
     line-height: 1.8;
@@ -4731,7 +4742,7 @@ main::before {
 
 .site-epilogue-ending {
     position: absolute;
-    bottom: clamp(68px, 8vw, 112px);
+    bottom: clamp(68px, calc(8 * var(--desktop-vw, 1vw)), 112px);
     left: 50%;
     width: 7px;
     aspect-ratio: 1;
@@ -4739,7 +4750,7 @@ main::before {
     transform: translateX(-50%) rotate(45deg);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     .site-epilogue {
         min-height: 420px;
         padding: 86px 0 120px;
@@ -4766,7 +4777,7 @@ main::before {
     .site-epilogue-ending { bottom: 66px; }
 }
 
-@media (min-width: 769px) and (max-width: 1100px) {
+@media (min-width: 769px) and (max-width: 1100px) and (hover: none) {
     .intro-layout {
         grid-template-columns: minmax(290px, 0.94fr) minmax(390px, 1.06fr);
         gap: 22px;
@@ -4776,7 +4787,7 @@ main::before {
     .solar-cycle { transform: translate(-3%, 3%) scale(1.01); }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px) and (hover: none) {
     main {
         --editorial-frame: min(86vw, 760px);
         --glass-frame: min(86vw, 760px);
@@ -4805,7 +4816,7 @@ main::before {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     main {
         --editorial-frame: 86vw;
         --glass-frame: 86vw;
@@ -4866,9 +4877,9 @@ main::before {
 }
 
 .section-label {
-    --label-gutter: clamp(24px, 3vw, 48px);
+    --label-gutter: clamp(24px, calc(3 * var(--desktop-vw, 1vw)), 48px);
     position: absolute;
-    top: clamp(14px, 1.4vw, 20px);
+    top: clamp(14px, calc(1.4 * var(--desktop-vw, 1vw)), 20px);
     right: var(--label-gutter);
     left: var(--label-gutter);
     width: auto;
@@ -4931,23 +4942,23 @@ main::before {
 .intro-copy h1 {
     color: var(--ink-primary);
     font-family: "LXGW WenKai TC", "Noto Serif TC", "Songti TC", serif;
-    font-size: clamp(2rem, 4vw, 3.6rem);
+    font-size: clamp(2rem, calc(4 * var(--desktop-vw, 1vw)), 3.6rem);
     font-weight: 300;
     line-height: 1.35;
     letter-spacing: 0.16em;
 }
 
 .intro-rule {
-    width: min(88px, 22vw);
+    width: min(88px, calc(22 * var(--desktop-vw, 1vw)));
     margin: 26px 0 30px;
     background: linear-gradient(90deg, rgba(117, 105, 81, 0.42), transparent);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px) and (hover: none) {
     .intro-copy { padding-top: 46px; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     .intro-copy h1 {
         font-size: clamp(1.85rem, 9vw, 2.8rem);
     }
@@ -4957,7 +4968,7 @@ main::before {
 #gallery-page {
     height: auto;
     min-height: 0;
-    padding: clamp(72px, 8vw, 118px) 0 clamp(92px, 10vw, 150px);
+    padding: clamp(72px, calc(8 * var(--desktop-vw, 1vw)), 118px) 0 clamp(92px, calc(10 * var(--desktop-vw, 1vw)), 150px);
 }
 
 .gallery-sticky-shell {
@@ -4979,7 +4990,7 @@ main::before {
 }
 
 /* 桌機左側資訊軌：提高層次，右緣標記同步目前章節。 */
-@media (min-width: 901px) {
+@media (min-width: 901px), (hover: hover) and (pointer: fine) {
     .site-header {
         width: 96px;
         padding: 20px 0 24px;
@@ -5224,7 +5235,7 @@ main::before {
     main { padding-left: 96px; }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px) and (hover: none) {
     #gallery-page {
         height: auto;
         min-height: 0;
@@ -5232,7 +5243,7 @@ main::before {
     }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 520px) and (hover: none) {
     .gallery-section-heading {
         align-items: center;
         gap: 16px;
@@ -5241,7 +5252,7 @@ main::before {
 }
 
 /* 手機版不直接縮小桌機構圖：重新分配框內空間與閱讀順序。 */
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     .site-header {
         height: 68px;
         padding-inline: 16px;
@@ -5490,7 +5501,7 @@ main::before {
     }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 560px) and (hover: none) {
     .message-group {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         grid-template-rows: repeat(3, 150px);
@@ -5640,18 +5651,18 @@ main::before {
 #thanks-page.page-content,
 #thanks-page.page-content.active {
     min-height: 0;
-    padding: clamp(60px, 7vw, 96px) 0 clamp(24px, 3vw, 44px);
+    padding: clamp(60px, calc(7 * var(--desktop-vw, 1vw)), 96px) 0 clamp(24px, calc(3 * var(--desktop-vw, 1vw)), 44px);
 }
 
 #thanks-page .text-container {
     width: min(var(--glass-frame), 1080px);
     min-height: 0;
-    padding: clamp(38px, 4.5vw, 56px) clamp(18px, 2.8vw, 40px);
-    row-gap: clamp(26px, 3.5vw, 42px);
+    padding: clamp(38px, calc(4.5 * var(--desktop-vw, 1vw)), 56px) clamp(18px, calc(2.8 * var(--desktop-vw, 1vw)), 40px);
+    row-gap: clamp(26px, calc(3.5 * var(--desktop-vw, 1vw)), 42px);
 }
 
 .commission-roster-card {
-    padding-block: clamp(26px, 3vw, 38px);
+    padding-block: clamp(26px, calc(3 * var(--desktop-vw, 1vw)), 38px);
 }
 
 .commission-roster-card ul {
@@ -5664,15 +5675,15 @@ main::before {
 
 .site-epilogue {
     min-height: 0;
-    padding: clamp(28px, 4vw, 48px) 0 clamp(64px, 8vw, 104px);
+    padding: clamp(28px, calc(4 * var(--desktop-vw, 1vw)), 48px) 0 clamp(64px, calc(8 * var(--desktop-vw, 1vw)), 104px);
 }
 
 .site-epilogue-final {
     min-height: 0;
-    padding: clamp(28px, 3.5vw, 38px) clamp(30px, 5vw, 64px);
+    padding: clamp(28px, calc(3.5 * var(--desktop-vw, 1vw)), 38px) clamp(30px, calc(5 * var(--desktop-vw, 1vw)), 64px);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     #thanks-page.page-content,
     #thanks-page.page-content.active {
         padding: 40px 0 20px;
@@ -5708,7 +5719,7 @@ main::before {
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 700px) and (hover: none) {
     .commission-roster {
         gap: 0;
     }
@@ -5824,9 +5835,9 @@ html.entrance-pending body {
 }
 
 .site-botanical-primary {
-    left: clamp(54px, 5vw, 88px);
+    left: clamp(54px, calc(5 * var(--desktop-vw, 1vw)), 88px);
     bottom: -17%;
-    width: min(39vw, 560px);
+    width: min(calc(39 * var(--desktop-vw, 1vw)), 560px);
     opacity: 0.72;
     transform: scaleX(-1) rotate(-3deg);
 }
@@ -5834,7 +5845,7 @@ html.entrance-pending body {
 .site-botanical-branch {
     top: -8%;
     right: -16%;
-    width: min(63vw, 990px);
+    width: min(calc(63 * var(--desktop-vw, 1vw)), 990px);
     opacity: 0.52;
     transform: scaleX(-1) rotate(-7deg);
 }
@@ -5889,7 +5900,7 @@ body.gallery-section-active .site-botanical {
 .entrance-color-field-plum {
     left: 0;
     top: 0;
-    width: clamp(96px, 9vw, 148px);
+    width: clamp(96px, calc(9 * var(--desktop-vw, 1vw)), 148px);
     height: 100%;
     background: rgba(117, 83, 102, 0.13);
 }
@@ -5913,9 +5924,9 @@ body.gallery-section-active .site-botanical {
 
 .entrance-botanical-hero {
     z-index: 2;
-    right: clamp(-58px, -2.5vw, -26px);
+    right: clamp(-58px, calc(-2.5 * var(--desktop-vw, 1vw)), -26px);
     bottom: -20%;
-    width: min(49vw, 720px);
+    width: min(calc(49 * var(--desktop-vw, 1vw)), 720px);
     opacity: 0.9;
 }
 
@@ -5923,17 +5934,17 @@ body.gallery-section-active .site-botanical {
     z-index: 1;
     top: -11%;
     left: -15%;
-    width: min(65vw, 970px);
+    width: min(calc(65 * var(--desktop-vw, 1vw)), 970px);
     opacity: 0.34;
     transform: rotate(7deg);
 }
 
 .entrance-content {
-    width: min(600px, 48vw);
+    width: min(600px, calc(48 * var(--desktop-vw, 1vw)));
     max-width: none;
-    margin: auto auto auto clamp(9vw, 12vw, 180px);
-    padding: clamp(28px, 4vw, 56px) 0 clamp(24px, 3vw, 44px)
-        clamp(24px, 3vw, 50px);
+    margin: auto auto auto clamp(calc(9 * var(--desktop-vw, 1vw)), calc(12 * var(--desktop-vw, 1vw)), 180px);
+    padding: clamp(28px, calc(4 * var(--desktop-vw, 1vw)), 56px) 0 clamp(24px, calc(3 * var(--desktop-vw, 1vw)), 44px)
+        clamp(24px, calc(3 * var(--desktop-vw, 1vw)), 50px);
     text-align: left;
     transform: none;
 }
@@ -5950,7 +5961,7 @@ body.gallery-section-active .site-botanical {
 
 .entrance h1 {
     color: var(--garden-sage-950);
-    font-size: clamp(3rem, 5.6vw, 5.35rem);
+    font-size: clamp(3rem, calc(5.6 * var(--desktop-vw, 1vw)), 5.35rem);
     line-height: 1.2;
     letter-spacing: 0.1em;
     text-shadow: 0 1px rgba(246, 247, 238, 0.32);
@@ -5960,7 +5971,7 @@ body.gallery-section-active .site-botanical {
     max-width: 32em;
     margin: 30px 0 22px;
     color: #374b40;
-    font-size: clamp(0.92rem, 1.25vw, 1.06rem);
+    font-size: clamp(0.92rem, calc(1.25 * var(--desktop-vw, 1vw)), 1.06rem);
     line-height: 2;
 }
 
@@ -5980,7 +5991,7 @@ body.gallery-section-active .site-botanical {
 
 .entrance-prompt {
     color: #2d4237;
-    font-size: clamp(1.12rem, 1.8vw, 1.32rem);
+    font-size: clamp(1.12rem, calc(1.8 * var(--desktop-vw, 1vw)), 1.32rem);
 }
 
 @property --entrance-reveal-radius {
@@ -5991,8 +6002,8 @@ body.gallery-section-active .site-botanical {
 
 /* 進站轉場：封面先收束至「入新章」，內頁再由入口中心柔和向外擴散。 */
 .entrance-transition-curtain {
-    --entrance-focus-x: 50vw;
-    --entrance-focus-y: 64vh;
+    --entrance-focus-x: calc(50 * var(--desktop-vw, 1vw));
+    --entrance-focus-y: calc(64 * var(--desktop-vh, 1vh));
     position: fixed;
     z-index: 3;
     inset: 0;
@@ -6146,7 +6157,7 @@ body.gallery-section-active .site-botanical {
     color: var(--garden-sage-950);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     .site-paper-background {
         background: linear-gradient(160deg, #a3b0a5 0%, #c2c7bd 52%, #9dab9f 100%);
     }
@@ -6361,7 +6372,7 @@ html.entrance-open .solar-pivot {
 .entrance {
     color: var(--time-ink-primary);
     background: transparent;
-    padding: clamp(24px, 4vw, 64px);
+    padding: clamp(24px, calc(4 * var(--desktop-vw, 1vw)), 64px);
     overflow-x: hidden;
 }
 
@@ -6385,7 +6396,7 @@ html.entrance-open .solar-pivot {
     display: grid;
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     align-items: center;
-    gap: clamp(24px, 3vw, 64px);
+    gap: clamp(24px, calc(3 * var(--desktop-vw, 1vw)), 64px);
     width: min(1440px, 100%);
     margin: auto;
 }
@@ -6393,7 +6404,7 @@ html.entrance-open .solar-pivot {
 .entrance-art {
     display: block;
     justify-self: center;
-    width: min(100%, 78svh, 780px);
+    width: min(100%, calc(78 * var(--desktop-vh, 1svh)), 780px);
     aspect-ratio: 1800 / 1858;
     opacity: 0.9;
     pointer-events: none;
@@ -6406,18 +6417,18 @@ html.entrance-open .solar-pivot {
     object-fit: contain;
 }
 
-@media (min-width: 901px) {
+@media (min-width: 901px), (hover: hover) and (pointer: fine) {
     .entrance {
-        padding-block: 3svh;
+        padding-block: calc(3 * var(--desktop-vh, 1svh));
     }
 
     .entrance-art {
-        width: min(91svh, 62vw);
+        width: min(calc(91 * var(--desktop-vh, 1svh)), calc(62 * var(--desktop-vw, 1vw)));
         justify-self: end;
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px) and (hover: none) {
     .entrance {
         padding: clamp(20px, 4svh, 36px) 22px;
     }
@@ -6456,7 +6467,7 @@ html.entrance-open .solar-pivot {
     }
 }
 
-@media (max-width: 900px) and (max-height: 500px) {
+@media (max-width: 900px) and (max-height: 500px) and (hover: none) {
     .entrance-layout h1 { font-size: 1.65rem; }
     .entrance-layout #entranceDescription { margin-top: 10px; font-size: 0.76rem; }
     .entrance-layout .entrance-enter { min-height: 48px; padding-block: 10px; }
@@ -6467,8 +6478,8 @@ html.entrance-open .solar-pivot {
     width: 100%;
     max-width: none;
     margin: 0;
-    padding: clamp(28px, 4vw, 56px) 0 clamp(24px, 3vw, 44px)
-        clamp(12px, 2.5vw, 36px);
+    padding: clamp(28px, calc(4 * var(--desktop-vw, 1vw)), 56px) 0 clamp(24px, calc(3 * var(--desktop-vw, 1vw)), 44px)
+        clamp(12px, calc(2.5 * var(--desktop-vw, 1vw)), 36px);
     text-align: left;
     transform: none;
     isolation: isolate;
@@ -6510,7 +6521,7 @@ html.entrance-open .solar-pivot {
 #entranceDescription {
     color: #d9e3dd;
     margin-left: 1.35em;
-    font-size: clamp(1.06rem, 1.4vw, 1.22rem);
+    font-size: clamp(1.06rem, calc(1.4 * var(--desktop-vw, 1vw)), 1.22rem);
     text-shadow:
         0 -1px 0 rgba(250, 255, 244, 0.32),
         0 1px 0 rgba(61, 88, 71, 0.5),
@@ -6520,7 +6531,7 @@ html.entrance-open .solar-pivot {
 
 .entrance-enter {
     width: min(218px, 100%);
-    margin-left: clamp(72px, 7vw, 108px);
+    margin-left: clamp(72px, calc(7 * var(--desktop-vw, 1vw)), 108px);
     border: 0;
 }
 
@@ -6555,7 +6566,7 @@ html.entrance-open .solar-pivot {
 
 .entrance-prompt {
     font-family: var(--artwork-font) !important;
-    font-size: clamp(1.5rem, 2.15vw, 1.78rem);
+    font-size: clamp(1.5rem, calc(2.15 * var(--desktop-vw, 1vw)), 1.78rem);
     color: #dce7e4;
     letter-spacing: 0.19em;
     opacity: calc(0.84 + var(--proximity) * 0.16);
@@ -6687,7 +6698,7 @@ html.entrance-open .solar-pivot {
         inset 0 -1px rgba(2, 9, 17, 0.28);
 }
 
-@media (min-width: 901px) {
+@media (min-width: 901px), (hover: hover) and (pointer: fine) {
     /* 透明開口精確貼合章節書籤；四個圓角外仍延續左列材質。 */
     .site-header {
         background: transparent;
@@ -6821,7 +6832,7 @@ html.entrance-open .solar-pivot {
     border-color: rgba(157, 184, 190, 0.2);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
 
 
 
@@ -6870,7 +6881,7 @@ html.entrance-open .solar-pivot {
     display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     .site-epilogue-final {
         padding-inline: 14px;
     }
@@ -6917,12 +6928,12 @@ html.entrance-open main {
 /* 作品展示改由同一個玻璃主體框包覆標題、進度與作品舞台。 */
 #gallery-page .gallery-sticky-shell {
     isolation: isolate;
-    width: var(--glass-frame, min(1180px, 82vw));
+    width: var(--glass-frame, min(1180px, calc(82 * var(--desktop-vw, 1vw))));
     margin: 0 auto;
-    padding: 0 0 clamp(22px, 3vw, 42px);
+    padding: 0 0 clamp(22px, calc(3 * var(--desktop-vw, 1vw)), 42px);
     overflow: hidden;
     border: 1px solid rgba(181, 204, 210, 0.24);
-    border-radius: clamp(22px, 2.4vw, 34px);
+    border-radius: clamp(22px, calc(2.4 * var(--desktop-vw, 1vw)), 34px);
     background:
         var(--glass-refraction),
         linear-gradient(132deg, rgba(207, 224, 226, 0.08), transparent 48%),
@@ -6937,7 +6948,7 @@ html.entrance-open main {
 
 #gallery-page .gallery-section-heading {
     width: 100%;
-    margin: 0 0 clamp(20px, 2.4vw, 34px);
+    margin: 0 0 clamp(20px, calc(2.4 * var(--desktop-vw, 1vw)), 34px);
     border: 0;
     background: transparent;
     box-shadow: none;
@@ -6949,7 +6960,7 @@ html.entrance-open main {
     display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     #gallery-page .gallery-sticky-shell {
         width: 100%;
         padding-bottom: 10px;
@@ -6967,12 +6978,12 @@ html.entrance-open main {
 }
 
 /* 寬螢幕三個主要內容框共用理時序的實際高度；窄螢幕仍依內容自然伸展。 */
-@media (min-width: 1280px) {
+@media (min-width: 1280px), (hover: hover) and (pointer: fine) {
     main {
         --intro-panel-height: calc(
-            min(560px, 43vw, calc(100vh - 150px))
-            + clamp(28px, 3vw, 48px)
-            + clamp(28px, 3vw, 48px)
+            min(560px, calc(43 * var(--desktop-vw, 1vw)), calc(calc(100 * var(--desktop-vh, 1vh)) - 150px))
+            + clamp(28px, calc(3 * var(--desktop-vw, 1vw)), 48px)
+            + clamp(28px, calc(3 * var(--desktop-vw, 1vw)), 48px)
         );
     }
 
@@ -6987,7 +6998,7 @@ html.entrance-open main {
     }
 
     #messages-page .messages-heading {
-        padding-top: clamp(38px, 3.6vw, 53px);
+        padding-top: clamp(38px, calc(3.6 * var(--desktop-vw, 1vw)), 53px);
         padding-bottom: 28px;
         margin-bottom: 8px;
     }
@@ -6997,15 +7008,15 @@ html.entrance-open main {
 #text-page .text-container h1 {
     position: absolute;
     top: calc(
-        clamp(14px, 1.4vw, 20px)
+        clamp(14px, calc(1.4 * var(--desktop-vw, 1vw)), 20px)
         + 11.5px
-        + clamp(18px, 1.4vw, 23px)
+        + clamp(18px, calc(1.4 * var(--desktop-vw, 1vw)), 23px)
     );
     right: 0;
     margin: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     #text-page .text-container h1 {
         top: 36px;
     }
@@ -7021,7 +7032,7 @@ html.entrance-open main {
     }
 }
 
-@media (max-width: 340px) {
+@media (max-width: 340px) and (hover: none) {
     .intro-copy {
         width: calc(100% + 12px);
         margin-inline: -6px;
@@ -7030,33 +7041,33 @@ html.entrance-open main {
 
 /* 作品章節：維持作品舞台尺寸，只收整標題比例、外框留白與導覽符號。 */
 #gallery-page .gallery-sticky-shell {
-    padding-bottom: max(10px, calc((min(1180px, 82vw) - min(1130px, 73vw)) / 2));
+    padding-bottom: max(10px, calc((min(1180px, calc(82 * var(--desktop-vw, 1vw))) - min(1130px, calc(73 * var(--desktop-vw, 1vw)))) / 2));
 }
 
 #gallery-page .gallery-section-heading {
     min-height: 0;
-    margin-bottom: clamp(16px, 1.8vw, 26px);
-    padding: clamp(28px, 2.7vw, 40px) clamp(24px, 3vw, 48px) clamp(20px, 2vw, 30px);
+    margin-bottom: clamp(16px, calc(1.8 * var(--desktop-vw, 1vw)), 26px);
+    padding: clamp(28px, calc(2.7 * var(--desktop-vw, 1vw)), 40px) clamp(24px, calc(3 * var(--desktop-vw, 1vw)), 48px) clamp(20px, calc(2 * var(--desktop-vw, 1vw)), 30px);
 }
 
 #gallery-page .gallery-section-heading h2 {
     color: #1e2823;
-    font-size: clamp(2.35rem, 4vw, 3.5625rem);
+    font-size: clamp(2.35rem, calc(4 * var(--desktop-vw, 1vw)), 3.5625rem);
     line-height: 1.35;
     letter-spacing: 0.16em;
-    transform: translateY(clamp(4px, 0.55vw, 8px));
+    transform: translateY(clamp(4px, calc(0.55 * var(--desktop-vw, 1vw)), 8px));
 }
 
 #gallery-page .gallery-section-heading .gallery-scroll-progress {
     gap: 12px;
     padding: 10px 16px 10px 10px;
-    transform: translateY(clamp(4px, 0.55vw, 8px));
+    transform: translateY(clamp(4px, calc(0.55 * var(--desktop-vw, 1vw)), 8px));
 }
 
 #gallery-page .gallery-section-heading .gallery-progress-orbit {
-    width: clamp(58px, 4.6vw, 68px);
-    height: clamp(58px, 4.6vw, 68px);
-    flex-basis: clamp(58px, 4.6vw, 68px);
+    width: clamp(58px, calc(4.6 * var(--desktop-vw, 1vw)), 68px);
+    height: clamp(58px, calc(4.6 * var(--desktop-vw, 1vw)), 68px);
+    flex-basis: clamp(58px, calc(4.6 * var(--desktop-vw, 1vw)), 68px);
     border: 1.5px solid rgba(75, 113, 104, 0.48);
     background: radial-gradient(ellipse at 30% 24%, rgba(244, 252, 250, 0.2), transparent 68%);
     box-shadow:
@@ -7121,14 +7132,14 @@ html.entrance-open main {
 }
 
 #gallery-page .gallery-stage .arrow-prev {
-    left: clamp(2px, 0.35vw, 6px);
+    left: clamp(2px, calc(0.35 * var(--desktop-vw, 1vw)), 6px);
 }
 
 #gallery-page .gallery-stage .arrow-next {
-    right: clamp(2px, 0.35vw, 6px);
+    right: clamp(2px, calc(0.35 * var(--desktop-vw, 1vw)), 6px);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     #gallery-page .gallery-sticky-shell {
         padding-bottom: 10px;
     }
@@ -7258,7 +7269,7 @@ html.entrance-open main {
     right: -12px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     #gallery-page .gallery-stage:has(.slide-item.has-artwork.is-current) .arrow-prev {
         left: -8px;
     }
@@ -7302,7 +7313,7 @@ html.has-content-reveal .content-reveal {
     will-change: auto;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     html.has-content-reveal .content-reveal,
     html.has-content-reveal .content-reveal.is-content-visible {
         opacity: 1;
@@ -7320,7 +7331,7 @@ html.has-content-reveal .content-reveal {
     min-height: 0;
     grid-template-columns: minmax(0, 1fr);
     align-items: start;
-    padding: clamp(38px, 4.2vw, 56px);
+    padding: clamp(38px, calc(4.2 * var(--desktop-vw, 1vw)), 56px);
 }
 
 #text-page .text-container::after {
@@ -7329,13 +7340,13 @@ html.has-content-reveal .content-reveal {
 
 .artist-profile-panel {
     position: relative;
-    top: clamp(-18px, -1.2vw, -10px);
+    top: clamp(-18px, calc(-1.2 * var(--desktop-vw, 1vw)), -10px);
     grid-column: 1 / -1;
     width: 100%;
     min-width: 0;
-    margin: clamp(96px, 8.2vw, 116px) 0 0;
+    margin: clamp(96px, calc(8.2 * var(--desktop-vw, 1vw)), 116px) 0 0;
     overflow: hidden;
-    border-radius: clamp(18px, 2.2vw, 32px);
+    border-radius: clamp(18px, calc(2.2 * var(--desktop-vw, 1vw)), 32px);
 }
 
 .artist-profile-panel img {
@@ -7350,7 +7361,7 @@ html.has-content-reveal .content-reveal {
     min-height: 0;
     grid-template-columns: minmax(0, 1fr);
     align-items: start;
-    padding: clamp(38px, 4.2vw, 56px);
+    padding: clamp(38px, calc(4.2 * var(--desktop-vw, 1vw)), 56px);
 }
 
 #planning-page .text-container::after {
@@ -7361,9 +7372,9 @@ html.has-content-reveal .content-reveal {
     grid-column: 1 / -1;
     width: 100%;
     min-width: 0;
-    margin: clamp(36px, 4.4vw, 64px) 0 0;
+    margin: clamp(36px, calc(4.4 * var(--desktop-vw, 1vw)), 64px) 0 0;
     overflow: hidden;
-    border-radius: clamp(18px, 2.2vw, 32px);
+    border-radius: clamp(18px, calc(2.2 * var(--desktop-vw, 1vw)), 32px);
 }
 
 .planning-concept-panel img {
@@ -7372,18 +7383,18 @@ html.has-content-reveal .content-reveal {
     height: auto;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 769px), (hover: hover) and (pointer: fine) {
     #planning-page .text-container {
-        padding-top: clamp(38px, 4.2vw, 56px);
-        padding-bottom: clamp(16px, 1.8vw, 24px);
+        padding-top: clamp(38px, calc(4.2 * var(--desktop-vw, 1vw)), 56px);
+        padding-bottom: clamp(16px, calc(1.8 * var(--desktop-vw, 1vw)), 24px);
     }
 
     #planning-page .planning-concept-panel {
-        margin-top: clamp(14px, 1.6vw, 22px);
+        margin-top: clamp(14px, calc(1.6 * var(--desktop-vw, 1vw)), 22px);
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     #text-page .text-container {
         min-height: 0;
         padding: 46px 18px 24px;
@@ -7409,9 +7420,9 @@ html.has-content-reveal .content-reveal {
 main > .page-content[hidden],
 main > .site-epilogue[hidden] { display: none !important; }
 main > .page-content { padding-top: 28px !important; padding-bottom: 28px !important; }
-main { min-height: 100svh; padding-top: 90px; }
+main { min-height: calc(100 * var(--desktop-vh, 1svh)); padding-top: 90px; }
 main > .page-content:focus { outline: none; }
-@media (max-width: 900px) {
+@media (max-width: 900px) and (hover: none) {
     main { padding-top: 82px; }
     main > .page-content { padding-top: 22px !important; padding-bottom: 22px !important; }
 }
@@ -7422,6 +7433,8 @@ main > .page-content:focus { outline: none; }
 /* 固定章節視窗，內容完整縮放並置中。 */
 html, body { height: 100%; overflow: hidden; }
 body > main {
+    --chapter-header-space: 90px;
+    --chapter-scroll-clearance: 0px;
     position: fixed;
     inset: 90px 0 0;
     width: auto;
@@ -7450,8 +7463,8 @@ main > .page-content.active {
 }
 .chapter-page-fit > .intro-layout { margin-inline: auto; }
 .site-header::after { display: none !important; }
-@media (max-width: 900px) {
-    body > main { inset: 82px 0 0; }
+@media (max-width: 900px) and (hover: none) {
+    body > main { --chapter-header-space: 82px; inset: 82px 0 0; }
     body > main.is-reading-flow {
         overflow-y: auto;
         overscroll-behavior-y: contain;
@@ -7469,21 +7482,61 @@ main > .page-content.active {
     }
 }
 
+/* 桌機由畫面頂端捲動，導覽留白屬於內容，不形成固定裁切帶。 */
+@media (min-width: 901px), (hover: hover) and (pointer: fine) {
+    body > main {
+        --chapter-scroll-clearance: var(--chapter-header-space);
+        inset: 0;
+        padding-top: var(--chapter-scroll-clearance);
+        box-sizing: border-box;
+        overflow-x: auto;
+        overflow-y: auto;
+        scrollbar-gutter: stable both-edges;
+        scrollbar-width: thin;
+        scrollbar-color: #708679 transparent;
+    }
+    body > main.is-reading-flow {
+        padding-top: calc(var(--chapter-scroll-clearance) + var(--reading-start-space, 24px));
+    }
+    main > .page-content.active {
+        height: auto !important;
+        min-height: 100% !important;
+        padding-block: 20px !important;
+        box-sizing: border-box;
+    }
+    main > .page-content > .chapter-page-fit { transform: none; }
+}
+
+html.desktop-layout body > main > .page-content.active {
+    width: max(100%, var(--desktop-canvas-width));
+    min-width: var(--desktop-canvas-width) !important;
+}
+html.desktop-layout .chapter-navigation {
+    width: max-content;
+    left: max(calc(100vw - 28px), calc(var(--desktop-viewport-width) - 28px));
+    right: auto;
+    transform: translateX(calc(-100% - var(--desktop-scroll-x, 0px)));
+}
+html.desktop-layout .entrance { overflow-x: auto; }
+html.desktop-layout .entrance-layout {
+    min-width: min(1440px, calc(var(--desktop-viewport-width) - 2 * clamp(24px, calc(4 * var(--desktop-vw)), 64px)));
+}
+
 /* 寄語：改為一張排版圖對應一個輪播頁面。 */
 #messages-page .messages-container {
     height: auto;
     min-height: 0;
-    padding-bottom: clamp(22px, 2.8vw, 36px);
+    padding-bottom: clamp(22px, calc(2.8 * var(--desktop-vw, 1vw)), 36px);
 }
 
 #messages-page .messages-heading {
-    margin-bottom: clamp(8px, 1vw, 14px);
+    margin-bottom: clamp(8px, calc(1 * var(--desktop-vw, 1vw)), 14px);
 }
 
 #messages-page .messages-carousel {
-    padding-inline: clamp(38px, 5vw, 64px);
-    top: clamp(-16px, -1.1vw, -8px);
-    margin-bottom: clamp(-16px, -1.1vw, -8px);
+    padding-inline: clamp(38px, calc(5 * var(--desktop-vw, 1vw)), 64px);
+    top: clamp(-16px, calc(-1.1 * var(--desktop-vw, 1vw)), -8px);
+    margin-bottom: clamp(-16px, calc(-1.1 * var(--desktop-vw, 1vw)), -8px);
 }
 
 #messages-page .messages-viewport {
@@ -7521,15 +7574,15 @@ main > .page-content.active {
     height: auto;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 769px), (hover: hover) and (pointer: fine) {
     #messages-page .messages-container {
-        padding-bottom: clamp(6px, 0.7vw, 10px);
+        padding-bottom: clamp(6px, calc(0.7 * var(--desktop-vw, 1vw)), 10px);
     }
 
     #messages-page .messages-heading {
-        padding-top: clamp(38px, 4vw, 54px);
-        padding-bottom: clamp(6px, 0.7vw, 10px);
-        margin-bottom: clamp(0px, 0.25vw, 3px);
+        padding-top: clamp(38px, calc(4 * var(--desktop-vw, 1vw)), 54px);
+        padding-bottom: clamp(6px, calc(0.7 * var(--desktop-vw, 1vw)), 10px);
+        margin-bottom: clamp(0px, calc(0.25 * var(--desktop-vw, 1vw)), 3px);
     }
 
     #messages-page .message-sheet {
@@ -7579,13 +7632,13 @@ main > .page-content.active {
 }
 
 /* 桌機以籌花事框高為基準，寄墨箋另收短底部留白。 */
-@media (min-width: 901px) {
+@media (min-width: 901px), (hover: hover) and (pointer: fine) {
     main {
         --planning-frame-height: calc(
-            clamp(38px, 4.2vw, 56px) + clamp(16px, 1.8vw, 24px)
-            + clamp(2rem, 4vw, 3.6rem) * 1.35
-            + clamp(14px, 1.6vw, 22px) + 1px
-            + (var(--glass-frame) - 2px - 2 * clamp(38px, 4.2vw, 56px)) * 1347 / 2400
+            clamp(38px, calc(4.2 * var(--desktop-vw, 1vw)), 56px) + clamp(16px, calc(1.8 * var(--desktop-vw, 1vw)), 24px)
+            + clamp(2rem, calc(4 * var(--desktop-vw, 1vw)), 3.6rem) * 1.35
+            + clamp(14px, calc(1.6 * var(--desktop-vw, 1vw)), 22px) + 1px
+            + (var(--glass-frame) - 2px - 2 * clamp(38px, calc(4.2 * var(--desktop-vw, 1vw)), 56px)) * 1347 / 2400
         );
     }
 
@@ -7637,7 +7690,7 @@ main > .page-content.active {
     #messages-page .message-sheet img { height: 100%; object-fit: contain; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     #messages-page .messages-container {
         padding-bottom: 18px;
     }
@@ -7794,7 +7847,7 @@ main .section-label-line {
 }
 
 /* 手機閱讀：縮減章節自身留白，再交由既有等比例 fitting 限制高度。 */
-@media (max-width: 900px) {
+@media (max-width: 900px) and (hover: none) {
     .entrance { padding: 18px 12px; }
     .entrance-layout { gap: 14px; }
     .entrance-layout .entrance-content {
@@ -7929,7 +7982,7 @@ main .section-label-line {
     }
 }
 
-@media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+@media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) and (hover: none) {
     .entrance-layout { grid-template-columns: 1fr 1fr; width: min(100%, 860px); }
     .entrance-layout h1 { font-size: clamp(26px, 4.8vw, 36px); }
     .entrance-layout #entranceDescription { font-size: 12px; }
@@ -7946,7 +7999,7 @@ main .section-label-line {
     #intro-page .solar-cycle { width: min(100%, 64svh, 280px); margin: 0; justify-self: center; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     .intro-layout::before,
     #gallery-page .gallery-sticky-shell,
     :is(#text-page, #planning-page, #thanks-page) .text-container,

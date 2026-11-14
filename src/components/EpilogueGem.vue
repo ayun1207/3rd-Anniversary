@@ -13,49 +13,14 @@ const gem = ref(null);
 const dialog = ref(null);
 const shade = ref(null);
 const panel = ref(null);
-const mobilePreference = window.matchMedia('(max-width: 900px)');
-const isMobile = ref(mobilePreference.matches);
 const opened = ref(false);
 const closing = ref(false);
 const pointerFocus = ref(true);
-const gemPosition = ref(null);
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 let openingAnimation;
 let writingAnimation;
 let closingAnimation;
 let gemAnimation;
-let positionFrame;
-let frameObserver;
-
-function positionGem() {
-    if (isMobile.value) {
-        return;
-    }
-    const frame = document.querySelector('#thanks-page .text-container');
-    if (!frame || props.currentChapter.value !== 'thanks') return;
-    const bounds = frame.getBoundingClientRect();
-    if (!bounds.width || !bounds.height) return;
-    const left = bounds.right - 68;
-    const top = bounds.bottom - 68;
-    gemPosition.value = {
-        left: `${Math.max(12, Math.min(left, innerWidth - 72))}px`,
-        top: `${Math.max(12, Math.min(top, innerHeight - 80))}px`
-    };
-}
-
-function queueGemPosition() {
-    cancelAnimationFrame(positionFrame);
-    if (props.currentChapter.value !== 'thanks') return;
-    positionFrame = requestAnimationFrame(() => {
-        positionFrame = requestAnimationFrame(positionGem);
-    });
-}
-
-async function updateMobileLayout() {
-    isMobile.value = mobilePreference.matches;
-    await nextTick();
-    positionGem();
-}
 
 function updateGemMotion() {
     gemAnimation?.kill();
@@ -148,25 +113,14 @@ function updateMotionPreference() {
 }
 watch(() => props.currentChapter.value, chapter => {
     if (chapter !== 'thanks') closeEpilogue(true);
-    else queueGemPosition();
 });
 watch([() => props.currentChapter.value, opened], updateGemMotion, { flush: 'post' });
 onMounted(() => {
     updateGemMotion();
-    queueGemPosition();
-    const frame = document.querySelector('#thanks-page .text-container');
-    frameObserver = new ResizeObserver(queueGemPosition);
-    if (frame) frameObserver.observe(frame);
-    window.addEventListener('resize', queueGemPosition);
-    mobilePreference.addEventListener('change', updateMobileLayout);
     document.addEventListener('visibilitychange', updateGemMotion);
 });
 motionPreference.addEventListener('change', updateMotionPreference);
 onBeforeUnmount(() => {
-    cancelAnimationFrame(positionFrame);
-    frameObserver?.disconnect();
-    window.removeEventListener('resize', queueGemPosition);
-    mobilePreference.removeEventListener('change', updateMobileLayout);
     gemAnimation?.kill();
     openingAnimation?.kill();
     writingAnimation?.kill();
@@ -178,10 +132,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <Teleport to="#thanks-page .text-container" :disabled="!isMobile">
+    <Teleport to="#thanks-page .text-container">
     <button v-show="currentChapter.value === 'thanks'" ref="trigger" type="button"
         :class="{ 'has-pointer-focus': pointerFocus }" @pointerdown="pointerFocus = true" @keydown="pointerFocus = false"
-        class="epilogue-gem-trigger" :style="isMobile ? null : gemPosition" aria-label="開啟藏在寶石裡的結語" aria-haspopup="dialog" @click="openEpilogue">
+        class="epilogue-gem-trigger" aria-label="開啟藏在寶石裡的結語" aria-haspopup="dialog" @click="openEpilogue">
         <span ref="gem" class="epilogue-gem season-gem" aria-hidden="true">
             <span class="gem-face gem-face-blue"></span>
             <span class="gem-face gem-face-gold"></span>
@@ -210,7 +164,9 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .epilogue-gem-trigger {
-    position: fixed;
+    position: absolute;
+    right: 8px;
+    bottom: 0;
     z-index: 35;
     display: grid;
     place-items: center;
@@ -297,7 +253,7 @@ onBeforeUnmount(() => {
     position: relative;
     box-sizing: border-box;
     width: min(980px, 100%);
-    padding: clamp(44px, 4vw, 58px) clamp(28px, 3vw, 44px);
+    padding: clamp(44px, calc(4 * var(--desktop-vw, 1vw)), 58px) clamp(28px, calc(3 * var(--desktop-vw, 1vw)), 44px);
     border: 2px solid transparent;
     border-radius: 32px;
     background:
@@ -328,7 +284,7 @@ onBeforeUnmount(() => {
     background: transparent;
     color: #f5f3e6;
     font: inherit;
-    font-size: clamp(26px, 2.5vw, 36px);
+    font-size: clamp(26px, calc(2.5 * var(--desktop-vw, 1vw)), 36px);
     font-weight: 300;
     line-height: 1.9;
     letter-spacing: 0.055em;
@@ -345,6 +301,9 @@ onBeforeUnmount(() => {
 }
 .epilogue-character { opacity: 0; }
 .epilogue-panel:focus { outline: none; }
+:global(html.desktop-layout) .epilogue-panel {
+    min-width: min(980px, calc(var(--desktop-viewport-width) - 48px));
+}
 .epilogue-accessible {
     position: absolute;
     width: 1px;
@@ -354,10 +313,10 @@ onBeforeUnmount(() => {
     clip-path: inset(50%);
     white-space: nowrap;
 }
-@media (max-width: 900px) {
+@media (max-width: 900px) and (hover: none) {
     .epilogue-gem-trigger { position: absolute; right: 0; bottom: 0; }
 }
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) {
     .epilogue-dialog { padding: 22px; }
     .epilogue-panel { padding: 56px 22px 36px; border-radius: 26px; }
     .epilogue-panel::before { border-radius: 18px; }

@@ -6,6 +6,7 @@ import EpilogueGem from './src/components/EpilogueGem.vue';
 import ArtworkViewer from './src/components/ArtworkViewer.vue';
 import MessagesCarousel from './src/components/MessagesCarousel.vue';
 import { gsap } from 'gsap';
+import { desktopPointerMedia, mobileLayoutMedia, mobileRosterMedia, setupDesktopViewport } from './src/layout/desktopViewport.js';
 
 // 單次過場依真實經過時間收束，避免低幀率或分頁節流延長入口等待。
 gsap.ticker.lagSmoothing(0);
@@ -283,7 +284,8 @@ let chapterTimeline;
 let chapterRequest = 0;
 const chapterImagePreparations = new WeakMap();
 const chapterScroller = document.querySelector('main');
-const readingMedia = window.matchMedia('(max-width: 900px)');
+const readingMedia = mobileLayoutMedia;
+setupDesktopViewport(chapterScroller);
 const readingGroups = [['text', 'planning'], ['messages', 'thanks']].map(names => names.map(name => document.getElementById(`${name}-page`)));
 let readingScrollTween;
 let readingProgressFrame = 0;
@@ -299,7 +301,9 @@ function readingSectionsFor(pageName) {
 
 function readingScrollTop(section) {
     const content = section.querySelector('.chapter-page-fit');
-    return Math.max(0, section.offsetTop - Math.max(24, (chapterScroller.clientHeight - content.offsetHeight) / 2));
+    const clearance = parseFloat(getComputedStyle(chapterScroller).getPropertyValue('--chapter-scroll-clearance')) || 0;
+    const availableHeight = chapterScroller.clientHeight - clearance;
+    return Math.max(0, section.offsetTop - clearance - Math.max(24, (availableHeight - content.offsetHeight) / 2));
 }
 
 function updateGalleryProgress(index) {
@@ -447,9 +451,15 @@ function fitCurrentChapter() {
         const readingSections = readingSectionsFor(currentSection);
         readingSections.forEach(section => section.querySelector('.chapter-page-fit').style.removeProperty('--chapter-fit-scale'));
         const [first, last] = readingSections.map(section => section.querySelector('.chapter-page-fit').offsetHeight);
-        chapterScroller.style.setProperty('--reading-start-space', `${Math.max(24, Math.min(64, (chapterScroller.clientHeight - first) / 6))}px`);
-        chapterScroller.style.setProperty('--reading-end-space', `${Math.max(24, (chapterScroller.clientHeight - last) / 2)}px`);
+        const clearance = parseFloat(getComputedStyle(chapterScroller).getPropertyValue('--chapter-scroll-clearance')) || 0;
+        const availableHeight = chapterScroller.clientHeight - clearance;
+        chapterScroller.style.setProperty('--reading-start-space', `${Math.max(24, Math.min(64, (availableHeight - first) / 6))}px`);
+        chapterScroller.style.setProperty('--reading-end-space', `${Math.max(24, (availableHeight - last) / 2)}px`);
         queueReadingProgress();
+        return;
+    }
+    if (!readingMedia.matches || desktopPointerMedia.matches) {
+        document.querySelector(`#${currentSection}-page .chapter-page-fit`).style.removeProperty('--chapter-fit-scale');
         return;
     }
     const section = document.getElementById(`${currentSection}-page`);
@@ -468,6 +478,7 @@ function queueChapterFit() {
 const chapterResizeObserver = new ResizeObserver(queueChapterFit);
 pageSections.forEach(section => chapterResizeObserver.observe(section.querySelector('.chapter-page-fit')));
 window.addEventListener('resize', queueChapterFit);
+desktopPointerMedia.addEventListener('change', queueChapterFit);
 window.visualViewport?.addEventListener('resize', queueChapterFit);
 
 function queueReadingProgress() {
@@ -740,7 +751,7 @@ const rosterStatus = document.getElementById('rosterStatus');
 const rosterCards = rosterTrack
     ? Array.from(rosterTrack.querySelectorAll('.commission-roster-card'))
     : [];
-const rosterMobile = window.matchMedia('(max-width: 700px)');
+const rosterMobile = mobileRosterMedia;
 let currentRosterCard = 0;
 let rosterTouchStartX = 0;
 let rosterTouchStartY = 0;

@@ -2,9 +2,10 @@
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { gsap } from 'gsap';
 import { messagePages } from '../data/messages.js';
+import { mobileLayoutMedia } from '../layout/desktopViewport.js';
 
 const props = defineProps({ currentChapter: { type: Object, required: true } });
-const mobileMedia = matchMedia('(max-width: 900px)');
+const mobileMedia = mobileLayoutMedia;
 const motionMedia = matchMedia('(prefers-reduced-motion: reduce)');
 const mobile = ref(mobileMedia.matches);
 const currentPage = ref(0);
