@@ -6493,25 +6493,17 @@ html.entrance-open .solar-pivot {
 .entrance h1 {
     color: var(--time-ink-primary);
     text-shadow:
-        -1px -1px 0 rgba(255, 255, 243, 0.55),
-        0 1px 0 rgba(173, 195, 179, 0.7),
-        1px 2px 0 rgba(61, 88, 71, 0.55),
-        1px 3px 2px rgba(33, 53, 44, 0.4),
-        2px 9px 12px rgba(33, 53, 44, 0.3),
-        0 16px 24px rgba(33, 53, 44, 0.16);
+        -0.5px -0.5px 0 rgba(255, 255, 245, 0.65),
+        0 1px 0 #bed0bd,
+        0.5px 2px 0 #78947f,
+        1px 3px 0 rgba(57, 82, 66, 0.9),
+        0 5px 6px rgba(33, 53, 44, 0.28);
 }
 
 .entrance-title-line {
     display: block;
-}
-
-@supports (background-clip: text) or (-webkit-background-clip: text) {
-    .entrance-title-line {
-        background: linear-gradient(165deg, #fffef2 0%, #f6faf2 35%, #cadbcf 72%, #e7f0e5 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-    }
+    /* 不透明字面隔開背後字影，短距離亮邊與側面保留浮雕感。 */
+    color: #f0f5eb;
 }
 
 .entrance-title-line-lower {
@@ -6519,14 +6511,14 @@ html.entrance-open .solar-pivot {
 }
 
 #entranceDescription {
-    color: #d9e3dd;
+    color: #f0f5eb;
     margin-left: 1.35em;
     font-size: clamp(1.06rem, calc(1.4 * var(--desktop-vw, 1vw)), 1.22rem);
     text-shadow:
-        0 -1px 0 rgba(250, 255, 244, 0.32),
-        0 1px 0 rgba(61, 88, 71, 0.5),
-        1px 3px 3px rgba(33, 53, 44, 0.3),
-        0 7px 10px rgba(33, 53, 44, 0.25);
+        0 -0.35px 0 rgba(255, 255, 245, 0.55),
+        0.4px 0.75px 0 rgba(150, 175, 155, 0.8),
+        0.75px 1.5px 0 rgba(57, 82, 66, 0.7),
+        0 2px 3px rgba(33, 53, 44, 0.22);
 }
 
 .entrance-enter {
@@ -7874,7 +7866,7 @@ main .section-label-line {
         font-size: clamp(2.3rem, 10vw, 3.8rem);
         line-height: 1.18;
         letter-spacing: 0.08em;
-        text-shadow: 0 2px 5px rgba(33, 53, 44, 0.2);
+        text-shadow: 0 1px 0 rgba(111, 139, 119, 0.55), 0 2px 3px rgba(33, 53, 44, 0.2);
     }
     .entrance-layout .entrance-title-line {
         background: none;
@@ -7883,7 +7875,7 @@ main .section-label-line {
     .entrance-layout #entranceDescription {
         font-size: clamp(13px, 3.3vw, 16px);
         margin-left: 0;
-        text-shadow: 0 1px 3px rgba(33, 53, 44, 0.18);
+        text-shadow: 0 0.75px 0 rgba(111, 139, 119, 0.55), 0 2px 2px rgba(33, 53, 44, 0.18);
     }
     .entrance-art { width: min(94vw, 50svh, 480px); }
     main > #gallery-page.page-content.active {
